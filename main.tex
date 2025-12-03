@@ -1,1 +1,72 @@
-content
+\section{Literature Review and Background}
+% MoC in neutronics
+% SN in neutronics
+% global illumination in computer graphics
+%       goals, algorithms
+\subsection{Global Deterministic Methods in Neutron Transport}
+\subsection{Global Illumination in Computer Graphics}
+
+\section{Radiance Cascades}
+
+\subsection{Penumbra Criteria for Global Illumination}\label{subsec:penumber-gi}
+% Nathan
+
+\subsection{Formalization of the Penumbra Criteria}
+% Liam
+As discussed in \cref{subsec:penumber-gi}, the penumbra criteria was originally formulated for global illumination problems in video game development.
+As such, the motivations for its formulation differ from those in the scientific community.
+That is, greater emphasis is placed on the \textit{speed} of the algorithm, rather than the numerical accuracy. 
+This is clearly seen in the penumbra criteria, which lacks rigor in its definition.
+Indeed, though initial papers by Sannikov and Osborne acknowledge the proportionality of the required step size needed in the angular and spatial discretizations, neither attempt to describe additional constraints to the requirements; both papers simply assume a coefficient of 1 and boldly claim that this holds generally.
+As part of this work, we propose to formalize the penumbra criteria so that the \rc technique and its limitations are clearly understood.
+
+For example, as seen in~\cite{sannikovRadianceCascadesNovel} and~\cite{osborneRadianceCascadesNovel2025}, the penumbra criteria assume the flux solution within the transition region is approximately linear between probes.
+This is clearly seen in the small angle approximation to the tangent function in \cref{subsec:penumber-gi}.
+
+
+\subsection{Radiance Intervals}
+% Nathan
+% What is it, definition/derivation, interval merging
+
+\subsection{Cascades}
+% Probes, cascades, cascades merging
+
+% create image of cascades -- Liam
+
+\section{Proposed Work}
+\subsection{Radiance Cascades Implementation}
+% what needs to exist in a code to implement RC, what needs to be implemented for RC
+It is imperative in the growing use and capabilities of graphical processing units (GPUs) that any and all commercial implementations of \rc parallelize using GPUs.
+It has been shown~\cite{sannikovRadianceCascadesNovel,osborneRadianceCascadesNovel2025} that \rc scales extremely well in parallel, and indeed GPUs are manufactured to handle the ray-tracing needs of the method.
+For this, we look to use the CUDA toolkit developed by NVIDIA.
+
+\subsection{Code}
+% OpenMoC, OpenCSG (separating from OpenMC -- would need to work with developers)
+\subsubsection{Current Codes}
+
+\subsubsection{Toy Problem}
+Rather than jumping in to implementing \rc in the general case, we propose to start with a simple implementation of \textit{no more than two} ``toy'' problems, where we choose very simple transport problems in 2D to implement with either a Python or C++ script.
+The purpose of this is purely educational, and it will do two things:
+\begin{enumerate}
+    \item Create an opportunity to practice programming \rc on a small problem before jumping to generalized code.
+    \item Show early results for the method applied to neutronics (internally, though it may make a cool LinkedIn post or something\ldots).
+\end{enumerate}
+
+\subsubsection{Long-Term Implementation}
+
+\subsection{Benchmarks}
+We propose the following benchmark cases be used for the development and testing of \rc.
+Because \rc has yet to be implemented for irregular domains and because this first work is for proof-of-concept, we restrict ourselves to simple-cartesian, flatland (2D) benchmark cases.
+
+\section{Future Work}
+\subsection{Unstructured Probe Placement and Improved Interpolation}
+Liam's scratch thoughts:
+\begin{itemize}
+    \item Numerous meshing algorithms exist that can place nodes within the domain of arbitrary meshes (such as \texttt{gmsh}).
+    \item The requirements of \rc lie in the spacing between probes with regard to their angular resolution. 
+    As of the writing of this, it is understood that each increase in cascade ``level'' results in a doubling of the spatial distance.
+    It should therefore be very straightforward to use a mesh generator with a user-set minimum spatial discretization for cascade 0, then the generator can place the probes for all higher cascades by doubling a global mesh parameter. 
+    The parameter needs to ensure that this is the \textit{maximum} distance between probes (nodes) to ensure the penumbra criteria are satisfied.
+    \item This admittedly sounds a lot like using finte element-like basis functions to interpolate between probes (nodes), though without the complicated basis functions -- we only need to use two probes to linearly interpolation, then three probes for quadratic, etc. I wonder, then if we could use something like B-splines to get high-accuracy interpolation between notes\ldots This may be too complicated, but the point is that increasing the interpolation accuracy should be mathematically straightforward, if not computationally obnoxious.
+    \item After meshing, each probe will have to hold information about the angular flux (including all of the its directions) \emph{and the nodes which it will interpolate between}. This should be as simple as using a search algorithm to find the nearest probes\ldots Or we could just use information from FEM meshers and ignore any information about the basis functions\ldots
+\end{itemize}

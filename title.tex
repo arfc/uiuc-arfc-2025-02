@@ -63,11 +63,27 @@
 \usepackage{mathpazo} % Palatino font
 \usepackage{graphicx} % For the logo
 
-% hyperref usually has to go last
+% pretty math
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{physics}
+
+\usepackage{units}
+\usepackage[labelfont=bf]{caption}
+
 \usepackage[hidelinks]{hyperref}
-% but glossaries behaves best if after hyperref
+\usepackage[noabbrev,capitalize]{cleveref}
+
+
 \usepackage[acronym,toc]{glossaries}
-\include{acros}
+%\include{acros}
+
+% convenience commands
+\newcommand{\rc}{Radiance Cascades}
+
 \makeglossaries
 
 \begin{document}
