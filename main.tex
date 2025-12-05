@@ -18,15 +18,148 @@ As such, the motivations for its formulation differ from those in the scientific
 That is, greater emphasis is placed on the \textit{speed} of the algorithm, rather than the numerical accuracy. 
 This is clearly seen in the penumbra criteria, which lacks rigor in its definition.
 Indeed, though initial papers by Sannikov and Osborne acknowledge the proportionality of the required step size needed in the angular and spatial discretizations, neither attempt to describe additional constraints to the requirements; both papers simply assume a coefficient of 1 and boldly claim that this holds generally.
-As part of this work, we propose to formalize the penumbra criteria so that the \rc technique and its limitations are clearly understood.
+As part of this work, we propose to formalize the penumbra criteria so that the \glspl{rc} technique and its limitations are clearly understood.
 
 For example, as seen in~\cite{sannikovRadianceCascadesNovel} and~\cite{osborneRadianceCascadesNovel2025}, the penumbra criteria assume the flux solution within the transition region is approximately linear between probes.
 This is clearly seen in the small angle approximation to the tangent function in \cref{subsec:penumber-gi}.
 
-
 \subsection{Radiance Intervals}
 % Nathan
 % What is it, definition/derivation, interval merging
+The foundational property of the radiation field that allows for \glspl{rc} is the notion of splitting incoming radiation rays into distinct intervals that can be solved for separately (and iteratively combined). These intervals are called `radiance intervals', by convention from Sannikov~\cite{sannikovRadianceCascadesNovel}.
+
+To prove this property, we begin with the characteristic form of the \gls{lbe} as
+\begin{equation}
+    \label{eq:lbe-characteristic-form}
+    \dv{u}\psi^g\left(\mathbf{r}_0 + u\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+    + \Sigma_t^g\left(\mathbf{r}_0 + u\boldsymbol{\Omega}, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 + u\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+    = 
+    Q^g\left(\mathbf{r}_0 + u\boldsymbol{\Omega}, \boldsymbol{\Omega}\right).
+\end{equation}
+Before continuing, we first perform a change of variables from $u$ to $s$, such that $u=-s$ and $\frac{d}{du}=-\frac{d}{ds}$,~\cite[p.~210]{lewisComputationalMethodsNeutron1984a}.
+This is done to solve `backwards' along each characteristic line; instead of solving for the contribution at $s$ from $\mathbf{r_0}$, we solve for the contribution at $\mathbf{r_0}$ from $s$.
+Then, the characteristic form using this transform is
+\begin{equation}
+    \label{eq:lbe-cov-char-form}
+    -\dv{s}\psi^g\left(\mathbf{r}_0 - s\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+    + \Sigma_t^g\left(\mathbf{r}_0 - s\boldsymbol{\Omega}, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - s\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+    = 
+    Q^g\left(\mathbf{r}_0 - s\boldsymbol{\Omega}, \boldsymbol{\Omega}\right).
+\end{equation}
+This is an linear ordinary differential equation, and so it can be solved for by use of an integrating factor. 
+We define the integrating factor as
+\begin{equation}
+    I = e^{-\int_0^s \dd{s'} \Sigma^g_t\left(\mathbf{r}_0 - s'\boldsymbol{\Omega},\boldsymbol{\Omega}\right)}.
+\end{equation}
+Henceforth, the independent variables are dropped purely for conciseness, and everything is assumed to be a function of $\mathbf{r}_0 - s'\boldsymbol{\Omega}$ and $\boldsymbol{\Omega}$ unless otherwise specified. 
+Multiplying Eq.~\ref{eq:lbe-cov-char-form} by our integrating factor, we obtain
+\begin{equation}
+    \label{eq:lbe-if-characteristic-form}
+    -e^{-\int_0^s \dd{s'} \Sigma^g_t}\dv{s}\psi^g
+    + e^{-\int_0^s \dd{s'} \Sigma^g_t}\Sigma_t^g\psi^g
+    = 
+    e^{-\int_0^s \dd{s'} \Sigma^g_t}Q^g.
+\end{equation}
+The left hand side of this equation is the output of a product rule, specifically
+\begin{equation}
+    \dv{s}\left[-e^{-\int_0^s \dd{s'} \Sigma^g_t}\psi^g\right]
+    =-e^{-\int_0^s \dd{s'} \Sigma^g_t}\dv{s}\psi^g
+    + e^{-\int_0^s \dd{s'} \Sigma^g_t}\Sigma_t^g\psi^g.
+\end{equation}
+Then, we insert this relation into Eq.~\ref{eq:lbe-if-characteristic-form}, and integrate both sides with respect to $s$. We set the bounds for this integration to be from $a$ to $b$, such that $0\leq a\leq b\leq\tau$ where $\tau$ is the endpoint of the ray. These bounds are chosen instead of the typical $0$ to $\tau$, because we are only interested in the incoming radiation along this interval at $s=a$.
+
+\begin{align}
+    \dv{s}\left[-e^{\int_0^s \dd{s'} \Sigma^g_t}\psi^g\right] 
+        &= e^{-\int_0^s \dd{s'} \Sigma^g_t}Q^g\notag\\
+    \int_a^{b}\dd{s}\dv{s}\left[-e^{-\int_0^s \dd{s'} \Sigma^g_t}\psi^g\right]
+        &= \int_a^{b} \dd{s}\,e^{-\int_0^s \dd{s'} \Sigma^g_t}Q^g
+\end{align}
+
+ For brevity, we define $\psi^g(x)=\psi^g\left(\mathbf{r}_0 - x\boldsymbol{\Omega},\boldsymbol{\Omega}\right)$. Evaluating the left hand side integral, rearranging, and solving for $\psi^g(a)$, we find
+\begin{align}
+    e^{-\int_0^{a} \dd{s'} \Sigma^g_t}\psi^g(a)
+        &= e^{-\int_0^{b} \dd{s'} \Sigma^g_t}\psi^g(b) + \int_a^{b} \dd{s}\,e^{-\int_0^s \dd{s'} \Sigma^g_t}Q^g\notag\\
+    \psi^g(a) 
+        &= e^{\int_0^{a} \dd{s'} \Sigma^g_t} \left[
+            e^{-\int_0^{b} \dd{s'} \Sigma^g_t}\psi^g(b) + \int_a^{b} \dd{s}\,e^{-\int_0^s \dd{s'} \Sigma^g_t}Q^g
+        \right]\notag\\
+         &= e^{\int_0^{a} \dd{s'} \Sigma^g_t - \int_0^{b} \dd{s'} \Sigma^g_t}\psi^g(b)
+            + e^{\int_0^{a} \dd{s'} \Sigma^g_t} \int_a^{b} \dd{s}\,e^{-\int_0^s \dd{s'} \Sigma^g_t}Q^g
+\end{align}
+
+Now, because the exponential in front of the integral is a function of $s'$ and not $s$, it can be factored into the integral, and thus 
+\begin{align}
+        \psi^g(a) &= e^{-\int_a^{b} \dd{s'} \Sigma^g_t}\psi^g(b) + \int_a^{b} \dd{s}\,e^{\int_0^a \dd{s'} \Sigma^g_t-\int_0^{s} \dd{s'} \Sigma^g_t}Q^g\notag\\
+    \label{eq:rc-interval-almost}
+        &= e^{-\int_a^{b} \dd{s'} \Sigma^g_t}\psi^g(b) + \int_a^{b} \dd{s}\,e^{-\int_a^s \dd{s'} \Sigma^g_t}Q^g.
+\end{align}
+For completeness and clarity, we now expand out the independent variables in each term.
+\begin{align}
+    \label{eq:rc-interval-full}
+    \begin{split}
+    \psi^g\left(\mathbf{r}_0 - a\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        =\, &e^{-\int_a^{b} \dd{s'} \Sigma^g_t\left(\mathbf{r}_0 - s'\boldsymbol{\Omega},\boldsymbol{\Omega}\right)}\psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)\\
+            &+ \int_a^{b} \dd{s}e^{-\int_a^s \dd{s'} \Sigma^g_t\left(\mathbf{r}_0 - s'\boldsymbol{\Omega},\boldsymbol{\Omega}\right)}Q^g\left(\mathbf{r}_0 - s\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+    \end{split}
+\end{align}
+Now, we formally define the transparency ($\beta^g_{a,b}$) and the radiance interval ($\psi^g_{a,b}$) as
+\begin{align}
+    \label{{eq:beta-and-rad-interval}}
+    \beta^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right) &= e^{-\int_a^b \dd{s'} \Sigma^g_t\left(\mathbf{r}_0 - s'\boldsymbol{\Omega}, \boldsymbol{\Omega}\right)}\\
+    \psi^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)&= \int_a^{b} \dd{s}\,e^{-\int_a^s \dd{s'} \Sigma^g_t\left(\mathbf{r}_0 - s'\boldsymbol{\Omega}, \boldsymbol{\Omega}\right)}Q^g\left(\mathbf{r}_0 - s\boldsymbol{\Omega},\boldsymbol{\Omega}\right).
+\end{align}
+The naming `transparency' and `radiance interval' is used for clarity, as the original derivation of \glspl{rc} by Sannikov~\cite{sannikovRadianceCascadesNovel} used these terms.
+Additionally, it should be noted that these definitions differ slightly from Sannikov's~\cite{sannikovRadianceCascadesNovel} in the arguments of the cross-section and source term, but are fundamentally identical. 
+The notation used here is to be consistent with the standard \gls{moc} formulation within the field of computational neutron transport. 
+Finally, we can insert our definitions for the transparency and radiance interval into Eq.~\ref{eq:rc-interval-full}, finding the simplified definition for the radiation contribution at $s=a$ from the interval $\left[a,b\right]$ as
+\begin{equation}
+    \label{eq:rad-contribution}
+    \psi^g\left(\mathbf{r}_0 - a\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        = \beta^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        + \psi^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right).
+\end{equation}
+
+\subsubsection{Validity of Radiance Interval Formulation}
+To illustrate that this formulation is a valid method of breaking a ray into segments, we select an arbitrary ray broken into two segments. 
+We define the interval ranges as $\left[a=0,b\right]$ and $\left[b,c=\tau\right]$.
+Using equation~\ref{eq:rad-contribution} we define $\psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right)$ as 
+\begin{align}
+    \psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right)
+        = \beta^g_{0,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        + \psi^g_{0,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right).
+\end{align}
+Now, again using equation~\ref{eq:rad-contribution}, we define $\psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)$ as 
+\begin{equation}
+    \label{eq:rad-contribution}
+    \psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        = \beta^g_{b,\tau}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - \tau\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        + \psi^g_{b,\tau}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right).
+\end{equation}
+Inserting this definition into that of $\psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right)$, again dropping arguments for brevity, we find
+\begin{align}
+    \psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right) &= \beta^g_{0,b}
+            \left[ \beta^g_{b,\tau}\psi^g\left(\tau\right) + \psi^g_{b,\tau} \right]
+            + \psi^g_{0,b}\notag\\
+        &= e^{-\int_0^b \dd{s'}\Sigma^g_t}
+            \left[ e^{-\int_b^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + \int_b^{\tau} \dd{s}\,e^{-\int_b^{s} \dd{s'} \Sigma^g_t}Q^g\right] +\psi^g_{b,\tau}\notag\\
+        &= e^{-\int_0^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + e^{-\int_0^b \dd{s'}\Sigma^g_t}\int_b^{\tau} \dd{s}\,e^{-\int_b^{s} \dd{s'} \Sigma^g_t}Q^g + \psi^g_{b,\tau}\notag\\ 
+        &=e^{-\int_0^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + \int_b^{\tau} \dd{s}\,e^{-\int_0^{s} \dd{s'} \Sigma^g_t}Q^g + \int_0^{b} \dd{s}\,e^{-\int_0^{s} \dd{s'} \Sigma^g_t}Q^g \notag\\
+        &= e^{-\int_0^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + \int_0^{\tau} \dd{s}\,e^{-\int_0^{s} \dd{s'} \Sigma^g_t}Q^g.
+\end{align}
+
+This finding is consistent with the long-characteristic solution that is the standard in \gls{moc}, and so we conclude that rays can be broken into radiance intervals as we have defined them. 
+
+\subsubsection{Radiance Interval Merging}
+The definition for $\psi^g\left(\mathbf{r}_0 - a\boldsymbol{\Omega},\boldsymbol{\Omega}\right)$ also defines how radiance intervals are combined to find the final solution at $\mathbf{r_0}$.
+The radiance interval merging formula, written more generally than Eq.~\ref{eq:rad-contribution}, is
+\begin{equation}
+    \label{eq:rad-interval-merging}
+    \psi^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right) = \beta^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g_{i+1,i+2}\left(\mathbf{r}_0,\boldsymbol{\Omega}\right)
+        + \psi^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right),
+\end{equation}
+where the dummy index $i$ denotes the interval bounds. 
+It is important to notice that two intervals can only be merged if they are directly adjacent: they must share a bound.
+Finally, it should be evident that if a ray is broken into $n$ intervals, the solution to the ray is found through recursively merging the radiance intervals, collapsing towards $\mathbf{r_0}$.
 
 \subsection{Cascades}
 % Probes, cascades, cascades merging
@@ -36,8 +169,8 @@ This is clearly seen in the small angle approximation to the tangent function in
 \section{Proposed Work}
 \subsection{Radiance Cascades Implementation}
 % what needs to exist in a code to implement RC, what needs to be implemented for RC
-It is imperative in the growing use and capabilities of graphical processing units (GPUs) that any and all commercial implementations of \rc parallelize using GPUs.
-It has been shown~\cite{sannikovRadianceCascadesNovel,osborneRadianceCascadesNovel2025} that \rc scales extremely well in parallel, and indeed GPUs are manufactured to handle the ray-tracing needs of the method.
+It is imperative in the growing use and capabilities of graphical processing units (GPUs) that any and all commercial implementations of \glspl{rc} parallelize using GPUs.
+It has been shown~\cite{sannikovRadianceCascadesNovel,osborneRadianceCascadesNovel2025} that \glspl{rc} scales extremely well in parallel, and indeed GPUs are manufactured to handle the ray-tracing needs of the method.
 For this, we look to use the CUDA toolkit developed by NVIDIA.
 
 \subsection{Code}
@@ -45,28 +178,35 @@ For this, we look to use the CUDA toolkit developed by NVIDIA.
 \subsubsection{Current Codes}
 
 \subsubsection{Toy Problem}
-Rather than jumping in to implementing \rc in the general case, we propose to start with a simple implementation of \textit{no more than two} ``toy'' problems, where we choose very simple transport problems in 2D to implement with either a Python or C++ script.
+Rather than jumping in to implementing \glspl{rc} in the general case, we propose to start with a simple implementation of \textit{no more than two} ``toy'' problems, where we choose very simple transport problems in 2D to implement with either a Python or C++ script.
 The purpose of this is purely educational, and it will do two things:
 \begin{enumerate}
-    \item Create an opportunity to practice programming \rc on a small problem before jumping to generalized code.
+    \item Create an opportunity to practice programming \glspl{rc} on a small problem before jumping to generalized code.
     \item Show early results for the method applied to neutronics (internally, though it may make a cool LinkedIn post or something\ldots).
 \end{enumerate}
 
 \subsubsection{Long-Term Implementation}
 
 \subsection{Benchmarks}
-We propose the following benchmark cases be used for the development and testing of \rc.
-Because \rc has yet to be implemented for irregular domains and because this first work is for proof-of-concept, we restrict ourselves to simple-cartesian, flatland (2D) benchmark cases.
+We propose the following benchmark cases be used for the development and testing of \glspl{rc}.
+Because \glspl{rc} has yet to be implemented for irregular domains and because this first work is for proof-of-concept, we restrict ourselves to simple-cartesian, flatland (2D) benchmark cases.
 
 \section{Future Work}
 \subsection{Unstructured Probe Placement and Improved Interpolation}
 Liam's scratch thoughts:
 \begin{itemize}
     \item Numerous meshing algorithms exist that can place nodes within the domain of arbitrary meshes (such as \texttt{gmsh}).
-    \item The requirements of \rc lie in the spacing between probes with regard to their angular resolution. 
+    \item The requirements of \glspl{rc} lie in the spacing between probes with regard to their angular resolution. 
     As of the writing of this, it is understood that each increase in cascade ``level'' results in a doubling of the spatial distance.
     It should therefore be very straightforward to use a mesh generator with a user-set minimum spatial discretization for cascade 0, then the generator can place the probes for all higher cascades by doubling a global mesh parameter. 
     The parameter needs to ensure that this is the \textit{maximum} distance between probes (nodes) to ensure the penumbra criteria are satisfied.
     \item This admittedly sounds a lot like using finte element-like basis functions to interpolate between probes (nodes), though without the complicated basis functions -- we only need to use two probes to linearly interpolation, then three probes for quadratic, etc. I wonder, then if we could use something like B-splines to get high-accuracy interpolation between notes\ldots This may be too complicated, but the point is that increasing the interpolation accuracy should be mathematically straightforward, if not computationally obnoxious.
     \item After meshing, each probe will have to hold information about the angular flux (including all of the its directions) \emph{and the nodes which it will interpolate between}. This should be as simple as using a search algorithm to find the nearest probes\ldots Or we could just use information from FEM meshers and ignore any information about the basis functions\ldots
+\end{itemize}
+
+\subsection{Nathan's Thoughts}
+\begin{itemize}
+    \item There are various methods employed in deterministic neutron transport methods for convergence acceleration that could be used for \glspl{rc}. Specific methods I think would be interesting to investigate are \gls{cmfd}, \gls{dsa}, and \gls{tsa}. \gls{cmfd} has already been used for \gls{moc} codes (and is implemented in OpenMOC and OpenMC) and has proven to be a great accelerator. \gls{dsa} (from what I can tell) is a super effective method for accelerating source iteration, but is only effective for highly diffusive problems/regions. \gls{tsa} (from what I can tell) is a more robust method for accelerating source iteration, is well suited for highly anisotropic scattering problems/regions and sparse/void/near-void problems / regions; at added computational cost compared to DSA. 
+    \item A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions. This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. \glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions. Instead, the source along each radiance interval can be computed as a continuous function by interpolating from nearby C0 probes. This will likely add computational cost, as now the source function would need to be numerically integrated, but might result in significant improvements in accuracy.
+    \item Osborne~\cite{osborneRadianceCascadesNovel2025, osborneSimpleRayAcceleration2025} discusses how in non-LTE radiation transport, many problems are very sparse, and so a lot of computation is wasted on void regions. This is similair to space applications, shut down dose rate calculations, and in general just charged particle transport problems. Osborne had some interesting ideas, namely using sparse graphs like VDB (which is a large package we could bring in and not worry about maintenance) and prefiltering void probes out of the problem. The prefiltering allows us to skip computing probes that we know do not contribute, drastically saving on compute cost, and the sparse rooted graphs efficiently store linked probes minimizing look up times when merging. This needs to be investigated a lot more before formalizing though, as I am unsure as to how to filter out probes.
 \end{itemize}
