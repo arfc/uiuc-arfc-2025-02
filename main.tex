@@ -191,6 +191,18 @@ The purpose of this is purely educational, and it will do two things:
 We propose the following benchmark cases be used for the development and testing of \glspl{rc}.
 Because \glspl{rc} has yet to be implemented for irregular domains and because this first work is for proof-of-concept, we restrict ourselves to simple-cartesian, flatland (2D) benchmark cases.
 
+C5G7 (multiplying), Kobayashi (fixed source)
+
+\subsection{Discussion Points}
+\paragraph{Standalone CSG Package}
+A standalone constructive solid geometry package, shared by major open source Monte Carlo codes such as OpenMC and MCDC, would greatly support the development of deterministic solvers intended to plug into Monte Carlo codes for generating variance-reduction parameters.
+The idea is that deterministic-method developers could simply import this package and focus solely on implementing their solver, while the shared CSG library would handle geometry as well as both continuous-energy (CE) and multigroup (MG) cross-section representations.
+Such an approach would significantly accelerate the development of \glspl{rc} codes, whether integrated into OpenMOC or another code, by eliminating the need to independently update/implement and maintain CSG and MGXS infrastructure within the \gls{rc} codebase.
+
+\paragraph{Source Representation}
+A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions. This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. \glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions. Instead, the source along each radiance interval can be computed as a continuous function by interpolating from nearby C0 probes. This will likely add computational cost, as now the source function would need to be numerically integrated, but might result in significant improvements in accuracy.
+
+
 \section{Future Work}
 \subsection{Unstructured Probe Placement and Improved Interpolation}
 Liam's scratch thoughts:
@@ -204,9 +216,14 @@ Liam's scratch thoughts:
     \item After meshing, each probe will have to hold information about the angular flux (including all of the its directions) \emph{and the nodes which it will interpolate between}. This should be as simple as using a search algorithm to find the nearest probes\ldots Or we could just use information from FEM meshers and ignore any information about the basis functions\ldots
 \end{itemize}
 
-\subsection{Nathan's Thoughts}
-\begin{itemize}
-    \item There are various methods employed in deterministic neutron transport methods for convergence acceleration that could be used for \glspl{rc}. Specific methods I think would be interesting to investigate are \gls{cmfd}, \gls{dsa}, and \gls{tsa}. \gls{cmfd} has already been used for \gls{moc} codes (and is implemented in OpenMOC and OpenMC) and has proven to be a great accelerator. \gls{dsa} (from what I can tell) is a super effective method for accelerating source iteration, but is only effective for highly diffusive problems/regions. \gls{tsa} (from what I can tell) is a more robust method for accelerating source iteration, is well suited for highly anisotropic scattering problems/regions and sparse/void/near-void problems / regions; at added computational cost compared to DSA. 
-    \item A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions. This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. \glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions. Instead, the source along each radiance interval can be computed as a continuous function by interpolating from nearby C0 probes. This will likely add computational cost, as now the source function would need to be numerically integrated, but might result in significant improvements in accuracy.
-    \item Osborne~\cite{osborneRadianceCascadesNovel2025, osborneSimpleRayAcceleration2025} discusses how in non-LTE radiation transport, many problems are very sparse, and so a lot of computation is wasted on void regions. This is similair to space applications, shut down dose rate calculations, and in general just charged particle transport problems. Osborne had some interesting ideas, namely using sparse graphs like VDB (which is a large package we could bring in and not worry about maintenance) and prefiltering void probes out of the problem. The prefiltering allows us to skip computing probes that we know do not contribute, drastically saving on compute cost, and the sparse rooted graphs efficiently store linked probes minimizing look up times when merging. This needs to be investigated a lot more before formalizing though, as I am unsure as to how to filter out probes.
-\end{itemize}
+\subsection{Adjoint Solver}
+One of the endgoals of Radiance cascades is to generate weight windows for variance reduction in a Monte Carlo code. To do so, an adjoint solve mode must be implemented. 
+
+\subsection{Acceleration Methods}
+There are various methods employed in deterministic neutron transport methods for convergence acceleration that could be used for \glspl{rc}. Specific methods I think would be interesting to investigate are \gls{cmfd}, \gls{dsa}, and \gls{tsa}. \gls{cmfd} has already been used for \gls{moc} codes (and is implemented in OpenMOC and OpenMC) and has proven to be a great accelerator. \gls{dsa} (from what I can tell) is a super effective method for accelerating source iteration, but is only effective for highly diffusive problems/regions. \gls{tsa} (from what I can tell) is a more robust method for accelerating source iteration, is well suited for highly anisotropic scattering problems/regions and sparse/void/near-void problems / regions; at added computational cost compared to DSA. 
+
+\subsection{Problem Sparsity}
+Osborne~\cite{osborneRadianceCascadesNovel2025, osborneSimpleRayAcceleration2025} discusses how in non-LTE radiation transport, many problems are very sparse, and so a lot of computation is wasted on void regions. This is similair to space applications, shut down dose rate calculations, and in general just charged particle transport problems. Osborne had some interesting ideas, namely using sparse graphs like VDB (which is a large package we could bring in and not worry about maintenance) and prefiltering void probes out of the problem. The prefiltering allows us to skip computing probes that we know do not contribute, drastically saving on compute cost, and the sparse rooted graphs efficiently store linked probes minimizing look up times when merging. This needs to be investigated a lot more before formalizing though, unsure as to how to filter out probes.
+
+\subsection{Charged Particle Transport}
+Nathan's work will be in charged particle transport, so a \glspl{rc} formulation for charged particle transport will be required. This is in future work because of the added complexity of the Boltzmann-Fokker-Planck equation compared to the linear Boltzmann equation.
