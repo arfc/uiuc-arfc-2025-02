@@ -6,17 +6,58 @@
 % SN in neutronics
 % global illumination in computer graphics
 %       goals, algorithms
+
+%%%%%%
+% Nathans thoughts on the layout of this section:
+% - Neutron Transport equation presentation, and discussion
+% - Numerical methods to solving neutron transport equation (Pn, Sn, short vs long MOC, Diffusion)
+    % strengths, weaknesses, applications
+% - Discussion of MOC specifically, presentation of basic MOC ideas and equations (flat vs linear source region, TRRM, parallelism...)
+% - Related fields to neutron transport (global illumination in computer graphics, non-LTE radiative transfer)
+    %  methods in solving there, finish with Radiance Cascades
+%%%%%%
 \subsection{Global Deterministic Methods in Neutron Transport}
 \subsection{Global Illumination in Computer Graphics}
 
 \section{Radiance Cascades}
-
-\subsection{Penumbra Criteria for Global Illumination}\label{subsec:penumber-gi}
+\subsection{Penumbra Criteria}
+\subsubsection{Penumbra Criteria for Global Illumination}\label{subsubsec:penumber-gi}
 % Nathan
+The relationship between the distance from a source and the required spatial and angular resolution to resolve the source is the `penumbra condition'.
+The penumbra condition is formally defined by Sannikov~\cite{sannikovRadianceCascadesNovel} using a 2-D planar problem with a light source and perfectly opaque absorber. 
+The goal of the problem is to determine the angular and spatial resolution required to accurately capture the penumbra of the shadow cast by the source at some distance past the absorber.
 
-\subsection{Formalization of the Penumbra Criteria}
+This can be illustrated by considering a detector placed in the penumbra.
+When the detector is near the source and absorber, moving the detector laterally will expose a significant additional amount of the source to the detector. 
+Inversely, if the detector is far, the lateral step required to yield the same change in the exposure of the source is much greater. 
+Therefore the number of lateral steps required to resolve the source is related to the distance from it, so as the distance increases, the lateral step size ($\Delta_s$) can also be increased. 
+Next, the solid angle of the source and absorber, when the detector is close, is large, and so a small angular shift in the direction of the detector face will not yield a large change in the perceived solid angle.
+Conversely, far from the source and absorber, the solid angle is small, and so a small angular shift can result in a large change in the perceived solid angle.
+Thus, the number of angular steps required to resolve the source is inversely related to the distance, and so as the distance increases, the angular step size ($\Delta_{\omega}$) must decrease.
+
+Compressing these observations yields the penumbra condition~\cite{sannikovRadianceCascadesNovel, osborneRadianceCascadesNovel2025}:
+\begin{enumerate}
+    \item Near-field radiance contributions from the light source vary with high spatial frequency and low angular frequency.
+    \item Far-field radiance contributions from the light source vary with low spatial frequency and high angular frequency.
+\end{enumerate}
+
+The penumbra condition can be represented mathematically as~\cite{sannikovRadianceCascadesNovel, osborneRadianceCascadesNovel2025}:
+\begin{align}
+    \begin{split}
+        \Delta_s &< f(D) \propto D,\\
+        \Delta_{\omega} &< g(D) \propto 1/D,
+    \end{split}
+\end{align}
+
+such that $f(D)$ and $g(D)$ are linear functions of the distance $D$ from a source. It should be noted that these observations still hold for the case in which the source is far from the absorber, but for that case the angular step $\Delta_{\omega}$ scales super-linearly with $1/D$~\cite{osborneRadianceCascadesNovel2025}. 
+
+\glspl{rc} depends on the hypothesis that the penumbra condition holds generally throughout the problem domain for all sources. 
+There are trivial exceptions to this hypothesis, namely a point source or a small source embedded in a perfectly absorbing medium. 
+In general however, the penumbra condition holds well for most purposes, and \glspl{rc} are formulated to encode most extreme cases~\cite{sannikovRadianceCascadesNovel}.
+
+\subsubsection{Formalization of the Penumbra Criteria}
 % Liam
-As discussed in \cref{subsec:penumber-gi}, the penumbra criteria was originally formulated for global illumination problems in video game development.
+As discussed in \cref{subsubsec:penumber-gi}, the penumbra criteria was originally formulated for global illumination problems in video game development.
 As such, the motivations for its formulation differ from those in the scientific community.
 That is, greater emphasis is placed on the \textit{speed} of the algorithm, rather than the numerical accuracy. 
 This is clearly seen in the penumbra criteria, which lacks rigor in its definition.
@@ -24,12 +65,15 @@ Indeed, though initial papers by Sannikov and Osborne acknowledge the proportion
 As part of this work, we propose to formalize the penumbra criteria so that the \glspl{rc} technique and its limitations are clearly understood.
 
 For example, as seen in~\cite{sannikovRadianceCascadesNovel} and~\cite{osborneRadianceCascadesNovel2025}, the penumbra criteria assume the flux solution within the transition region is approximately linear between probes.
-This is clearly seen in the small angle approximation to the tangent function in \cref{subsec:penumber-gi}.
+This is clearly seen in the small angle approximation to the tangent function in \cref{subsubsec:penumber-gi}.
 
 \subsection{Radiance Intervals}
 % Nathan
 % What is it, definition/derivation, interval merging
-The foundational property of the radiation field that allows for \glspl{rc} is the notion of splitting incoming radiation rays into distinct intervals that can be solved for separately (and iteratively combined). These intervals are called `radiance intervals', by convention from Sannikov~\cite{sannikovRadianceCascadesNovel}.
+This section introduces and derives the concept of radiance intervals in a neutron transport framework.
+\subsubsection{Formalization of Radiance Intervals}
+The foundational property of the radiation field that allows for \glspl{rc} is the notion of splitting incoming radiation rays into distinct intervals that can be solved for separately (and iteratively combined). 
+These intervals are called `radiance intervals', by convention from Sannikov~\cite{sannikovRadianceCascadesNovel}.
 
 To prove this property, we begin with the characteristic form of the \gls{lbe} as
 \begin{equation}
@@ -170,9 +214,9 @@ Finally, it should be evident that if a ray is broken into $n$ intervals, the so
 % create image of cascades -- Liam
 
 \section{Proposed Work}
-\subsection{Radiance Cascades Implementation}
-% what needs to exist in a code to implement RC, what needs to be implemented for RC
+This section discusses the implementation of \glspl{rc}, and our proposed work.
 
+\subsection{Prerequisite Code Features}
 Prior to implementing into a codebase, there a few features that must exist in order to implement \glspl{rc}. Additionally, there are highly-desired features that we think make a code more or less ideal to implement in, but are not explicitly required for implementation.
 
 \subsubsection{Required Features}
@@ -205,13 +249,7 @@ It has been shown~\cite{sannikovRadianceCascadesNovel,osborneRadianceCascadesNov
 
 
 
-\subsection{Code}
-% OpenMoC, OpenCSG (separating from OpenMC -- would need to work with developers)
-\subsubsection{Current Codes}
-There were four codes that we investigated as possible implementation points.
-These four codes were OpenMC, OpenSN, DexRT, and OpenMOC. 
-\paragraph{OpenMC}
-
+\subsection{Radiance Cascades Implementation}
 
 \subsubsection{Toy Problem}
 Rather than jumping in to implementing \glspl{rc} in the general case, we propose to start with a simple implementation of \textit{no more than two} ``toy'' problems, where we choose very simple transport problems in 2D to implement with either a Python or C++ script.
@@ -221,13 +259,26 @@ The purpose of this is purely educational, and it will do two things:
     \item Show early results for the method applied to neutronics (internally, though it may make a cool LinkedIn post or something\ldots).
 \end{enumerate}
 
-\subsubsection{Long-Term Implementation}
+% OpenMoC, OpenCSG (separating from OpenMC -- would need to work with developers)
+\subsubsection{Implementation Target}
+There were four codes that we investigated as possible implementation points.
+These four codes were OpenMC, OpenSN, DexRT, and OpenMOC.
+\paragraph{OpenMC}
+\paragraph{OpenSN}
+\paragraph{DexRT}
+\paragraph{OpenMOC}
+
+\subsubsection{Implementation Outline}
+% Long time implementation outline
 
 \subsection{Benchmarks}
 We propose the following benchmark cases be used for the development and testing of \glspl{rc}.
 Because \glspl{rc} has yet to be implemented for irregular domains and because this first work is for proof-of-concept, we restrict ourselves to simple-cartesian, flatland (2D) benchmark cases.
 
-C5G7 (multiplying), Kobayashi (fixed source)
+\paragraph{Liam}
+C5G7 (multiplying)
+\paragraph{Nathan}
+Kobayashi (fixed source)
 
 \subsection{Discussion Points}
 This section highlights specific ideas we have had that could fit into both future work and first implementation.
