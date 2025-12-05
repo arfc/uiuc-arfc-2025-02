@@ -1,3 +1,6 @@
+\tableofcontents
+\clearpage
+
 \section{Literature Review and Background}
 % MoC in neutronics
 % SN in neutronics
@@ -169,13 +172,46 @@ Finally, it should be evident that if a ray is broken into $n$ intervals, the so
 \section{Proposed Work}
 \subsection{Radiance Cascades Implementation}
 % what needs to exist in a code to implement RC, what needs to be implemented for RC
+
+Prior to implementing into a codebase, there a few features that must exist in order to implement \glspl{rc}. Additionally, there are highly-desired features that we think make a code more or less ideal to implement in, but are not explicitly required for implementation.
+
+\subsubsection{Required Features}
+\paragraph{Geometry Representation}
+In the current form of \glspl{rc}, the spacing between probes of the same cascade must be identical. Because of this, the geometric representation in the code must be either structured rectilinear meshes or constructive solid geometry. If the geometric representation is a structured rectilinear mesh, then the vertices would be the centroids of probes. This is the representation used by Osborne for non-LTE radiative transfer~\cite{osborneRadianceCascadesNovel2025}. If the geometric representation is constructive solid geometry, then we would simply prescribe the probe centroids and would not be restricted by the mesh. Additionally, using constructive solid geometry would enable simple plug in to Monte Carlo codes down the line. 
+
+\paragraph{Multigroup Cross Sections}
+\glspl{rc} is a deterministic method, and so the energy dependence is discretized using either the multigroup approximation or some other discretization scheme (charged particle transport). As such, there must be some sort of cross section interface, allowing users to specify multigroup cross sections for geometric regions. 
+
+\subsubsection{Desired Features}
+\paragraph{Shared Memory Parallelism}
+\glspl{rc} are optimized and well suited for shared memory parallel execution (trivially parallel). 
+Specifically, radiance intervals can be calculated independently, and then after all intervals have been calculated, interval merging can be calculated independently with read-only access on `parent' probes. 
+Unfortunately, distributed memory parallelism is a bit more challenging, and should be left for future work. Ideally, a code base would have some notion of shared memory parallelism already existing, especially GPU based parallelism.
+This would be in the form of OpenMP or CUDA, or ideally a general parallelism interface like OneAPI, Kokkos, RAJA, etc. 
+The benefits of using a general interface are that they are externally maintained and updated, interface with all types of GPUs (NVIDIA, AMD, Intel...) and CPUs (Intel, AMD...) with no additional user effort or code written, and would be updated to reflect the state of the industry (e.g. new GPU company comes out).
+Among all of the general parallelism interfaces, Kokkos seems to be the front runner because of its simple interface, large user community, highly active development team, large device support, and backing from the Linux foundation.
+The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{}.%https://www.osti.gov/servlets/purl/2305595
+
+\paragraph{Simple Code Base}
+Ideally, the code base would be relatively simple to develop in. 
+This means the code for the executable would be written in one language, and not, for example, half-python and half-c++ (SWIG, Cython). 
+In our opinion (Nathan), SWIG and Cython drastically worsen the complexity of the build system, without much of a real payoff in user experience. 
+A system like OpenMC's, where there is a python interface for generating input files but the actual code execution occurs entirely in C++, is desired.
+
+\paragraph{} % Not sure where this goes
 It is imperative in the growing use and capabilities of graphical processing units (GPUs) that any and all commercial implementations of \glspl{rc} parallelize using GPUs.
 It has been shown~\cite{sannikovRadianceCascadesNovel,osborneRadianceCascadesNovel2025} that \glspl{rc} scales extremely well in parallel, and indeed GPUs are manufactured to handle the ray-tracing needs of the method.
-For this, we look to use the CUDA toolkit developed by NVIDIA.
+
+
+
 
 \subsection{Code}
 % OpenMoC, OpenCSG (separating from OpenMC -- would need to work with developers)
 \subsubsection{Current Codes}
+There were four codes that we investigated as possible implementation points.
+These four codes were OpenMC, OpenSN, DexRT, and OpenMOC. 
+\paragraph{OpenMC}
+
 
 \subsubsection{Toy Problem}
 Rather than jumping in to implementing \glspl{rc} in the general case, we propose to start with a simple implementation of \textit{no more than two} ``toy'' problems, where we choose very simple transport problems in 2D to implement with either a Python or C++ script.
@@ -194,6 +230,8 @@ Because \glspl{rc} has yet to be implemented for irregular domains and because t
 C5G7 (multiplying), Kobayashi (fixed source)
 
 \subsection{Discussion Points}
+This section highlights specific ideas we have had that could fit into both future work and first implementation.
+
 \paragraph{Standalone CSG Package}
 A standalone constructive solid geometry package, shared by major open source Monte Carlo codes such as OpenMC and MCDC, would greatly support the development of deterministic solvers intended to plug into Monte Carlo codes for generating variance-reduction parameters.
 The idea is that deterministic-method developers could simply import this package and focus solely on implementing their solver, while the shared CSG library would handle geometry as well as both continuous-energy (CE) and multigroup (MG) cross-section representations.
@@ -201,7 +239,6 @@ Such an approach would significantly accelerate the development of \glspl{rc} co
 
 \paragraph{Source Representation}
 A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions. This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. \glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions. Instead, the source along each radiance interval can be computed as a continuous function by interpolating from nearby C0 probes. This will likely add computational cost, as now the source function would need to be numerically integrated, but might result in significant improvements in accuracy.
-
 
 \section{Future Work}
 \subsection{Unstructured Probe Placement and Improved Interpolation}
