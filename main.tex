@@ -314,7 +314,10 @@ The idea is that deterministic-method developers could simply import this packag
 Such an approach would significantly accelerate the development of \glspl{rc} codes, whether integrated into OpenMOC or another code, by eliminating the need to independently update/implement and maintain CSG and MGXS infrastructure within the \gls{rc} codebase.
 
 \paragraph{Source Representation}
-A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions. This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. \glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions. Instead, the source along each radiance interval can be computed as a continuous function by interpolating from nearby C0 probes. This will likely add computational cost, as now the source function would need to be numerically integrated, but might result in significant improvements in accuracy.
+A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions.
+This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. \glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions.
+Instead, the source along each radiance interval can be computed as a continuous function by interpolating from nearby C0 probes.
+This will likely add computational cost, as now the source function would need to be numerically integrated, but might result in significant improvements in accuracy.
 
 \section{Future Work}
 \subsection{Unstructured Probe Placement and Improved Interpolation}
