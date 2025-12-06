@@ -272,13 +272,38 @@ These four codes were OpenMC, OpenSN, DexRT, and OpenMOC.
 % Long time implementation outline
 
 \subsection{Benchmarks}
+Benchmark cases for \glspl{rc} must be chosen to specifically show the advantages of the method and directly test for known problems in other methods, such as ray-effects in \glspl{sn}.
 We propose the following benchmark cases be used for the development and testing of \glspl{rc}.
-Because \glspl{rc} has yet to be implemented for irregular domains and because this first work is for proof-of-concept, we restrict ourselves to simple-cartesian, flatland (2D) benchmark cases.
+
+The application of \glspl{rc} to the \glspl{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
+There are two main differences between this application and ours:
+\begin{enumerate}
+    \item Neutron transport simulations are typically focused on length scales in the centimeters to meters, not kilometers and light-years.\label{first difference}
+    \item The source term is dependent on the flux in multiplying (fission) media.\label{second difference}
+\end{enumerate}
+
+\Cref{first difference} will be straightforward to show, as there are many benchmarks that allow for testing neutron streaming.
+One such set, known as the Kobayashi benchmarks~\cite{kobayashi3DRADIATIONRANSPORT2000}, has become an industry standard and has been used consistently in modern codes, such as the \glspl{sn} code Denovo from Oak Ridge National Laboratory~\cite{evansDenovoNewThreeDimensional2010b}.
+They look to test streaming through voids from a fixed source into a non-multiplying material.
+
+These benchmarks consist of three geometries:
+\begin{enumerate}
+    \item A source surrounded by a cubic void.
+    \item A source with a vertical (chimney-like) void.
+    \item A source with a ``dog leg''\footnote{Yes, that is the actual name in the paper.} void duct.
+\end{enumerate}
+% Add images!
+The surrounding non-void region is either strictly absorbing or \%50 absorbing with \%50 scattering (of the total cross section).
+
+The ultimate goal will be to report on \glspl{rc}'s capabilities on the 3D problems as they were originally published.
+However, we will propose to start with 2D ``flattened'' versions of these problems for a proof-of-concept internally, then move on to 3D implementation.
+
+\Cref{second difference}, however, is the more interesting and relevant problem to tackle for a proof-of-concept, and thus will make up the bulk of the work for benchmark problems.
+To be considered successful, we will need to implement \glspl{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \glspl{sn}.
+Or, alternatively, must be proven to scale well using GPU parallelism.
 
 \paragraph{Liam}
 C5G7 (multiplying)
-\paragraph{Nathan}
-Kobayashi (fixed source)
 
 \subsection{Discussion Points}
 This section highlights specific ideas we have had that could fit into both future work and first implementation.
