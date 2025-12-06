@@ -1,0 +1,48 @@
+\subsection{Penumbra Criteria}
+\subsubsection{Penumbra Criteria for Global Illumination}\label{subsubsec:penumber-gi}
+% Nathan
+The relationship between the distance from a source and the required spatial and angular resolution to resolve the source is the `penumbra condition'.
+The penumbra condition is formally defined by Sannikov~\cite{sannikovRadianceCascadesNovel} using a 2-D planar problem with a light source and perfectly opaque absorber. 
+The goal of the problem is to determine the angular and spatial resolution required to accurately capture the penumbra of the shadow cast by the source at some distance past the absorber.
+
+This can be illustrated by considering a detector placed in the penumbra.
+When the detector is near the source and absorber, moving the detector laterally will expose a significant additional amount of the source to the detector. 
+Inversely, if the detector is far, the lateral step required to yield the same change in the exposure of the source is much greater. 
+Therefore the number of lateral steps required to resolve the source is related to the distance from it, so as the distance increases, the lateral step size ($\Delta_s$) can also be increased. 
+Next, the solid angle of the source and absorber, when the detector is close, is large, and so a small angular shift in the direction of the detector face will not yield a large change in the perceived solid angle.
+Conversely, far from the source and absorber, the solid angle is small, and so a small angular shift can result in a large change in the perceived solid angle.
+Thus, the number of angular steps required to resolve the source is inversely related to the distance, and so as the distance increases, the angular step size ($\Delta_{\omega}$) must decrease.
+
+Compressing these observations yields the penumbra condition~\cite{sannikovRadianceCascadesNovel, osborneRadianceCascadesNovel2025}:
+\begin{enumerate}
+    \item Near-field radiance contributions from the light source vary with high spatial frequency and low angular frequency.
+    \item Far-field radiance contributions from the light source vary with low spatial frequency and high angular frequency.
+\end{enumerate}
+
+The penumbra condition can be represented mathematically as~\cite{sannikovRadianceCascadesNovel, osborneRadianceCascadesNovel2025}:
+\begin{align}
+    \begin{split}
+        \Delta_s &< f(D) \propto D,\\
+        \Delta_{\omega} &< g(D) \propto 1/D,
+    \end{split}
+\end{align}
+
+such that $f(D)$ and $g(D)$ are linear functions of the distance $D$ from a source. It should be noted that these observations still hold for the case in which the source is far from the absorber, but for that case the angular step $\Delta_{\omega}$ scales super-linearly with $1/D$~\cite{osborneRadianceCascadesNovel2025}. 
+
+\glspl{rc} depends on the hypothesis that the penumbra condition holds generally throughout the problem domain for all sources. 
+There are trivial exceptions to this hypothesis, namely a point source or a small source embedded in a perfectly absorbing medium. 
+In general however, the penumbra condition holds well for most purposes, and \glspl{rc} are formulated to encode most extreme cases~\cite{sannikovRadianceCascadesNovel}.
+
+\subsubsection{Formalization of the Penumbra Criteria}
+% Liam
+As discussed in \cref{subsubsec:penumber-gi}, the penumbra criteria was originally formulated for global illumination problems in video game development.
+As such, the motivations for its formulation differ from those in the scientific community.
+That is, greater emphasis is placed on the \textit{speed} of the algorithm, rather than the numerical accuracy. 
+This is clearly seen in the penumbra criteria, which lacks rigor in its definition.
+Indeed, though initial papers by Sannikov and Osborne acknowledge the proportionality of the required step size needed in the angular and spatial discretizations, neither attempt to describe additional constraints to the requirements; both papers simply assume a coefficient of 1 and boldly claim that this holds generally.
+As part of this work, we propose to formalize the penumbra criteria so that the \glspl{rc} technique and its limitations are clearly understood.
+
+For example, as seen in~\cite{sannikovRadianceCascadesNovel} and~\cite{osborneRadianceCascadesNovel2025}, the penumbra criteria assume the flux solution within the transition region is approximately linear between probes.
+This is clearly seen in the small angle approximation to the tangent function in \cref{subsubsec:penumber-gi}.
+
+

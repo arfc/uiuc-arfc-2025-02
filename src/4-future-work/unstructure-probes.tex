@@ -1,0 +1,12 @@
+\subsection{Unstructured Probe Placement and Improved Interpolation}
+Liam's scratch thoughts:
+\begin{itemize}
+    \item Numerous meshing algorithms exist that can place nodes within the domain of arbitrary meshes (such as \texttt{gmsh}).
+    \item The requirements of \glspl{rc} lie in the spacing between probes with regard to their angular resolution. 
+    As of the writing of this, it is understood that each increase in cascade ``level'' results in a doubling of the spatial distance.
+    It should therefore be very straightforward to use a mesh generator with a user-set minimum spatial discretization for cascade 0, then the generator can place the probes for all higher cascades by doubling a global mesh parameter. 
+    The parameter needs to ensure that this is the \textit{maximum} distance between probes (nodes) to ensure the penumbra criteria are satisfied.
+    \item This admittedly sounds a lot like using finte element-like basis functions to interpolate between probes (nodes), though without the complicated basis functions -- we only need to use two probes to linearly interpolation, then three probes for quadratic, etc. I wonder, then if we could use something like B-splines to get high-accuracy interpolation between notes\ldots This may be too complicated, but the point is that increasing the interpolation accuracy should be mathematically straightforward, if not computationally obnoxious.
+    \item After meshing, each probe will have to hold information about the angular flux (including all of the its directions) \emph{and the nodes which it will interpolate between}. This should be as simple as using a search algorithm to find the nearest probes\ldots Or we could just use information from FEM meshers and ignore any information about the basis functions\ldots
+\end{itemize}
+

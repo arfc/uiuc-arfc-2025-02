@@ -1,0 +1,31 @@
+\subsection{Prerequisite Code Features}
+Prior to implementing into a codebase, there a few features that must exist in order to implement \glspl{rc}. Additionally, there are highly-desired features that we think make a code more or less ideal to implement in, but are not explicitly required for implementation.
+
+\subsubsection{Required Features}
+\paragraph{Geometry Representation}
+In the current form of \glspl{rc}, the spacing between probes of the same cascade must be identical. Because of this, the geometric representation in the code must be either structured rectilinear meshes or constructive solid geometry. If the geometric representation is a structured rectilinear mesh, then the vertices would be the centroids of probes. This is the representation used by Osborne for non-LTE radiative transfer~\cite{osborneRadianceCascadesNovel2025}. If the geometric representation is constructive solid geometry, then we would simply prescribe the probe centroids and would not be restricted by the mesh. Additionally, using constructive solid geometry would enable simple plug in to Monte Carlo codes down the line. 
+
+\paragraph{Multigroup Cross Sections}
+\glspl{rc} is a deterministic method, and so the energy dependence is discretized using either the multigroup approximation or some other discretization scheme (charged particle transport). As such, there must be some sort of cross section interface, allowing users to specify multigroup cross sections for geometric regions. 
+
+\subsubsection{Desired Features}
+\paragraph{Shared Memory Parallelism}
+\glspl{rc} are optimized and well suited for shared memory parallel execution (trivially parallel). 
+Specifically, radiance intervals can be calculated independently, and then after all intervals have been calculated, interval merging can be calculated independently with read-only access on `parent' probes. 
+Unfortunately, distributed memory parallelism is a bit more challenging, and should be left for future work. Ideally, a code base would have some notion of shared memory parallelism already existing, especially GPU based parallelism.
+This would be in the form of OpenMP or CUDA, or ideally a general parallelism interface like OneAPI, Kokkos, RAJA, etc. 
+The benefits of using a general interface are that they are externally maintained and updated, interface with all types of GPUs (NVIDIA, AMD, Intel...) and CPUs (Intel, AMD...) with no additional user effort or code written, and would be updated to reflect the state of the industry (e.g. new GPU company comes out).
+Among all of the general parallelism interfaces, Kokkos seems to be the front runner because of its simple interface, large user community, highly active development team, large device support, and backing from the Linux foundation.
+The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{}.%https://www.osti.gov/servlets/purl/2305595
+
+\paragraph{Simple Code Base}
+Ideally, the code base would be relatively simple to develop in. 
+This means the code for the executable would be written in one language, and not, for example, half-python and half-c++ (SWIG, Cython). 
+In our opinion (Nathan), SWIG and Cython drastically worsen the complexity of the build system, without much of a real payoff in user experience. 
+A system like OpenMC's, where there is a python interface for generating input files but the actual code execution occurs entirely in C++, is desired.
+
+\paragraph{} % Not sure where this goes
+It is imperative in the growing use and capabilities of graphical processing units (GPUs) that any and all commercial implementations of \glspl{rc} parallelize using GPUs.
+It has been shown~\cite{sannikovRadianceCascadesNovel,osborneRadianceCascadesNovel2025} that \glspl{rc} scales extremely well in parallel, and indeed GPUs are manufactured to handle the ray-tracing needs of the method.
+
+
