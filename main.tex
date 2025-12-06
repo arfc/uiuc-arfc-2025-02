@@ -273,6 +273,8 @@ These four codes were OpenMC, OpenSN, DexRT, and OpenMOC.
 
 \subsection{Benchmarks}
 Benchmark cases for \glspl{rc} must be chosen to specifically show the advantages of the method and directly test for known problems in other methods, such as ray-effects in \glspl{sn}.
+To be considered successful, we will need to implement \glspl{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \glspl{sn}.
+Or, alternatively, must be proven to scale well using GPU parallelism.
 We propose the following benchmark cases be used for the development and testing of \glspl{rc}.
 
 The application of \glspl{rc} to the \glspl{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
@@ -299,8 +301,6 @@ The ultimate goal will be to report on \glspl{rc}'s capabilities on the 3D probl
 However, we will propose to start with 2D ``flattened'' versions of these problems for a proof-of-concept internally, then move on to 3D implementation.
 
 \Cref{second difference}, however, is the more interesting and relevant problem to tackle for a proof-of-concept, and thus will make up the bulk of the work for benchmark problems.
-To be considered successful, we will need to implement \glspl{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \glspl{sn}.
-Or, alternatively, must be proven to scale well using GPU parallelism.
 
 \paragraph{Liam}
 C5G7 (multiplying)
