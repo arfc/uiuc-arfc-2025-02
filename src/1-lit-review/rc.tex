@@ -14,3 +14,20 @@ As seen with neutronics methods such as the \acrlong{moc} (and its relative, \ac
 Though~\cite{sannikovRadianceCascadesNovela} gives a strong start to tackling this problem, Sannikov notes that the task of simply storing the first cascade is practicaly equivalent to discretizing the entire domain, which can be a dealbreaker for large problems.
 That is, to truly see the benefits of this technique, computational tools must be able to effectively store \textit{twice} the memory of the finest discretization, though each additional cascade's memory requirements reduce exponentially.
 
+The most relevant paper to this project proposal is that written by Osborne and Sannikov entitled ``Radiance cascades: a novel high-resolution formal solution for multidimensional non-LTE radiative transfer.''
+In this paper, the authors apply \acrshort{rc} to radiative transfer in astrophysics.
+Similar to deterministic neutron transport, the discrete ordinates method has dominated as the method-of-choice, and has likewise struggled with ray effects.
+Unlike terrestrial neutronics, astrophysics is not able to take advantage of Monte Carlo methods because of massive length scales, and these scales likewise greatly affect the \acrshort{sn} solution far from the source.
+To achieve an accurate solution, extremely high angular resolution is required, but the computational needs scale linearly with the number of angular quadrature points.
+
+Osborne visits the claim of infinite rays constructed for a finite cost.
+He notes that this asymptotic scaling breaks down before infinite rays can be realized but notes that while the penumbra criterion holds, ``the integration of the radiation field at high spatial and angular resolution [is] far cheaper than could be obtained with any traditional ray-casting approach.''
+Additionally, the computational cost is dependent on the length of the radiance interval, and for higher cascades, these intervals can be considerably longer than lower cascades.
+Lastly, the scaling laws introduced by~\cite{sannikovRadianceCascadesNovela} and~\cite{osborneRadianceCascadesNovel2025a} are dependent on the so-called ``branching factor,'' which controls the number of rays computed for each cascade.
+It is mentioned that more complex branching strategies can be applied in 3D to take advantage of the second angular dimension, possible leading to improved scaling.
+This hypothesis was not explored in Osborne's paper.
+
+The most notable contribution to \acrlong{rc} in~\cite{osborneRadianceCascadesNovel2025a} is the so-called ``bilinear fix.''
+One of the weaknesses of \acrshort{rc} as it was introduced in~\cite{sannikovRadianceCascadesNovela} is ringing artefacting.
+The fix removes these numerical errors by correctly interpolating the source contributions from the next highest cascade.
+An overview of this fix has been provided in \cref{subsec:bilinear-fix}.
