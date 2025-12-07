@@ -6,7 +6,7 @@ Prior to implementing into a codebase, there a few features that must exist in o
 In the current form of \acrshort{rc}, the spacing between probes of the same cascade must be identical. Because of this, the geometric representation in the code must be either structured rectilinear meshes or constructive solid geometry. If the geometric representation is a structured rectilinear mesh, then the vertices would be the centroids of probes. This is the representation used by Osborne for non-LTE radiative transfer~\cite{osborneRadianceCascadesNovel2025}. If the geometric representation is constructive solid geometry, then we would simply prescribe the probe centroids and would not be restricted by the mesh. Additionally, using constructive solid geometry would enable simple plug in to Monte Carlo codes down the line.
 
 \paragraph{Multigroup Cross Sections}
-\acrshort{rc} is a deterministic method, and so the energy dependence is discretized using either the multigroup approximation or some other discretization scheme (charged particle transport). As such, there must be some sort of cross section interface, allowing users to specify multigroup cross sections for geometric regions.
+\acrshort{rc} is a deterministic method, and so the energy dependence is discretized using either the multigroup approximation or some other discretization scheme (charged particle transport). As such, there must be some sort of cross section module, allowing users to specify multigroup cross sections for geometric regions.
 
 \subsubsection{Desired Features}
 \paragraph{Shared Memory Parallelism}
@@ -16,7 +16,7 @@ Unfortunately, distributed memory parallelism is a bit more challenging, and sho
 This would be in the form of OpenMP or CUDA, or ideally a general parallelism interface like OneAPI, Kokkos, RAJA, etc. 
 The benefits of using a general interface are that they are externally maintained and updated, interface with all types of GPUs (NVIDIA, AMD, Intel...) and CPUs (Intel, AMD...) with no additional user effort or code written, and would be updated to reflect the state of the industry (e.g. new GPU company comes out).
 Among all of the general parallelism interfaces, Kokkos seems to be the front runner because of its simple interface, large user community, highly active development team, large device support, and backing from the Linux foundation.
-The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{}.%https://www.osti.gov/servlets/purl/2305595
+The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{}.%davisEvaluativeComparisonPerformance2024 https://www.osti.gov/servlets/purl/2305595
 
 \paragraph{Simple Code Base}
 Ideally, the code base would be relatively simple to develop in. 
