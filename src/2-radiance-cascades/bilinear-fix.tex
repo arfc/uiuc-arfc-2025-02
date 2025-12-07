@@ -1,0 +1,28 @@
+\subsection{Bilinear Fix}
+The most notable issue with \glspl{rc} is ringing artefacts, as shown in the upper image of \cref{fig:ringing-effect}.
+As discussed by Osborne~\cite{osborneRadianceCascadesNovel2025}, the origin of this issue lies in the oversampling of a source across cascades.
+This issue is remedied through the use of the so-called ``bilinear fix.''
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{figs/ringing-effect}
+    \caption{Ringing effect. Taken from~\cite{osborneRadianceCascadesNovel2025}, figure 7. Caption from original source: \textit{Comparison of falloff around an opaque circular source using basic radiance cascades, and those with the bilinear fix. On the left-hand side, a tonemapped representation of the radiation field is shown. The upper panel of each pair on the right-hand side is a comparison of the intensity falloff against a theoretical model shown for cuts at different angles starting from the centre of the source, whilst the lower panel of each pair is the relative error between the solution along these different cuts and the expected falloff. We note that this is the worst-case scenario for ringing from the basic radiance cascades method as it shows an extremely opaque source embedded in a completely transparent medium.}}
+    \label{fig:ringing-effect}
+\end{figure}
+
+Consider a spherical source in space.
+Because each probe both within and across cascades is located a different point in space, each will ``see'' a different contribution of the source to the angular flux at the point.
+When interpolation is carried out between a higher and lower cascade, we unfairly increase the contributions of the source on the probe; the source is not properly blocked (``occluded'') when stepping to a lower cascade.
+This leads to energy not being conserved at locations where cascades overlap a source.
+
+For illustration, let's say we have two cascades, 0 and 1, where Cascade 0 has 4 equidistant angular directions, and Cascade 1 has 8.
+Additionally let's assume that the penumbra criterion holds, so there are twice as many probes in Cascade 0 as there are in Cascade 1 to reflect the higher spatial density.
+As discussed previously, the method of radiance cascades evaluates contributions to each probe within distances defined by the radiance interval.
+This interval is an annulus is 2D and a shell in 3D.
+The fix is thus:
+\begin{enumerate}
+    \item Impose the radiance interval and angular discretization of Cascade $i$ onto the probes in Cascade $i+1$.
+    \item Trace rays along the imposed radiance intervals and angular discretizations on Cascade $i+1$.
+    \item Use bilinear interpolation to merge these contributions to Cascade $i$.
+\end{enumerate}
+This process minimizes parallax effects and ensures occlusion (blocking) from Cascade $i$ is correctly applied.
+% CREATE IMAGES FOR EACH OF THE ABOVE STEPS
