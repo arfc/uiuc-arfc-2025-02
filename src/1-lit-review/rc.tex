@@ -31,3 +31,8 @@ The most notable contribution to \acrlong{rc} in~\cite{osborneRadianceCascadesNo
 One of the weaknesses of \acrshort{rc} as it was introduced in~\cite{sannikovRadianceCascadesNovela} is ringing artefacting.
 The fix removes these numerical errors by correctly interpolating the source contributions from the next highest cascade.
 An overview of this fix has been provided in \cref{subsec:bilinear-fix}.
+
+The final paper of interest is entitled ``Holographic Radiance Cascades for 2D Global Illumination''~\cite{freemanHolographicRadianceCascades2025}.
+In this work, the authors rework the original \acrlong{rc} formulation to decrease resolution in only a single direction as cascades increase.
+Doing this both improves shadow resolution by limiting the diffusion introduced by class \acrlong{rc} and provides an acceleration structure.
+The results of this work show promise in the area of radiation shielding, where resolving ``shadow'' regions are of the utmost importance.
