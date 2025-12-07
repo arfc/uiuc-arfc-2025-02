@@ -21,13 +21,17 @@
 \subsection{Global Illumination in Computer Graphics}
 
 \section{Radiance Cascades}
+As previously discussed, \acrlong{rc} was developed to simulate global illumination in realtime for computer graphics applications.
+The method is built upon the following simple principle: Near a source, the radiance field varies rapidly in space, but not in angle. 
+Far from the source, the radiance field varies slowly in space but rapidly in angle. 
+There are, of course, caveats to this generalization, and the point of the proposed work is to explore cases where these assumptions hold or deteriorate.
+In this section, we provide an overview of the theory presented in papers by Sannikov and Osborne~\cite{osborneRadianceCascadesNovel2025a,sannikovRadianceCascadesNovela} with some additional preliminary theory for the method as it pertains to neutron transport.
 
 \input{src/2-radiance-cascades/penumbra-criterion}
 
 \subsection{Radiance Intervals}
-% Nathan
-% What is it, definition/derivation, interval merging
 This section introduces and derives the concept of radiance intervals in a neutron transport framework.
+
 \input{src/2-radiance-cascades/radiance-intervale-formalization}
 \input{src/2-radiance-cascades/ri-validity}
 \input{src/2-radiance-cascades/interval-merging}
