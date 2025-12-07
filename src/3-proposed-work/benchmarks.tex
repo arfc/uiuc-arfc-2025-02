@@ -17,10 +17,62 @@ They look to test streaming through voids from a fixed source into a non-multipl
 
 These benchmarks consist of three geometries:
 \begin{enumerate}
-    \item A source surrounded by a cubic void.
-    \item A source with a vertical (chimney-like) void.
-    \item A source with a ``dog leg''\footnote{Yes, that is the actual name in the paper.} void duct.
+    \item A source surrounded by a cubic void (\cref{fig:first-kobayashi}).
+    \item A source with a vertical (chimney-like) void (\cref{fig:second-kobayashi}).
+    \item A source with a ``dog leg''\footnote{Yes, that is the actual name in the paper.} void duct (\cref{fig:third-kobayashi}).
 \end{enumerate}
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/2D-kobayashi-1}
+        \caption{2D}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/3D-kobayashi-1}
+        \caption{3D}
+    \end{subfigure}
+    \caption{First Kobayashi benchmark (taken from~\cite{kobayashi3DRADIATIONRANSPORT2000}).}
+    \label{fig:first-kobayashi}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/2D-kobayashi-2}
+        \caption{2D}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/3D-kobayashi-2}
+        \caption{3D}
+    \end{subfigure}
+    \caption{Second Kobayashi benchmark (taken from~\cite{kobayashi3DRADIATIONRANSPORT2000}).}
+    \label{fig:second-kobayashi}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/2D-kobayashi-3-1}
+        \caption{2D $x-y$ plane.}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/2D-kobayashi-3-2}
+        \caption{2D $y-z$ plane.}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/2D-kobayashi-3-3}
+        \caption{2D $x-z$ plane.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/3D-kobayashi-3}
+        \caption{3D}
+    \end{subfigure}
+    \caption{Third Kobayashi benchmark (taken from~\cite{kobayashi3DRADIATIONRANSPORT2000}).}
+    \label{fig:third-kobayashi}
+\end{figure}
 % Add images!
 The surrounding non-void region is either strictly absorbing or 50\% absorbing with 50\% scattering (of the total cross section).
 
