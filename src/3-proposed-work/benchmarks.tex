@@ -73,8 +73,25 @@ These benchmarks consist of three geometries:
     \caption{Third Kobayashi benchmark (taken from~\cite{kobayashi3DRADIATIONRANSPORT2000}).}
     \label{fig:third-kobayashi}
 \end{figure}
-% Add images!
 The surrounding non-void region is either strictly absorbing or 50\% absorbing with 50\% scattering (of the total cross section).
+Values for these cases can be found in \cref{tab:kobayashi-source-and-mat-props}.
+\begin{table}[htb!]
+    \centering
+    \begin{tabular}{cccc|c}
+    &&&\textbf{Problem 1}&\textbf{Problem 2}\\
+    \toprule
+    \textbf{Region}& \textbf{Source} [n/cm\textsuperscript{3}-s]& $\mathbf{\Sigma_t}$ [1/cm]&\multicolumn{2}{c}{$\mathbf{\Sigma_s}$ [1/cm]}\\
+    \midrule
+    1&1&0.1&0&0.05\\
+    2&0&$1\times 10^{-4}$&0&$0.5\times 10^{-4}$\\
+    3&0&0.1&0&0.05\\
+    \bottomrule
+\end{tabular}
+    \caption{Source strength and material properties for Kobayashi benchmark problems.}
+    \label{tab:kobayashi-source-and-mat-props}
+\end{table}
+
+
 
 The ultimate goal will be to report on \glspl{rc}'s capabilities on the 3D problems as they were originally published.
 However, we will propose to start with 2D ``flattened'' versions of these problems for a proof-of-concept internally, then move on to 3D implementation.
