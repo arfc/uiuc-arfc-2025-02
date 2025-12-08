@@ -1,12 +1,13 @@
 This section introduces and derives the concept of radiance intervals in a neutron transport framework.
 The foundational property of the radiation field that allows for \glspl{rc} is the notion of splitting incoming radiation rays into distinct intervals that can be solved for separately (and iteratively combined). 
-These intervals are called `radiance intervals', by convention from Sannikov~\cite{sannikovRadianceCascadesNovel}.
+These intervals are called ``radiance intervals'', by convention from Sannikov~\cite{sannikovRadianceCascadesNovel}.
+A schematic of radiance intervals and their influence of the solution on a probe can be found in \cref{fig:ri-osborne}.
 \begin{figure}[!htpb]
     \centering
-    \includegraphics[width=\linewidth]{figs/radiance-interval-cmo.png}
-    \label{fig:ri-osborne}
+    \includegraphics[width=\linewidth]{figs/radiance-interval-cmo}
     \caption{Concept of radiance intervals illustrated against standard long-characteristics.
-    Taken from~\cite{osborneRadianceCascadesNovel2025}.
+    Taken from~\cite{osborneRadianceCascadesNovel2025}
+    \label{fig:ri-osborne}.
     Caption from original source:
         \textit{Comparison of long characteristics style ray-casting from a point against two different radiance intervals over the same field.
         The three coloured primitives can be considered opaque emissive sources.
