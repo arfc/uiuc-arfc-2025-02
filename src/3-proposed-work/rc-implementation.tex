@@ -16,7 +16,7 @@ These four codes were OpenMC, OpenSN, DexRT, and OpenMOC.
 OpenMC~\cite{romanoOpenMCStateoftheartMonte2015c} has a mature code base featuring CSG and MGXS modules, and so it satisfies both required prerequisites. 
 Additionally, OpenMC satisfies both desired features, as it supports shared memory parallelism via OpenMP and has a very developer friendly code base.
 Unfortunately, we believe OpenMC is not the correct code to implement \glspl{rc} in, as it is primarily a Monte Carlo code. 
-While OpenMc does have a deterministic solver, it's \gls{trrm} solver, this is only supported due to the inherently stochastic nature of \gls{trrm}. 
+While OpenMc does have a deterministic solver, \gls{trrm} solver, this is only supported due to the inherently stochastic nature of \gls{trrm}. 
 \glspl{rc} do not have a stochastic element, and thus do not belong in OpenMC.
 
 \paragraph{OpenSN}
@@ -35,7 +35,7 @@ Unfortunately, due to the nature of non-LTE radiative transfer, the representati
 The representation for opacity is significantly more complicated, as the opacity is strongly coupled to the radiation field, but still stores mean values for each discretized wavelength (the equivalent to discrete energy groups).
 Thus, DexRT is capable of representing MGXS, and the implementation would only require adding input file parsing and a removal of cross-section dependence on the radiation field.
 Additionally, as DexRT is a implementation of \glspl{rc} for a physics application, it is adaptable to solving the \gls{lbe}.
-Despite mostly satisfying the prerequisites, there are a few notable things to consider if implementing in DexRT.
+Despite mostly satisfying the prerequisites, there are a few notable things to consider if implementing in DexRT:
 \begin{enumerate}
     \item DexRT is in rapid but sporradic development, and is maintained by a single person.
     \item DexRT solves for non-LTE radiative transfer, and this problem is heavily baked into the code base. An abstraction to also solve the \gls{lbe} could be tricky to implement, and may not be supported by Osborne, as the problems are very different.
@@ -47,9 +47,9 @@ OpenMOC~\cite{boydOpenMOCMethodCharacteristics2014a} is an open source \gls{moc}
 OpenMOC uses CSG for geometric representation, has a MGXS module, and uses OpenMP or CUDA for shared memory parallelism. 
 In our opinion, the code base is relatively complex, due mostly to design choices motivated by the computational environment at the time of writing. 
 For example, the code uses SWIG for python bindings of C++ code, which adds an additional, complicated step to the build system. 
-OpenMOC also has distinct code written CPUs and GPUs, and, due to the state of OpenMP and CUDA at the time of writing, has many explicit memory calls. 
+OpenMOC also has distinct code written for CPUs and GPUs, and, due to the state of OpenMP and CUDA at the time of writing, has many explicit memory calls. 
 These features add maintenance burden and are no longer required given the recent introduction of portable parallelism interfaces like Kokkos and RAJA.
-Additionally, OpenMOC is outdated and needs a lot of code maintenance prior to implementing \glspl{rc}, although this will be discussed further in~\ref{subsubsec:implementation-outline}.
+Additionally, OpenMOC is outdated and needs a lot of code maintenance prior to implementing \glspl{rc}, although this will be discussed further in~\cref{subsubsec:implementation-outline}.
 That said, we believe that of the four codes investigated, OpenMOC is clearly the code to implement \glspl{rc} into for a few reasons. 
 OpenMOC satisfies most of the prerequisite features we defined previously, only missing the mark on code base simplicity; something that can be remedied through maintenance and updates.
 Additionally, the intent of OpenMOC was to investigate and demonstrate long characteristic methods for solving the \gls{lbe}.
@@ -65,21 +65,22 @@ This section assumes we will be implementing into OpenMOC, and will layout a rou
 OpenMOC is sporadically maintained, and as such has a few outdated dependencies.
 Specifically, the build system uses some deprecated packages, like \texttt{distutils}, and the minimum CMake version (2.8) has been deprecated since 2020. 
 
-Additionally, OpenMOC was intended to be able to interface with OpenMC, specifically for geometry and cross section generation. 
+More significantly, OpenMOC was intended to be able to interface with OpenMC, specifically for geometry and cross section generation. 
 However, OpenMC has developed new surfaces that are not implemented in OpenMOC, such as x/y cylinders, quadrics, spheres, cones, and torii. 
 Additionally, OpenMOC only supports reading MGXS from OpenMC for cell and material domain types, while OpenMC supports generating cross sections for distributed cells, meshes, and universes.
-Thus, OpenMOC is not currently fully compatible with OpenMC geometry or cross section generation.
+Thus, OpenMOC is not currently fully compatible with OpenMC geometry or cross section generation. 
+Before implementing \glspl{rc}, we believe OpenMOC should be able to do all the things it's documentation says it can do, and so these must be updated.
 
 \paragraph{Desired Updates}
 There are a lot of desired updates to OpenMOC that we believe could be beneficial to implement for \glspl{rc}.
 \begin{enumerate}
     \item Code organization: The C++ source code is currently all stored in the same directory. We propose organizing the code into logical sub-directories, similair to the organization of MOOSE apps.
     \item Code complexity: The C++ source integration into Python using SWIG complicates the code and build system. We propose seperating the C++ source and Python interface, similair to how OpenMC works.
-    \item Code cleanliness: Some of the source files are extremely long, and could benefit from templating and unnecessary function/variable deletion.
+    \item Code cleanliness: Some of the source files are extremely long, and could benefit from templating and unnecessary function/variable removal.
     \item Linear Algebra: OpenMOC has a \gls{cmfd} solver implemented, where the data storage (sparse matrix) and the solver itself are written natively. 
     For the sake of conciceness and performance, we propose bringing in PETSc for the sparse linear algebra that \gls{cmfd} requires. 
     This would drastically decrease the volume of code written for the \gls{cmfd} solver, and entirely remove the need of the \texttt{vector} class. 
-    Additionally, using PETSc gaurantees adequate performance, scalability, and portability (PETSc support Kokkos).
+    Additionally, using PETSc gaurantees adequate performance, scalability, and portability (PETSc supports Kokkos).
     \item Portable Parallelism: The parallel solvers currently use CUDA or OpenMP for shared memory parallelism.
     Because of this, there are two families of solvers in OpenMOC, those written with CUDA and those written with OpenMP, that have nearly identical code. 
     Additionally, because the GPU solver is written in CUDA, it is not portable between GPU systems. 
@@ -96,3 +97,5 @@ For the initial implementation, we propose the following features
     \item Capability to handle both multiplying and fixed-source problems
     \item The standard \glspl{rc} merging algorithm and Bi-linear fix merging algorithm
 \end{enumerate}
+
+The first two features already exist in OpenMOC, but are included for completeness and clarity.
