@@ -13,14 +13,14 @@ The purpose of this is purely educational, and it will do two things:
 There were four codes that we investigated as possible implementation points.
 These four codes were OpenMC, OpenSN, DexRT, and OpenMOC.
 \paragraph{OpenMC}
-OpenMC~\cite{} has a mature code base featuring CSG and MGXS modules, and so it satisfies both required prerequisites. 
+OpenMC~\cite{romanoOpenMCStateoftheartMonte2015c} has a mature code base featuring CSG and MGXS modules, and so it satisfies both required prerequisites. 
 Additionally, OpenMC satisfies both desired features, as it supports shared memory parallelism via OpenMP and has a very developer friendly code base.
 Unfortunately, we believe OpenMC is not the correct code to implement \glspl{rc} in, as it is primarily a Monte Carlo code. 
 While OpenMc does have a deterministic solver, it's \gls{trrm} solver, this is only supported due to the inherently stochastic nature of \gls{trrm}. 
 \glspl{rc} do not have a stochastic element, and thus do not belong in OpenMC.
 
 \paragraph{OpenSN}
-OpenSN~\cite{} is a discrete ordinates research code developed by Dr. Ragusa's group at Texas A\&M University. 
+OpenSN~\cite{OpenSnOpensn2025} is a discrete ordinates research code developed by Dr. Ragusa's group at Texas A\&M University. 
 OpenSN has a MGXS module and supports shared memory parallelism through OpenMP.
 OpenSN explicitly supports unstructued meshs, and should be capable of supporting structured meshes through input files, but this feature is unclear. 
 OpenSN is actively maintained, and recently underwent a massive update to the code base, which was to add a python interface. 
@@ -60,8 +60,32 @@ OpenMOC is also an open-source package, that is nearly in the code graveyard of 
 % - maintenance required
 % - updates planned
 % - planned implementation goals (forward solve, 2D, source iteration, neutron only, multiplying and fixed source...)
-This section assumes we will be implementing into OpenMOC, and will layout a rough estimate on the initial \glspl{rc} implementation. 
-\paragraph{Required Maintenance and Updates}
+This section assumes we will be implementing into OpenMOC, and will layout a rough estimate on the work for the initial \glspl{rc} implementation. 
+\paragraph{Required Maintenance}
+OpenMOC is sporadically maintained, and as such has a few outdated dependencies.
+Specifically, the build system uses some deprecated packages, like \texttt{distutils}, and the minimum CMake version (2.8) has been deprecated since 2020. 
+
+Additionally, OpenMOC was intended to be able to interface with OpenMC, specifically for geometry and cross section generation. 
+However, OpenMC has developed new surfaces that are not implemented in OpenMOC, such as x/y cylinders, quadrics, spheres, cones, and torii. 
+Additionally, OpenMOC only supports reading MGXS from OpenMC for cell and material domain types, while OpenMC supports generating cross sections for distributed cells, meshes, and universes.
+Thus, OpenMOC is not currently fully compatible with OpenMC geometry or cross section generation.
+
+\paragraph{Desired Updates}
+There are a lot of desired updates to OpenMOC that we believe could be beneficial to implement for \glspl{rc}.
+\begin{enumerate}
+    \item Code organization: The C++ source code is currently all stored in the same directory. We propose organizing the code into logical sub-directories, similair to the organization of MOOSE apps.
+    \item Code complexity: The C++ source integration into Python using SWIG complicates the code and build system. We propose seperating the C++ source and Python interface, similair to how OpenMC works.
+    \item Code cleanliness: Some of the source files are extremely long, and could benefit from templating and unnecessary function/variable deletion.
+    \item Linear Algebra: OpenMOC has a \gls{cmfd} solver implemented, where the data storage (sparse matrix) and the solver itself are written natively. 
+    For the sake of conciceness and performance, we propose bringing in PETSc for the sparse linear algebra that \gls{cmfd} requires. 
+    This would drastically decrease the volume of code written for the \gls{cmfd} solver, and entirely remove the need of the \texttt{vector} class. 
+    \item Portable Parallelism: The parallel solvers currently use CUDA or OpenMP for shared memory parallelism.
+    Because of this, there are two families of solvers in OpenMOC, those written with CUDA and those written with OpenMP, that have nearly identical code. 
+    Additionally, because the GPU solver is written in CUDA, it is not portable between GPU systems. 
+    We propose bringing in a package like Kokkos or RAJA for shared (and distributed) memory parallelism. 
+    This change would drastically reduce the size of the codebase, enable portable parallelism in the future, and simplify the codebase (increased readability); all without losing functionality or performance.
+\end{enumerate}
 
 \paragraph{Implementation Goals}
+
 

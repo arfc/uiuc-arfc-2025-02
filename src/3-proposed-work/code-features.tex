@@ -16,8 +16,7 @@ Unfortunately, distributed memory parallelism is a bit more challenging, and sho
 This would be in the form of OpenMP or CUDA, or ideally a general parallelism interface like OneAPI, Kokkos, RAJA, etc. 
 The benefits of using a general interface are that they are externally maintained and updated, interface with all types of GPUs (NVIDIA, AMD, Intel...) and CPUs (Intel, AMD...) with no additional user effort or code written, and would be updated to reflect the state of the industry (e.g. new GPU company comes out).
 Among all of the general parallelism interfaces, Kokkos seems to be the front runner because of its simple interface, large user community, highly active development team, large device support, and backing from the Linux foundation.
-The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{}.%davisEvaluativeComparisonPerformance2024 https://www.osti.gov/servlets/purl/2305595
-
+The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{davisEvaluativeComparisonPerformanceb}.
 \paragraph{Simple Code Base}
 Ideally, the code base would be relatively simple to develop in. 
 This means the code for the executable would be written in one language, and not, for example, half-python and half-c++ (SWIG, Cython). 
