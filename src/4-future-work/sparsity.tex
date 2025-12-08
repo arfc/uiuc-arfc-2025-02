@@ -1,4 +1,6 @@
 \subsection{Problem Sparsity}
-Osborne~\cite{osborneRadianceCascadesNovel2025, osborneSimpleRayAcceleration2025} discusses how in non-LTE radiation transport, many problems are very sparse, and so a lot of computation is wasted on void regions. This is similair to space applications, shut down dose rate calculations, and in general just charged particle transport problems. Osborne had some interesting ideas, namely using sparse graphs like VDB (which is a large package we could bring in and not worry about maintenance) and prefiltering void probes out of the problem. The prefiltering allows us to skip computing probes that we know do not contribute, drastically saving on compute cost, and the sparse rooted graphs efficiently store linked probes minimizing look up times when merging. This needs to be investigated a lot more before formalizing though, unsure as to how to filter out probes.
-
-
+Osborne~\cite{osborneRadianceCascadesNovel2025, osborneSimpleRayAcceleration2025} discusses how in non-LTE radiation transport, many problems are very sparse, and so a lot of computation is wasted on void regions.
+This is similair to space applications, shut down dose rate calculations, and in general just charged particle transport problems.
+Osborne had some interesting ideas, namely using sparse graphs like VDB (which is a large package we could bring in and not worry about maintenance) and prefiltering void probes out of the problem.
+The prefiltering allows us to skip computing probes that we know do not contribute, drastically saving on compute cost, and the sparse rooted graphs efficiently store linked probes minimizing look up times when merging.
+This needs to be investigated a lot more before formalizing though, unsure as to how to filter out probes.
