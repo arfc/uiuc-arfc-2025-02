@@ -1,16 +1,17 @@
 \subsection{Benchmarks}
 Benchmark cases for \glspl{rc} must be chosen to specifically show the advantages of the method and directly test for known problems in other methods, such as ray-effects in \glspl{sn}.
-To be considered successful, we will need to implement \glspl{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \glspl{sn}.
+To be considered successful, we will need to implement \glspl{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \gls{sn}.
 Or, alternatively, must be proven to scale well using GPU parallelism.
 We propose the following benchmark cases be used for the development and testing of \glspl{rc}.
 
-The application of \glspl{rc} to the \glspl{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
+The application of \glspl{rc} to the \gls{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
 There are two main differences between this application and ours:
 \begin{enumerate}
     \item Neutron transport simulations are typically focused on length scales in the centimeters to meters, not kilometers and light-years.\label{first difference}
     \item The source term is dependent on the flux in multiplying (fission) media.\label{second difference}
 \end{enumerate}
 
+\subsubsection{Streaming and Fixed Source: Kobayashi Benchmark}
 \Cref{first difference} will be straightforward to show, as there are many benchmarks that allow for testing neutron streaming.
 One such set, known as the Kobayashi benchmarks~\cite{kobayashi3DRADIATIONRANSPORT2000}, has become an industry standard and has been used consistently in modern codes, such as the \glspl{sn} code Denovo from Oak Ridge National Laboratory~\cite{evansDenovoNewThreeDimensional2010b}.
 They look to test streaming through voids from a fixed source into a non-multiplying material.
@@ -93,6 +94,7 @@ Values for these cases can be found in \cref{tab:kobayashi-source-and-mat-props}
 The ultimate goal will be to report on \glspl{rc}'s capabilities on the 3D problems as they were originally published.
 However, we will propose to start with 2D ``flattened'' versions of these problems for a proof-of-concept internally, then move on to 3D implementation.
 
+\subsubsection{Multiplying Media: C5G7 Benchmark}
 \Cref{second difference}, however, is the more interesting and relevant problem to tackle for a proof-of-concept.
 One of the most well-known benchmarks for this is the C5G7 benchmark case, which models a simplified, reflected quarter-core reactor with mixed-oxide and uranium-oxide fuel.
 The core is moderated with water.
