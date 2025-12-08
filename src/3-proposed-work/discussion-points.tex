@@ -1,6 +1,9 @@
 \subsection{Discussion Points}
 This section highlights specific ideas we have had that could fit into both future work and first implementation.
 
+\paragraph{3D Implementation}
+A 3D implementation of \glspl{rc} is absolutely feasible, however the scaling law that makes \glspl{rc} so interesting in 2D does not apply in 3D (atleast not trivially like in 2D).
+
 \paragraph{Standalone CSG Package}
 A standalone constructive solid geometry package, shared by major open source Monte Carlo codes such as OpenMC and MCDC, would greatly support the development of deterministic solvers intended to plug into Monte Carlo codes for generating variance-reduction parameters.
 The idea is that deterministic-method developers could simply import this package and focus solely on implementing their solver, while the shared CSG library would handle geometry as well as both continuous-energy (CE) and multigroup (MG) cross-section representations.
@@ -8,7 +11,8 @@ Such an approach would significantly accelerate the development of \glspl{rc} co
 
 \paragraph{Source Representation}
 A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions.
-This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. \glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions.
+This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. 
+\glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions.
 Instead, the source along each radiance interval can be computed as a continuous function by interpolating from nearby C0 probes.
 This will likely add computational cost, as now the source function would need to be numerically integrated, but might result in significant improvements in accuracy.
 
