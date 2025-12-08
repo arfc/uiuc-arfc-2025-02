@@ -1,4 +1,16 @@
-Another industry that is interested in solving transport problems is computer graphics, especially in the world of video game development.
-The developers of these games are interested not only in the accuracy of solutions (though perhaps arguably not as much as nuclear scientists), but also in the speed at which those solutions are achieved, oftentimes restricted to ``realtime,'' or near-instantaneous.
-There are additional applications seen in rendering for animation and computer-generated imagery (CGI) in movie-making, which have been fortunate to have the financial resources to invest in top-of-the-line computational resources; however, this paper will focus on a particular application of photon transport methodology developed by game developers.
+Another industry engaged in solving transport problems is computer graphics, which focuses on rendering light for realistic scene generation.
+A major subset of this field is video game development, where developers must balance solution accuracy with stringent performance requirements.
+Unlike scientific simulations, graphics pipelines often demand \textit{real-time} or near-instantaneous results, which places tight limits on computational cost.
+A related application within computer graphics is animation and computer-generated imagery (CGI) in film production, where high-end computational resources allow for more expensive offline rendering.
+This paper, however, focuses specifically on photon-transport methodologies emerging from the real-time rendering community in gaming.
 
+Historically, standard image-rendering pipelines relied on rasterization, in which a 3D schene is projected onto a 2D display .
+While extremely fast, rasterization does not inherently capture the complex light–matter interactions needed for physically realistic lighting.
+Ray tracing techniques, alternatively,  directly simulates light paths and their interactions with the environment, but until recently was prohibitively expensive for consumer hardware, not to mention unreasonably time-consuming to render each frame.
+The emergence of ray-tracing-dedicated units within modern graphics processing units (GPUs) has changed this landscape, making real-time ray tracing feasible and establishing it as a new standard in contemporary video games.\cite{oferSummaryRealTime2023}
+
+Within computer graphics, global illumination (GI) denotes the complete solution of a scene’s lighting, including both direct and indirect light transport.
+This is analogous to global neutron transport problems such as full-core flux calculations
+The central argument of this paper is that GI techniques have direct relevance to nuclear-engineering transport problems.
+The underlying physics is essentially the same -- identical for photon transport -- and the computer-graphics community has already built a substantial ecosystem around GPU-accelerated ray tracing.
+This creates an opportunity to take advantage of developments in real-time photon transport and apply them to scientific transport simulations.
