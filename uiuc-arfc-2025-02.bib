@@ -31,7 +31,7 @@
   urldate = {2025-12-08},
   abstract = {The ability to solve the radiative transfer equation in a fast and accurate fashion is central to several important applications in combustion physics, controlled thermonuclear fusion and astrophysics. Most practitioners see the value of using discrete ordinates methods for such applications. However, previous efforts at designing discrete ordinates methods that are both fast and accurate have met with limited success. This is especially so when parts of the application satisfy the free streaming limit in which case most solution strategies become unacceptably diffusive or when parts of the application have high absorption or scattering opacities in which case most solution strategies converge poorly. Designing a single solution strategy that retains second-order accuracy and converges with optimal efficiency in the free streaming limit as well as the optically thick limit is a challenge. Recent results also indicate that schemes that are less than second-order accurate will not retrieve the radiation diffusion limit. In this paper we analyze several of the challenges involved in doing multidimensional numerical radiative transfer. It is realized that genuinely multidimensional discretizations of the radiative transfer equation that are second-order accurate exist. Because such discretizations are more faithful to the physics of the problem they help minimize the diffusion in the free streaming limit. Because they have a more compact stencil, they have superior convergence properties. The ability of the absorption and scattering terms to couple strongly to the advection terms is examined. Based on that we find that operator splitting of the scattering and advection terms damages the convergence in several situations. Newton--Krylov methods are shown to provide a natural way to incorporate the effects of nonlinearity as well as strong coupling in a way that avoids operator splitting. Used by themselves, Newton--Krylov methods converge slowly. However, when the Newton--Krylov methods are used as smoothers within a full approximation scheme multigrid method, the convergence is vastly improved. The combination of a genuinely multidimensional, nonlinearly positive scheme that uses Full Approximation Scheme multigrid in conjunction with the Newton--Krylov method is shown to result in a discrete ordinates method for radiative transfer that is highly accurate and converges very rapidly in all circumstances. Several convergence studies are carried out which show that the resultant method has excellent convergence properties. Moreover, this excellent convergence is retained in the free streaming limit as well as in the limit of high optical depth. The presence of strong scattering terms does not slow down the convergence rate for our method. In fact it is shown that without operator splitting, the presence of a strong scattering opacity enhances the convergence rate in quite the same way that the convergence is enhanced when a high absorption opacity is present! We show that the use of differentiable limiters results in substantial improvement in the convergence rate of the method. By carrying out an accuracy analysis on meshes with increasing resolution it is further shown that the accuracy that one obtains seems rather close to the designed second-order accuracy and does not depend on the specific choice of limiter. The methods for multidimensional radiative transfer that are presented here should improve the accuracy of several radiative transfer calculations while at the same time improving their convergence properties. Because the methods presented here are similar to those used for simulating neutron transport problems and problems involving rarefied gases, those fields should also see improvements in their numerical capabilities by assimilation of the methods presented here.},
   keywords = {Discrete ordinates methods,Multidimensional radiative transfer,Multidimensional upwinding,Multigrid,Newton-Krylov methods,Rapid convergence,Second-order accuracy},
-  file = {/home/liamp2/Zotero/storage/TNDWJHHY/Balsara - 2001 - Fast and accurate discrete ordinates methods for multidimensional radiative transfer. Part I, basic.pdf;/home/liamp2/Zotero/storage/UXYXQGWH/S002240730000114X.html}
+  file = {/home/lipohlmann/Zotero/storage/TNDWJHHY/Balsara - 2001 - Fast and accurate discrete ordinates methods for multidimensional radiative transfer. Part I, basic.pdf;/home/lipohlmann/Zotero/storage/UXYXQGWH/S002240730000114X.html}
 }
 
 @book{bellNuclearReactorTheory1970a,
@@ -50,7 +50,7 @@
   isbn = {978-92-64-01069-7},
   langid = {english},
   annotation = {OCLC: 225411818},
-  file = {/home/liamp2/Zotero/storage/8XJTDK87/2005 - Benchmark on deterministic transport calculations without spatial homogenisation MOX fuel assembly.pdf}
+  file = {/home/lipohlmann/Zotero/storage/8XJTDK87/2005 - Benchmark on deterministic transport calculations without spatial homogenisation MOX fuel assembly.pdf}
 }
 
 @article{boydOpenMOCMethodCharacteristics2014a,
@@ -66,7 +66,22 @@
   urldate = {2025-09-30},
   abstract = {The method of characteristics (MOC) is a numerical integration technique for partial differential equations, and has seen widespread use for reactor physics lattice calculations. The exponential growth in computing power has finally brought the possibility for high-fidelity full core MOC calculations within reach. The OpenMOC code is being developed at the Massachusetts Institute of Technology to investigate algorithmic acceleration techniques and parallel algorithms for MOC. OpenMOC is a free, open source code written using modern software languages such as C/C++ and CUDA with an emphasis on extensible design principles for code developers and an easy to use Python interface for code users. The present work describes the OpenMOC code and illustrates its ability to model large problems accurately and efficiently.},
   keywords = {Criticality,High performance computing,Method of characteristics,Neutron transport,Nonlinear diffusion acceleration,Open source},
-  file = {/home/liamp2/Zotero/storage/64R8IZ2B/Boyd et al. - 2014 - The OpenMOC method of characteristics neutral particle transport code.pdf}
+  file = {/home/lipohlmann/Zotero/storage/64R8IZ2B/Boyd et al. - 2014 - The OpenMOC method of characteristics neutral particle transport code.pdf}
+}
+
+@article{camminadyRayEffectMitigation2019,
+  title = {Ray Effect Mitigation for the Discrete Ordinates Method through Quadrature Rotation},
+  author = {Camminady, Thomas and Frank, Martin and K{\"u}pper, Kerstin and Kusch, Jonas},
+  year = 2019,
+  month = apr,
+  journal = {Journal of Computational Physics},
+  volume = {382},
+  pages = {105--123},
+  issn = {00219991},
+  doi = {10.1016/j.jcp.2019.01.016},
+  urldate = {2025-12-08},
+  langid = {english},
+  file = {/home/lipohlmann/Zotero/storage/92GWJFSJ/Camminady et al. - 2019 - Ray effect mitigation for the discrete ordinates method through quadrature rotation.pdf}
 }
 
 @article{carlsonMethodCharacteristicsOther1976,
@@ -83,15 +98,15 @@
   doi = {10.13182/NSE76-A26927},
   urldate = {2025-12-08},
   abstract = {A general method of characteristics for solving the multigroup transport equation is developed. This is combined with an adaptive difference scheme, called the modified diamond scheme, and is then applied to the finite difference form of the equation. This formulation is obtained from the discrete ordinates equation, which in turn derives from the multigroup equation, both on the basis of consistency arguments. In this connection two forms of the multigroup equation are used, and the diffusion and other important limits also have a bearing on the final difference equation. The new approaches resolve a number of theoretical and practical difficulties with Sn-type transport calculations, in particular in curved and multidimensional geometries. They lead to a firmer basis for discrete ordinates quadrature sets and to better control, mesh cell by mesh cell, over flux extrapolation, including methods to smooth out unwanted flux oscillations. The total effect is a more consistent treatment of the transport equation together with improved accuracy, fewer breakdowns, and more speed in the calculations, while keeping close to the physics of the problem and retaining the basic simplicity of the difference approach.},
-  file = {/home/liamp2/Zotero/storage/6U6ML3ZM/Carlson - 1976 - A Method of Characteristics and Other Improvements in Solution Methods for the Transport Equation.pdf}
+  file = {/home/lipohlmann/Zotero/storage/6U6ML3ZM/Carlson - 1976 - A Method of Characteristics and Other Improvements in Solution Methods for the Transport Equation.pdf}
 }
 
-@article{davisEvaluativeComparisonPerformanceb,
+@article{davisEvaluativeComparisonPerformancea,
   title = {An {{Evaluative Comparison}} of {{Performance Portability}} across {{GPU Programming Models}}},
   author = {Davis, J H and Sivaraman, P and Minn, I and Parasyris, K and Menon, H and Georgakoudis, G and Bhatele, A},
   abstract = {Ensuring high productivity in scientific software development necessitates developing and maintaining a single codebase that can run efficiently on a range of accelerator-based supercomputing platforms. While prior work has investigated the performance portability of a few selected proxy applications or programming models, this paper provides a comprehensive study of a range of proxy applications implemented in the major programming models suitable for GPU-based platforms. We present and analyze performance results across NVIDIA and AMD GPU hardware currently deployed in leadership-class computing facilities using a representative range of scientific codes and several programming models -- CUDA, HIP, Kokkos, RAJA, OpenMP, OpenACC, and SYCL. Based on the specific characteristics of applications tested, we include recommendations to developers on how to choose the right programming model for their code. We find that Kokkos and RAJA in particular offer the most promise empirically as performance portable programming models. These results provide a comprehensive evaluation of the extent to which each programming model for heterogeneous systems provides true performance portability in real-world usage.},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/WHLNNPPT/Davis et al. - An Evaluative Comparison of Performance Portability across GPU Programming Models.pdf}
+  file = {/home/lipohlmann/Zotero/storage/WHLNNPPT/Davis et al. - An Evaluative Comparison of Performance Portability across GPU Programming Models.pdf}
 }
 
 @misc{DeterministicTimeDependentNeutron,
@@ -101,7 +116,7 @@
   abstract = {To ensure reliable modelling of neutron physics within a state-of-the-art transient code, the neutron kinetics part of such a code should be based on the full-scale calculation of the space-time neutron kinetics equations without use of the diffusion approximation and spatial homogenisation.},
   howpublished = {https://www.oecd-nea.org/jcms/pl\_32145/deterministic-time-dependent-neutron-transport-benchmark-without-spatial-homogenisation-c5g7-td},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/XGYQT453/deterministic-time-dependent-neutron-transport-benchmark-without-spatial-homogenisation-c5g7-td.html}
+  file = {/home/lipohlmann/Zotero/storage/XGYQT453/deterministic-time-dependent-neutron-transport-benchmark-without-spatial-homogenisation-c5g7-td.html}
 }
 
 @article{eklundMethodCharacteristicsReview2015,
@@ -117,7 +132,7 @@
   urldate = {2025-11-05},
   abstract = {This paper provides the basics of the Method of Characteristics (MOC) in solving partial differential equations (PDEs) to the problems of interests to science and nuclear engineering. The PDEs are widely used in science and engineering to model physical systems and processes. Such equations are often complex, difficult and/or highly impractical to solve analytically. Although several methods exist to approximate solutions for PDEs, employing an approach that is both computationally -- resourceful and reliable is crucial in particular to engineering fields of importance to creating reliable and safe designs of the systems involved. This paper introduces and expounds upon the MOC, a method by which PDE solutions are converged quickly and accurately as compared to alternative methods. The MOC theory is described with a few study cases in showing a step-by-step solution for each. Its detailed application to neutron transport, thermal hydraulics and conductivity imaging are presented.},
   keywords = {AGENT,Method of characteristics,Nuclear engineering,Partial differential equations,Reactor physics,Thermal hydraulics},
-  file = {/home/liamp2/Zotero/storage/8BVIKUAB/Eklund et al. - 2015 - Method of characteristics – A review with applications to science and nuclear engineering computatio.pdf}
+  file = {/home/lipohlmann/Zotero/storage/8BVIKUAB/Eklund et al. - 2015 - Method of characteristics – A review with applications to science and nuclear engineering computatio.pdf}
 }
 
 @article{evansDenovoNewThreeDimensional2010b,
@@ -135,7 +150,7 @@
   doi = {10.13182/NT171-171},
   urldate = {2025-12-06},
   abstract = {Denovo is a new, three-dimensional, discrete ordinates (SN) transport code that uses state-of-the-art solution methods to obtain accurate solutions to the Boltzmann transport equation. Denovo uses the Koch-Baker-Alcouffe parallel sweep algorithm to obtain high parallel efficiency on O(100) processors on XYZ orthogonal meshes. As opposed to traditional SN codes that use source iteration, Denovo uses nonstationary Krylov methods to solve the within-group equations. Krylov methods are far more efficient than stationary schemes. Additionally, classic acceleration schemes (diffusion synthetic acceleration) do not suffer stability problems when used as a preconditioner to a Krylov solver. Denovo's generic programming framework allows multiple spatial discretization schemes and solution methodologies. Denovo currently provides diamond-difference, theta-weighted diamond-difference, linear-discontinuous finite element, trilinear-discontinuous finite element, and step characteristics spatial differencing schemes. Also, users have the option of running traditional source iteration instead of Krylov iteration. Multigroup upscatter problems can be solved using Gauss-Seidel iteration with transport, two-grid acceleration. A parallel first-collision source is also available. Denovo solutions to the Kobayashi benchmarks are in excellent agreement with published results. Parallel performance shows excellent weak scaling up to 20000 cores and good scaling up to 40000 cores.},
-  file = {/home/liamp2/Zotero/storage/6DS9HZUV/Evans et al. - 2010 - Denovo A New Three-Dimensional Parallel Discrete Ordinates Code in SCALE.pdf}
+  file = {/home/lipohlmann/Zotero/storage/6DS9HZUV/Evans et al. - 2010 - Denovo A New Three-Dimensional Parallel Discrete Ordinates Code in SCALE.pdf}
 }
 
 @misc{freemanHolographicRadianceCascades2025,
@@ -152,7 +167,7 @@
   abstract = {Efficiently calculating global illumination has always been one of the greatest challenges in computer graphics. Algorithms for approximating global illumination have always struggled to run in realtime for fully dynamic scenes, and have had to rely heavily on stochastic raytracing, spatialtemporal denoising, or undersampled representations, resulting in much lower quality of lighting compared to reference solutions. Even though the problem of calculating global illumination in 2D is significantly simpler than that of 3D, most contemporary approaches still struggle to accurately approximate 2D global illumination under realtime constraints. We present Holographic Radiance Cascades: a new single-shot scene-agnostic radiance transfer algorithm for global illumination, which is capable of achieving results visually indistinguishable from the 2D reference solution at realtime framerates. Our method uses a multi-level radiance probe system, and computes rays via combining short ray intervals as a replacement for conventional raytracing. It runs at constant cost for a given scene size, taking 1.85ms for a 512x512 pixel image and 7.67ms for 1024x1024 on an RTX 3080 Laptop.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Graphics},
-  file = {/home/liamp2/Zotero/storage/SK8DPT4S/Freeman et al. - 2025 - Holographic Radiance Cascades for 2D Global Illumination.pdf}
+  file = {/home/lipohlmann/Zotero/storage/SK8DPT4S/Freeman et al. - 2025 - Holographic Radiance Cascades for 2D Global Illumination.pdf}
 }
 
 @article{ganapolAnalyticalBenchmarksNuclear2008a,
@@ -161,7 +176,7 @@
   year = 2008,
   abstract = {The developers of computer codes involving neutron transport theory for nuclear engineering applications seldom apply analytical benchmarking strategies to ensure the quality of their programs. A major reason for this is the lack of analytical benchmarks and their documentation in the literature. The few such benchmarks that do exist are difficult to locate, as they are scattered throughout the neutron transport and radiative transfer literature. The motivation for this benchmark compendium, therefore, is to gather several analytical benchmarks appropriate for nuclear engineering applications under one cover. We consider the following three subject areas: neutron slowing down and thermalization without spatial dependence, one-dimensional neutron transport in infinite and finite media, and multidimensional neutron transport in a half-space and an infinite medium. Each benchmark is briefly described, followed by a detailed derivation of the analytical solution representation. Finally, a demonstration of the evaluation of the solution representation includes qualified numerical benchmark results. All accompanying computer codes are suitable for the PC computational environment and can serve as educational tools for courses in nuclear engineering. While this benchmark compilation does not contain all possible benchmarks, by any means, it does include some of the most prominent ones and should serve as a valuable reference.},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/PV3GTU32/Analytical Benchmarks for Nuclear Engineering Applications Case Studies in Neutron Transport Theory.pdf}
+  file = {/home/lipohlmann/Zotero/storage/PV3GTU32/Analytical Benchmarks for Nuclear Engineering Applications Case Studies in Neutron Transport Theory.pdf}
 }
 
 @misc{kobayashi3DRADIATIONRANSPORT2000,
@@ -171,10 +186,10 @@
   month = nov,
   publisher = {{Nuclear Energy Agency, Organisation for Economic Co-operation and Development}},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/CZK7PYJF/Nuclear Energy Agency - 1995 - Advanced Monte Carlo computer programs for radiation transport seminar ; Saclay, (France), 27 - 29.pdf}
+  file = {/home/lipohlmann/Zotero/storage/CZK7PYJF/Nuclear Energy Agency - 1995 - Advanced Monte Carlo computer programs for radiation transport seminar ; Saclay, (France), 27 - 29.pdf}
 }
 
-@article{kochunasHybridParallelAlgorithm2013a,
+@article{kochunasHybridParallelAlgorithm2013,
   title = {A {{Hybrid Parallel Algorithm}} for the 3-{{D Method}} of {{Characteristics Solution}} of the {{Boltzmann Transport Equation}} on {{High Performance Compute Clusters}}.},
   author = {Kochunas, Brendan Matthew},
   year = 2013,
@@ -183,7 +198,41 @@
   urldate = {2025-11-05},
   abstract = {The focus of this thesis is on the development of a highly scalable parallel algorithm for solving the 3-D method of characteristics (MOC) form of the Boltzmann neutron transport equation. The derivation of the 3-D MOC method is presented first, along with the details of the discretization techniques, that utilize the concept of modular ray tracing. The implementation of these equations is then described, and then the approach to parallelizing the algorithm is discussed. Results are shown for a range of benchmark problems typically solved by 3-D neutron transport codes. The algorithm is parallelized in space, angle, and by characteristic rays, which is specific to the MOC solution method. Once the parallel algorithm is established, a performance model for the particular implementation is derived. This model contains detailed expressions for the number of floating point operations and execution time as a function of the problem size and fundamental computer hardware properties, such as the time per flop and cache access latency. The procedure for determining the hardware coefficients required by the performance model is then presented and validated using experimental results. The performance model is shown to agree well with experiment for both types of execution, and the model is therefore used for subsequent analyses that explore the algorithm's sensitivities to the computer and network hardware characteristics. The model is also analyzed to assess the scaling of the algorithm for a quarter core PWR. The optimization of the convergence of the parallel 3-D MOC algorithm through the use of the coarse mesh finite difference (CMFD) method is then developed. The CMFD accelerated parallel 3-D MOC algorithm is then used to compute solutions to several numerical benchmarks, that show good agreement with the reference results. Finally, the research performed in this thesis and its conclusions are summarized, and areas of future research are suggested.},
   langid = {american},
-  file = {/home/liamp2/Zotero/storage/QMJDU4FN/Kochunas - 2013 - A Hybrid Parallel Algorithm for the 3-D Method of Characteristics Solution of the Boltzmann Transpor.pdf}
+  file = {/home/lipohlmann/Zotero/storage/QMJDU4FN/Kochunas - 2013 - A Hybrid Parallel Algorithm for the 3-D Method of Characteristics Solution of the Boltzmann Transpor.pdf}
+}
+
+@article{lathropRayEffectsDiscrete1968,
+  title = {Ray {{Effects}} in {{Discrete Ordinates Equations}}},
+  author = {Lathrop, K. D.},
+  year = 1968,
+  month = jun,
+  journal = {Nuclear Science and Engineering},
+  volume = {32},
+  number = {3},
+  pages = {357--369},
+  publisher = {Taylor \& Francis},
+  issn = {0029-5639},
+  doi = {10.13182/NSE68-4},
+  urldate = {2025-12-08},
+  abstract = {The nature of anomalous computational effects due to the discretization of the angular variable in transport theory discrete ordinates approximations is described and analyzed. The origin of these effects within the derivation of the Sn discrete ordinates equations is shown, and the effects are related to the non-equivalence of the general geometry discrete ordinates equations and the corresponding spherical harmonics equations. Procedures are given for the definition of two-dimensional discrete ordinates equations that are equivalent to the spherical harmonics equations. Elimination of ray effects from the two-dimensional S2 equations by reduction to the diffusion theory equations is verified in a numerical example. Recipes for the elimination of ray effects are analyzed in the analytic solution of the infinite medium, isotropic line-source problem in the rectangular geometry, S2 approximation. Optimum magnitudes for corrective source terms are indicated by the analysis. It is concluded that ray effects may be eliminated by modification of the discrete ordinates formulation, but that the extra computational effort may be more expensive than the alternative of increasing the order of angular quadrature and that the presence of discretization effects may serve as an indicator of the adequacy of the angular quadrature used.},
+  file = {/home/lipohlmann/Zotero/storage/PKPE5MZT/Lathrop - 1968 - Ray Effects in Discrete Ordinates Equations.pdf}
+}
+
+@article{lathropRemediesRayEffects1971,
+  title = {Remedies for {{Ray Effects}}},
+  author = {Lathrop, K. D.},
+  year = 1971,
+  month = sep,
+  journal = {Nuclear Science and Engineering},
+  volume = {45},
+  number = {3},
+  pages = {255--268},
+  publisher = {Taylor \& Francis},
+  issn = {0029-5639},
+  doi = {10.13182/NSE45-03-255},
+  urldate = {2025-12-08},
+  abstract = {Remedies are considered for the ray effect, a flux distortion producing defect of the discrete ordinates approximation to the transport equation. The partially effective remedies of increasing the number of directions, selecting quadrature sets invariant under discrete rotations, and introducing coupling terms into the representation of the transport divergence operator are considered. Numerical results are presented showing the effectiveness of these remedies in a standard test problem. Remedies that eliminate the ray effect are also considered. We show how to formulate multidimensional discrete ordinate equations equivalent to spherical harmonic equations and relate the order of the equivalent spherical harmonic equations to the degree of precision of the numerical quadrature. We give numerical results for this kind of remedy in three test problems, including one with material discontinuities. We show how the use of orthonormal polynomials permits the formulation of discrete ordinates approximations which have properties ``like'' those of the highest order spherical harmonic equations consistent with the number of directions in the discrete ordinates approximation. We find that these formulations also eliminate ray effects. We conclude that the partially effective remedy of using more, specially chosen, directions is the most practical remedy for most applications, but that for especially difficult situations or for reference calculations, the defect-eliminating spherical harmonic-like formulations should be available for use.},
+  file = {/home/lipohlmann/Zotero/storage/EN4LJH56/Lathrop - 1971 - Remedies for Ray Effects.pdf}
 }
 
 @book{lewisComputationalMethodsNeutron1984a,
@@ -193,7 +242,7 @@
   urldate = {2025-10-06},
   abstract = {This books presents a balanced overview of the major methods currently available for obtaining numerical solutions in neutron and gamma ray transport. It focuses on methods particularly suited to the complex problems encountered in the analysis of reactors, fusion devices, radiation shielding, and other nuclear systems. Derivations are given for each of the methods showing how the transport equation is reduced to sets of algebraic equations suitable for solution on a digital computer. The limitations of the methods and their suitability for different classes of problems are discussed in terms of computer memory, time requirements, and accuracy},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/PYDKLEAR/Lewis and Miller - 1984 - Computational methods of neutron transport.pdf;/home/liamp2/Zotero/storage/65HXFQ6X/fqs5j-71k98.html}
+  file = {/home/lipohlmann/Zotero/storage/PYDKLEAR/Lewis and Miller - 1984 - Computational methods of neutron transport.pdf;/home/lipohlmann/Zotero/storage/65HXFQ6X/fqs5j-71k98.html}
 }
 
 @misc{OpenSnOpensn2025,
@@ -220,7 +269,7 @@
   abstract = {Non-LTE radiative transfer is a key tool for modern astrophysics: it is the means by which many key synthetic observables are produced, thus connecting simulations and observations. The default approach for computing the radiation field in multidimensional solar radiative transfer models has long remained the same: a short characteristics, discrete ordinates method, formal solver. In situations with complex atmospheric structure and multiple transitions between optically thick and thin regimes these solvers require prohibitively high angular resolution to correctly resolve the radiation field. Here, we present the theory of radiance cascades, a technique designed to exploit structure inherent to the radiation field, allowing for efficient reuse of calculated samples, thus providing a very high-resolution result at a fraction of the computational cost of existing methods. We additionally describe our implementation of this method in the DexRT code, and present initial results of the synthesis of a snapshot of a magnetohydrodynamic model of a solar prominence formed via levitation-condensation, along with comparison against short characteristics solutions. The approach presented here provides a credible route for routinely performing multidimensional radiative transfer calculations free from so-called ray effects, and scaling high-quality non-LTE models to next-generation high-performance computing systems with GPU accelerators.},
   copyright = {https://creativecommons.org/licenses/by/4.0/},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/WR2YZ7MS/Osborne and Sannikov - 2025 - Radiance cascades a novel high-resolution formal solution for multidimensional non-LTE radiative tr.pdf}
+  file = {/home/lipohlmann/Zotero/storage/WR2YZ7MS/Osborne and Sannikov - 2025 - Radiance cascades a novel high-resolution formal solution for multidimensional non-LTE radiative tr.pdf}
 }
 
 @misc{osborneSimpleRayAcceleration2025,
@@ -238,7 +287,7 @@
   archiveprefix = {arXiv},
   langid = {english},
   keywords = {Astrophysics - Instrumentation and Methods for Astrophysics,Astrophysics - Solar and Stellar Astrophysics},
-  file = {/home/liamp2/Zotero/storage/AMZMZKZZ/Osborne - 2025 - A Simple Ray Acceleration Structure for Non-LTE Radiative Transfer.pdf}
+  file = {/home/lipohlmann/Zotero/storage/AMZMZKZZ/Osborne - 2025 - A Simple Ray Acceleration Structure for Non-LTE Radiative Transfer.pdf}
 }
 
 @techreport{osti_4315921,
@@ -264,17 +313,17 @@
   urldate = {2025-11-24},
   abstract = {In this article, we present a method for rendering dynamic scenes featuring translucent procedural volumetric detail with all-frequency soft shadows being cast from objects residing inside the view frustum. Our approach is based on an approximation of physically correct shadows from distant Gaussian area light sources positioned behind the view plane, using iterative convolution. We present a theoretical and empirical analysis of this model and propose an efficient class of convolution kernels which provide high quality at interactive frame rates. Our GPU-based implementation supports arbitrary volumetric detail maps, requires no precomputation, and therefore allows for real-time modification of all rendering parameters.},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/SGFKW8Z4/Patel et al. - 2013 - Instant convolution shadows for volumetric detail mapping.pdf}
+  file = {/home/lipohlmann/Zotero/storage/SGFKW8Z4/Patel et al. - 2013 - Instant convolution shadows for volumetric detail mapping.pdf}
 }
 
 @article{rabitiMethodCharacteristicsNeutron,
   title = {The {{Method}} of {{Characteristics}} for the {{Neutron Transport Equation}}},
   author = {Rabiti, C and Smith, M A and Palmiotti, G},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/KQYXLLQM/Rabiti et al. - The Method of Characteristics for the Neutron Transport Equation.pdf}
+  file = {/home/lipohlmann/Zotero/storage/KQYXLLQM/Rabiti et al. - The Method of Characteristics for the Neutron Transport Equation.pdf}
 }
 
-@article{romanoOpenMCStateoftheartMonte2015c,
+@article{romanoOpenMCStateoftheartMonte2015d,
   title = {{{OpenMC}}: {{A}} State-of-the-Art {{Monte Carlo}} Code for Research and Development},
   shorttitle = {{{OpenMC}}},
   author = {Romano, Paul K. and Horelik, Nicholas E. and Herman, Bryan R. and Nelson, Adam G. and Forget, Benoit and Smith, Kord},
@@ -289,7 +338,7 @@
   urldate = {2025-12-07},
   abstract = {This paper gives an overview of OpenMC, an open source Monte Carlo particle transport code recently developed at the Massachusetts Institute of Technology. OpenMC uses continuous-energy cross sections and a constructive solid geometry representation, enabling high-fidelity modeling of nuclear reactors and other systems. Modern, portable input/output file formats are used in OpenMC: XML for input, and HDF5 for output. High performance parallel algorithms in OpenMC have demonstrated near-linear scaling to over 100,000 processors on modern supercomputers. Other topics discussed in this paper include plotting, CMFD acceleration, variance reduction, eigenvalue calculations, and software development processes.},
   keywords = {HDF5,Monte Carlo,Neutron transport,OpenMC,Parallel,XML},
-  file = {/home/liamp2/Zotero/storage/YRLL6DK6/Romano et al. - 2015 - OpenMC A state-of-the-art Monte Carlo code for research and development.pdf;/home/liamp2/Zotero/storage/FM35K3IV/S030645491400379X.html}
+  file = {/home/lipohlmann/Zotero/storage/YRLL6DK6/Romano et al. - 2015 - OpenMC A state-of-the-art Monte Carlo code for research and development.pdf;/home/lipohlmann/Zotero/storage/FM35K3IV/S030645491400379X.html}
 }
 
 @misc{sannikovRadianceCascadesNovel,
@@ -299,7 +348,7 @@
   abstract = {This work proposes a novel data structure called radiance cascades that allows effectively storing and calculating radiance field by decomposing it into multiple ranges (from near-field to far-field) and storing them separately. The idea of radiance cascades relies on an observation, that in order to resolve radiance emitted by an object, one needs to have higher linear resolution next to it, and higher angular resolution farther away from it. Radiance cascades exhibit a distinctly unique way of asymptotic scaling that for all practical purposes is equivalent to casting infinitely many rays in a finite amount of time, while using a finite amount of memory. This highly unusual property allows to effectively remove the total number of rays as the primary constraint for calculating global illumination in 2d and 3d.},
   archiveprefix = {https://github.com/Raikiri/RadianceCascadesPaper},
   langid = {english},
-  file = {/home/liamp2/Zotero/storage/T72B5UN8/Sannikov - Radiance Cascades.pdf}
+  file = {/home/lipohlmann/Zotero/storage/T72B5UN8/Sannikov - Radiance Cascades.pdf}
 }
 
 @article{thynellDiscreteordinatesMethodRadiative1998,
@@ -315,7 +364,7 @@
   doi = {10.1016/S0020-7225(98)00052-4},
   urldate = {2025-12-08},
   abstract = {About 50 years ago, Chandrasekhar developed the discrete-ordinates method for analyzing radiation heat transfer within a plane-parallel medium. The effects of absorption, multiple scattering, and collimated incidence were considered. Since then, the numerical method has been utilized to study radiative heat transfer in one- and multi-dimensional rectangular, spherical and cylindrical geometries. In this article, the formulation of the discrete-ordinates method is described for computing radiative transfer in a one-dimensional (1D) slab and two-dimensional (2D) rectangular geometries, including the effects of absorbing, emitting and scattering constituents. Both the strengths and the weaknesses of this numerical approach are addressed. The accuracy of available results obtained by utilizing the discrete-ordinates method is compared with other methods of solution for several representative cases. It is evident that major advances have been made related to the development and application of the discrete-ordinates method in multi-dimensional systems. However, much more work remains to be done with the development of this classical technique, including, among others, a more effective treatment of nongray radiative properties of molecular gases and turbulence, as well as a removal of false scattering.},
-  file = {/home/liamp2/Zotero/storage/7XCR9T2K/Thynell - 1998 - Discrete-ordinates method in radiative heat transfer.pdf;/home/liamp2/Zotero/storage/5YZBBXKC/S0020722598000524.html}
+  file = {/home/lipohlmann/Zotero/storage/7XCR9T2K/Thynell - 1998 - Discrete-ordinates method in radiative heat transfer.pdf;/home/lipohlmann/Zotero/storage/5YZBBXKC/S0020722598000524.html}
 }
 
 @article{trammRandomRayMethod2017a,
@@ -331,5 +380,5 @@
   urldate = {2025-11-05},
   abstract = {A new approach to solving partial differential equations (PDEs) based on the method of characteristics (MOC) is presented. The Random Ray Method (TRRM) uses a stochastic rather than deterministic discretization of characteristic tracks to integrate the phase space of a problem. TRRM is potentially applicable in a number of transport simulation fields where long characteristic methods are used, such as neutron transport and gamma ray transport in reactor physics as well as radiative transfer in astrophysics. In this study, TRRM is developed and then tested on a series of exemplar reactor physics benchmark problems. The results show extreme improvements in memory efficiency compared to deterministic MOC methods, while also reducing algorithmic complexity, allowing for a sparser computational grid to be used while maintaining accuracy.},
   keywords = {High performance computing,Method of characteristics,Neutron transport,Reactor simulation,Stochastic methods},
-  file = {/home/liamp2/Zotero/storage/T258ABND/Tramm et al. - 2017 - The Random Ray Method for neutral particle transport.pdf}
+  file = {/home/lipohlmann/Zotero/storage/T258ABND/Tramm et al. - 2017 - The Random Ray Method for neutral particle transport.pdf}
 }
