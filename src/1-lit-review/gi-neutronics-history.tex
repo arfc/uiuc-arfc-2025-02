@@ -1,0 +1,13 @@
+Deterministic neutron transport techniques are developed around the expansion of the \acrshort{bte}'s scattering source term in angle ($\mathbf{\Omega}$) using orthogonal basis functions.
+The most-widely used expansion is that of spherical harmonics, which is a complete set of orthogonal functions that form a basis on the surface of a sphere~\cite{bellNuclearReactorTheory1970a}.
+For continuous treatment of angle, the angular flux is then expanded using Legendre polynomials~\cite{lewisComputationalMethodsNeutron1984a}, making up the so-called $P_N$ method.
+While the details of this method are outside the scope of this paper, we note that the $P_N$ method has mostly fallen out of favor because the complexity involved in its formulation and the approximations needed to achieve vacuum boundary conditions, which themselves are defined piecewise-discontinuous in angle.
+
+The discrete ordinates method ($S_N$) has remained the standard numerical approach in transport theory in applications ranging from heat transfer~\cite{thynellDiscreteordinatesMethodRadiative1998} to neutronics to astrophysics.
+Indeed, since it's introduction by Chandrasekhar~\cite{alma99126985512205899} to astrophysics and subsequent application to neutronics by Carlson~\cite{carlsonMethodCharacteristicsOther1976,osti_4315921}, it has seen continued research, development, and applications at the national laboratories through codes such as Denovo~\cite{evansDenovoNewThreeDimensional2010b}, PARTISN~\cite{baker2009time}, and OpenSN~\cite{OpenSnOpensn2025}\footnote{At the time of this writing, a reference journal article for citations of OpenSN has not been provided.}.
+In $S_N$, the \acrshort{bte} is evaluated along selected angles (``ordinates'') that make up a quadrature set (usually Gauss-Legendre).
+Once each direction has been solved for, the results are multiplied by their associated weighting functions and summed together at each spatial point to construct the scalar (angle-integrated) flux.
+$S_N$ methods usually use ``sweeps,'' a colloquial term referring to an iterative scheme in which the solver follows (``sweeps'') along the direction of neutron travel until convergence.
+An excellent introduction to the sweeping algorithm, along with the discrete ordinates method in general, can be found in~\cite{lewisComputationalMethodsNeutron1984a}.
+
+Despite its effectiveness, $S_N$ struggles with numerical artifacts known as \textit{ray effects}.

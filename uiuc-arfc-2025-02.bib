@@ -1,3 +1,46 @@
+@book{alma99126985512205899,
+  title = {Radiative Transfer},
+  author = {Chandrasekhar, S.},
+  year = {1960--1950},
+  publisher = {Dover Publications},
+  address = {New York},
+  isbn = {0-486-60590-6},
+  langid = {english},
+  lccn = {60003117},
+  keywords = {Astronomie,astrophysics,Astrophysics,Astrophysique,Physique,Radiation,Radiative transfer,Rayonnement,Sciences de l'espace,Strahlungstransport,Stralingstransport,Transfert radiatif}
+}
+
+@techreport{baker2009time,
+  title = {Time-Dependent, Parallel Neutral Particle Transport Code System.},
+  author = {BAKER, RANDAL S},
+  year = 2009,
+  institution = {Oak Ridge National Laboratory (ORNL), Oak Ridge, TN (United States)}
+}
+
+@article{balsaraFastAccurateDiscrete2001,
+  title = {Fast and Accurate Discrete Ordinates Methods for Multidimensional Radiative Transfer. {{Part I}}, Basic Methods},
+  author = {Balsara, Dinshaw},
+  year = 2001,
+  month = jun,
+  journal = {Journal of Quantitative Spectroscopy and Radiative Transfer},
+  volume = {69},
+  number = {6},
+  pages = {671--707},
+  issn = {0022-4073},
+  doi = {10.1016/S0022-4073(00)00114-X},
+  urldate = {2025-12-08},
+  abstract = {The ability to solve the radiative transfer equation in a fast and accurate fashion is central to several important applications in combustion physics, controlled thermonuclear fusion and astrophysics. Most practitioners see the value of using discrete ordinates methods for such applications. However, previous efforts at designing discrete ordinates methods that are both fast and accurate have met with limited success. This is especially so when parts of the application satisfy the free streaming limit in which case most solution strategies become unacceptably diffusive or when parts of the application have high absorption or scattering opacities in which case most solution strategies converge poorly. Designing a single solution strategy that retains second-order accuracy and converges with optimal efficiency in the free streaming limit as well as the optically thick limit is a challenge. Recent results also indicate that schemes that are less than second-order accurate will not retrieve the radiation diffusion limit. In this paper we analyze several of the challenges involved in doing multidimensional numerical radiative transfer. It is realized that genuinely multidimensional discretizations of the radiative transfer equation that are second-order accurate exist. Because such discretizations are more faithful to the physics of the problem they help minimize the diffusion in the free streaming limit. Because they have a more compact stencil, they have superior convergence properties. The ability of the absorption and scattering terms to couple strongly to the advection terms is examined. Based on that we find that operator splitting of the scattering and advection terms damages the convergence in several situations. Newton--Krylov methods are shown to provide a natural way to incorporate the effects of nonlinearity as well as strong coupling in a way that avoids operator splitting. Used by themselves, Newton--Krylov methods converge slowly. However, when the Newton--Krylov methods are used as smoothers within a full approximation scheme multigrid method, the convergence is vastly improved. The combination of a genuinely multidimensional, nonlinearly positive scheme that uses Full Approximation Scheme multigrid in conjunction with the Newton--Krylov method is shown to result in a discrete ordinates method for radiative transfer that is highly accurate and converges very rapidly in all circumstances. Several convergence studies are carried out which show that the resultant method has excellent convergence properties. Moreover, this excellent convergence is retained in the free streaming limit as well as in the limit of high optical depth. The presence of strong scattering terms does not slow down the convergence rate for our method. In fact it is shown that without operator splitting, the presence of a strong scattering opacity enhances the convergence rate in quite the same way that the convergence is enhanced when a high absorption opacity is present! We show that the use of differentiable limiters results in substantial improvement in the convergence rate of the method. By carrying out an accuracy analysis on meshes with increasing resolution it is further shown that the accuracy that one obtains seems rather close to the designed second-order accuracy and does not depend on the specific choice of limiter. The methods for multidimensional radiative transfer that are presented here should improve the accuracy of several radiative transfer calculations while at the same time improving their convergence properties. Because the methods presented here are similar to those used for simulating neutron transport problems and problems involving rarefied gases, those fields should also see improvements in their numerical capabilities by assimilation of the methods presented here.},
+  keywords = {Discrete ordinates methods,Multidimensional radiative transfer,Multidimensional upwinding,Multigrid,Newton-Krylov methods,Rapid convergence,Second-order accuracy},
+  file = {/home/liamp2/Zotero/storage/TNDWJHHY/Balsara - 2001 - Fast and accurate discrete ordinates methods for multidimensional radiative transfer. Part I, basic.pdf;/home/liamp2/Zotero/storage/UXYXQGWH/S002240730000114X.html}
+}
+
+@book{bellNuclearReactorTheory1970a,
+  title = {Nuclear {{Reactor Theory}}},
+  author = {Bell, George and Glasstone, Samuel},
+  year = 1970,
+  publisher = {Litton Educational Publishing, inc}
+}
+
 @book{BenchmarkDeterministicTransport2005,
   title = {Benchmark on Deterministic Transport Calculations without Spatial Homogenisation: {{MOX}} Fuel Assembly 3-{{D}} Extendion Case},
   shorttitle = {Benchmark on Deterministic Transport Calculations without Spatial Homogenisation},
@@ -24,6 +67,23 @@
   abstract = {The method of characteristics (MOC) is a numerical integration technique for partial differential equations, and has seen widespread use for reactor physics lattice calculations. The exponential growth in computing power has finally brought the possibility for high-fidelity full core MOC calculations within reach. The OpenMOC code is being developed at the Massachusetts Institute of Technology to investigate algorithmic acceleration techniques and parallel algorithms for MOC. OpenMOC is a free, open source code written using modern software languages such as C/C++ and CUDA with an emphasis on extensible design principles for code developers and an easy to use Python interface for code users. The present work describes the OpenMOC code and illustrates its ability to model large problems accurately and efficiently.},
   keywords = {Criticality,High performance computing,Method of characteristics,Neutron transport,Nonlinear diffusion acceleration,Open source},
   file = {/home/liamp2/Zotero/storage/64R8IZ2B/Boyd et al. - 2014 - The OpenMOC method of characteristics neutral particle transport code.pdf}
+}
+
+@article{carlsonMethodCharacteristicsOther1976,
+  title = {A {{Method}} of {{Characteristics}} and {{Other Improvements}} in {{Solution Methods}} for the {{Transport Equation}}},
+  author = {Carlson, Bengt G.},
+  year = 1976,
+  month = nov,
+  journal = {Nuclear Science and Engineering},
+  volume = {61},
+  number = {3},
+  pages = {408--425},
+  publisher = {Taylor \& Francis},
+  issn = {0029-5639},
+  doi = {10.13182/NSE76-A26927},
+  urldate = {2025-12-08},
+  abstract = {A general method of characteristics for solving the multigroup transport equation is developed. This is combined with an adaptive difference scheme, called the modified diamond scheme, and is then applied to the finite difference form of the equation. This formulation is obtained from the discrete ordinates equation, which in turn derives from the multigroup equation, both on the basis of consistency arguments. In this connection two forms of the multigroup equation are used, and the diffusion and other important limits also have a bearing on the final difference equation. The new approaches resolve a number of theoretical and practical difficulties with Sn-type transport calculations, in particular in curved and multidimensional geometries. They lead to a firmer basis for discrete ordinates quadrature sets and to better control, mesh cell by mesh cell, over flux extrapolation, including methods to smooth out unwanted flux oscillations. The total effect is a more consistent treatment of the transport equation together with improved accuracy, fewer breakdowns, and more speed in the calculations, while keeping close to the physics of the problem and retaining the basic simplicity of the difference approach.},
+  file = {/home/liamp2/Zotero/storage/6U6ML3ZM/Carlson - 1976 - A Method of Characteristics and Other Improvements in Solution Methods for the Transport Equation.pdf}
 }
 
 @article{davisEvaluativeComparisonPerformanceb,
@@ -181,6 +241,15 @@
   file = {/home/liamp2/Zotero/storage/AMZMZKZZ/Osborne - 2025 - A Simple Ray Acceleration Structure for Non-LTE Radiative Transfer.pdf}
 }
 
+@techreport{osti_4315921,
+  title = {{{SOLUTION}} of the {{TRANSPORT EQUATION}} by the {{Sn METHOD}}},
+  author = {Carlson, B G and Bell, G I},
+  year = 1958,
+  month = oct,
+  address = {USA},
+  institution = {Los Alamos Scientific Lab., N. Mex.}
+}
+
 @article{patelInstantConvolutionShadows2013,
   title = {Instant Convolution Shadows for Volumetric Detail Mapping},
   author = {Patel, Daniel and {\v S}olt{\'e}szov{\'a}, Veronika and Nordbotten, Jan Martin and Bruckner, Stefan},
@@ -231,6 +300,22 @@
   archiveprefix = {https://github.com/Raikiri/RadianceCascadesPaper},
   langid = {english},
   file = {/home/liamp2/Zotero/storage/T72B5UN8/Sannikov - Radiance Cascades.pdf}
+}
+
+@article{thynellDiscreteordinatesMethodRadiative1998,
+  title = {Discrete-Ordinates Method in Radiative Heat Transfer},
+  author = {Thynell, Stefan T.},
+  year = 1998,
+  month = sep,
+  journal = {International Journal of Engineering Science},
+  volume = {36},
+  number = {12},
+  pages = {1651--1675},
+  issn = {0020-7225},
+  doi = {10.1016/S0020-7225(98)00052-4},
+  urldate = {2025-12-08},
+  abstract = {About 50 years ago, Chandrasekhar developed the discrete-ordinates method for analyzing radiation heat transfer within a plane-parallel medium. The effects of absorption, multiple scattering, and collimated incidence were considered. Since then, the numerical method has been utilized to study radiative heat transfer in one- and multi-dimensional rectangular, spherical and cylindrical geometries. In this article, the formulation of the discrete-ordinates method is described for computing radiative transfer in a one-dimensional (1D) slab and two-dimensional (2D) rectangular geometries, including the effects of absorbing, emitting and scattering constituents. Both the strengths and the weaknesses of this numerical approach are addressed. The accuracy of available results obtained by utilizing the discrete-ordinates method is compared with other methods of solution for several representative cases. It is evident that major advances have been made related to the development and application of the discrete-ordinates method in multi-dimensional systems. However, much more work remains to be done with the development of this classical technique, including, among others, a more effective treatment of nongray radiative properties of molecular gases and turbulence, as well as a removal of false scattering.},
+  file = {/home/liamp2/Zotero/storage/7XCR9T2K/Thynell - 1998 - Discrete-ordinates method in radiative heat transfer.pdf;/home/liamp2/Zotero/storage/5YZBBXKC/S0020722598000524.html}
 }
 
 @article{trammRandomRayMethod2017a,
