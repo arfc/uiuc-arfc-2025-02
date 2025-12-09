@@ -1,5 +1,5 @@
 \subsubsection{Multiplying Media: C5G7 Benchmark}\label{subsubsec:c5g7}
-In this proposal, we also suggest an additional extension to the benchmarks to test the second part of \cref{second difference}: multiplying media.
+In addition to in-scattering sources, we will also be interested in testing sourcing contributions from a multiplying region (fission).
 One of the most well-known benchmarks is the C5G7 benchmark, which models a simplified, reflected, quarter-core reactor with mixed-oxide and uranium-oxide fuel.
 The core is moderated with water.
 As described in~\cite{BenchmarkDeterministicTransport2005}, this problem looks to challenge codes' abilities to handle spatial heterogeneity.
@@ -7,7 +7,7 @@ A general schematic of this benchmark has been given in \cref{fig:c5g7-general},
 One advantage to choosing this benchmark is the ability to expand to time-dependent testing, as development is currently underway for this extension~\cite{DeterministicTimeDependentNeutron}.
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.8\textwidth]{figs/c5g7-general}
+    \includegraphics[width=0.6\textwidth]{figs/c5g7-general}
     \caption{General schematic of the C5G7 benchmark.}
     \label{fig:c5g7-general}
 \end{figure}
@@ -17,8 +17,8 @@ The implementation of C5G7 requires a mostly-mature code to implement, with the 
     \item 3D implementation.
     \item Complicated geometry.
     \item Multiple materials.
-    \item Varying length scales (ex. between pincells vs. from assemble to vacuum boundary).
+    \item Varying length scales (ex. between pincells vs. from assembly to vacuum boundary).
 \end{enumerate}
-Therefore, we propose to first create test problems using OpenMC or MCNP6 with multiplying media and simple geometry.
-This will allow for the development and refinement of source iteration methods.
+Therefore, we propose to first create test problems using OpenMC, Serpent, or MCNP6 with multiplying media and simple geometry.
+This will allow for the continued development and refinement of source iteration methods.
 Then, we will build up to more complicated geometries, finally arriving at the C5G7 benchmark, which will be reported on and published.
