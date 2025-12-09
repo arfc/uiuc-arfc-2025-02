@@ -15,11 +15,11 @@ The first problem will consider a purely absorbing material with either a simple
 \subsubsection{Implementation Target}
 We investigated four codes to potentially implement \glspl{rc} in: OpenMC, OpenSN, DexRT, and OpenMOC.
 \paragraph{OpenMC}
-OpenMC~\cite{romanoOpenMCStateoftheartMonte2015c} has a mature code base featuring CSG and MGXS modules, and so it satisfies both required prerequisites. 
+OpenMC~\cite{romanoOpenMCStateoftheartMonte2015d} has a mature code base featuring CSG and MGXS modules, and so it satisfies both required prerequisites.
 Additionally, OpenMC satisfies both desired features, as it supports shared memory parallelism via OpenMP and has a very developer friendly code base.
 Unfortunately, we believe OpenMC is not the correct code to implement \glspl{rc} in, as it is primarily a Monte Carlo code. 
 While OpenMc does have a deterministic solver, \gls{trrm} solver, this is only supported due to the inherently stochastic nature of \gls{trrm}. 
-\glspl{rc} do not have a stochastic element, and thus do not belong in OpenMC.
+\acrlong{rc} do not have a stochastic element, and thus do not belong in OpenMC.
 
 \paragraph{OpenSN}
 OpenSN~\cite{OpenSnOpensn2025} is a discrete ordinates research code developed by Dr. Ragusa's group at Texas A\&M University. 
