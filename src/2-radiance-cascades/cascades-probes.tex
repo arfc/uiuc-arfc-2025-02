@@ -1,0 +1,11 @@
+\subsection{Cascades and Probes}
+Because this paper focuses on nuclear applications of \acrlong{rc}, we briefly define a couple terms commonly used in computer graphics.
+These are cascades and probes.
+A ``probe'' in computer-graphics is synonymous to a detector in nuclear engineering.
+It is a simulation structure that has a position in space and a defined set of directions where it is interested in computing and storing contributions to the radiance field.
+Note, however, that probes ``point'' structures that do not have associated volume or surface area (like a detector would).
+In this way, probes are analogous to nodes in finite element analysis in that they are points in space that contain more information that just their location.
+
+Cascades are a collection of probes that are equidistant\footnote{More on this to be discussed in \cref{sec:future-work}.} from one another and contain the same angular discretizations.
+In \acrlong{rc}, cascades are arranged hierarchically: the lowest cascade provides the finest spatial resolution (the most probes) but uses the coarsest angular resolution, while higher cascades contain progressively fewer probes but have the finest angular discretization.
+Radiance Cascades solves the radiance field by first computing the highest-level cascade, then successively interpolating solutions downward through each cascade until the lowest level is reached, where a final interpolation produces a continuous field.
