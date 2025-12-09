@@ -10,9 +10,7 @@ There are two main differences between this application and ours:
     \item Neutron transport simulations are typically focused on length scales in the centimeters to meters, not kilometers and light-years.\label{first difference}
     \item The source term is dependent on the flux itself in both multiplying (fission) and nonmultiplying systems.\label{second difference}
 \end{enumerate}
-\Cref{subsubsec:kobayashi} gives a general descriptions for the proposed benchmarks along with reasons behind their selection.
 
-\subsubsection{Streaming and Fixed Source: Kobayashi Benchmark}\label{subsubsec:kobayashi}
 \Cref{first difference} will be straightforward to show, as there are many benchmarks that allow for testing neutron streaming.
 One such set, known as the Kobayashi benchmarks~\cite{kobayashi3DRADIATIONRANSPORT2000}, is an industry standard and has been used consistently in modern nuclear software, such as the discrete ordinates code Denovo developed by Oak Ridge National Laboratory~\cite{evansDenovoNewThreeDimensional2010b}.
 The benchmarks look to test streaming through voids from a fixed source into a non-multiplying material and can be extended to also test for scattering source convergence with minor changes to material properties.
