@@ -1,12 +1,15 @@
 \subsection{Radiance Cascades Implementation}
 
 \subsubsection{Toy Problem}
-Rather than jumping in to implementing \glspl{rc} in the general case, we propose to start with a simple implementation of \textit{no more than two} ``toy'' problems, where we choose very simple transport problems in 2D to implement with either a Python or C++ script.
-The purpose of this is purely educational, and it will do two things:
+Rather than immediately implementing \glspl{rc} in the general case, we propose to begin with a simple implementation applied to no more than two ``toy'' problems.
+These will consist of basic two-dimensional transport problems solved using either Python or C++.
+The purpose is purely educational and serves two goals:
 \begin{enumerate}
-    \item Create an opportunity to practice programming \glspl{rc} on a small problem before jumping to generalized code.
-    \item Show early results for the method applied to neutronics (internally, though it may make a cool LinkedIn post or something\ldots).
+    \item Provide an opportunity to practice implementing \glspl{rc} on a small, well-defined problem before moving to a generalized code base.
+    \item Demonstrate early results for the method as applied to neutronics.
 \end{enumerate}
+To accomplish this, we will start from example problems already developed by the community and tailor the corresponding code to match our problem of interest\footnote{This approach was personally recommended by C.\,M.\,J.\ Osborne.}.
+The first problem will consider a purely absorbing material with either a simple boundary source or a uniform volumetric source on a basic two-dimensional Cartesian geometry subject to vacuum boundary conditions.
 
 % OpenMoC, OpenCSG (separating from OpenMC -- would need to work with developers)
 \subsubsection{Implementation Target}
