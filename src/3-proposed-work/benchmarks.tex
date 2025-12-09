@@ -1,22 +1,23 @@
 \subsection{Benchmarks}
-Benchmark cases for \glspl{rc} must be chosen to specifically show the advantages of the method and directly test for known problems in other methods, such as ray-effects in \glspl{sn}.
-To be considered successful, we will need to implement \glspl{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \gls{sn}.
+Benchmark cases for \acrshort{rc} must be chosen to specifically show the advantages of the method and directly test for known problems in other methods, such as ray-effects in $S_N$.
+To be considered successful, we will need to implement \acrshort{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \gls{sn}.
 Or, alternatively, must be proven to scale well using GPU parallelism.
-We propose the following benchmark cases be used for the development and testing of \glspl{rc}.
+We propose the following benchmark cases be used for the development and testing of \acrshort{rc}.
 
-The application of \glspl{rc} to the \gls{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
+The application of \acrshort{rc} to the \gls{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
 There are two main differences between this application and ours:
 \begin{enumerate}
     \item Neutron transport simulations are typically focused on length scales in the centimeters to meters, not kilometers and light-years.\label{first difference}
-    \item The source term is dependent on the flux in multiplying (fission) media.\label{second difference}
+    \item The source term is dependent on the flux itself in both multiplying (fission) and nonmultiplying systems.\label{second difference}
 \end{enumerate}
+\Cref{subsubsec:kobayashi} gives a general descriptions for the proposed benchmarks along with reasons behind their selection.
 
-\subsubsection{Streaming and Fixed Source: Kobayashi Benchmark}
+\subsubsection{Streaming and Fixed Source: Kobayashi Benchmark}\label{subsubsec:kobayashi}
 \Cref{first difference} will be straightforward to show, as there are many benchmarks that allow for testing neutron streaming.
-One such set, known as the Kobayashi benchmarks~\cite{kobayashi3DRADIATIONRANSPORT2000}, has become an industry standard and has been used consistently in modern codes, such as the \glspl{sn} code Denovo from Oak Ridge National Laboratory~\cite{evansDenovoNewThreeDimensional2010b}.
-They look to test streaming through voids from a fixed source into a non-multiplying material.
+One such set, known as the Kobayashi benchmarks~\cite{kobayashi3DRADIATIONRANSPORT2000}, is an industry standard and has been used consistently in modern nuclear software, such as the discrete ordinates code Denovo developed by Oak Ridge National Laboratory~\cite{evansDenovoNewThreeDimensional2010b}.
+The benchmarks look to test streaming through voids from a fixed source into a non-multiplying material and can be extended to also test for scattering source convergence with minor changes to material properties.
 
-These benchmarks consist of three geometries:
+There are three associated geometries:
 \begin{enumerate}
     \item A source surrounded by a cubic void (\cref{fig:first-kobayashi}).
     \item A source with a vertical (chimney-like) void (\cref{fig:second-kobayashi}).
@@ -74,6 +75,7 @@ These benchmarks consist of three geometries:
     \caption{Third Kobayashi benchmark (taken from~\cite{kobayashi3DRADIATIONRANSPORT2000}).}
     \label{fig:third-kobayashi}
 \end{figure}
+\noindent
 The surrounding non-void region is either strictly absorbing or 50\% absorbing with 50\% scattering (of the total cross section).
 Values for these cases can be found in \cref{tab:kobayashi-source-and-mat-props}.
 \begin{table}[htb!]
@@ -91,33 +93,6 @@ Values for these cases can be found in \cref{tab:kobayashi-source-and-mat-props}
     \caption{Source strength and material properties for Kobayashi benchmark problems.}
     \label{tab:kobayashi-source-and-mat-props}
 \end{table}
-The ultimate goal will be to report on \glspl{rc}'s capabilities on the 3D problems as they were originally published.
+The ultimate goal will be to report on \acrshort{rc}'s capabilities on the 3D problems as they were originally published.
 However, we will propose to start with 2D ``flattened'' versions of these problems for a proof-of-concept internally, then move on to 3D implementation.
-
-\subsubsection{Multiplying Media: C5G7 Benchmark}
-\Cref{second difference}, however, is the more interesting and relevant problem to tackle for a proof-of-concept.
-One of the most well-known benchmarks for this is the C5G7 benchmark case, which models a simplified, reflected quarter-core reactor with mixed-oxide and uranium-oxide fuel.
-The core is moderated with water.
-As described in~\cite{BenchmarkDeterministicTransport2005}, this problem looks to challenge codes' abilities to handle spatial heterogeneity.
-A general schematic of this benchmark has been given in \cref{fig:c5g7-general}, and we refer the reader to the Nuclear Energy Agency report~\cite{BenchmarkDeterministicTransport2005} for specifics.
-One advantage to choosing this benchmark is the ability to expand to time-dependent testing, as development is currently underway for this extension~\cite{DeterministicTimeDependentNeutron}.
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figs/c5g7-general}
-    \caption{General schematic of the C5G7 benchmark.}
-    \label{fig:c5g7-general}
-\end{figure}
-
-The implementation of C5G7 requires a mostly-mature code to implement, with the major challenges being:
-\begin{enumerate}
-    \item 3D implementation.
-    \item Complicated geometry.
-    \item Multiple materials.
-    \item Varying length scales (ex. between pincells vs. from assemble to vacuum boundary).
-\end{enumerate}
-Therefore, we propose to first create test problems using OpenMC or MCNP6 with multiplying media and simple geometry.
-This will allow for the development and refinement of source iteration methods.
-Then, we will build up to more complicated geometries, finally arriving at the C5G7 benchmark, which will be reported on and published.
-
-To sum up: We look to test both the streaming and source capabilities of \acrlong{rc} using the Kobayashi and C5G7 benchmarks, respectively.
-The Kobayashi benchmarks have simplified 2D forms that more-readily allow for preliminary testing than C5G7, so we advocate for additional test problems to precede C5G7.
+As mentioned above, the strengths in this suite of benchmarks lie in the ability to provide both challenging streaming geometries while also testing for accurate source terms from phase space in-scattering.

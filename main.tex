@@ -22,16 +22,14 @@
 %%%%%%
 \input{src/1-lit-review/neutronics-history}
 \input{src/1-lit-review/gi-background}
-
 \input{src/1-lit-review/rc}
 
 \section{Radiance Cascades}
-As previously discussed, \acrlong{rc} was developed to simulate global illumination in realtime for computer graphics applications.
-The method is built upon the following simple principle: Near a source, the radiance field varies rapidly in space, but not in angle. 
-Far from the source, the radiance field varies slowly in space but rapidly in angle. 
-There are, of course, caveats to this generalization, and the point of the proposed work is to explore cases where these assumptions hold or deteriorate.
-In this section, we provide an overview of the theory presented in papers by Sannikov and Osborne~\cite{sannikovRadianceCascadesNovel,osborneSimpleRayAcceleration2025} with some additional preliminary theory for the method as it pertains to neutron transport.
-
+As previously discussed, \acrlong{rc} was developed to simulate global illumination in real time for computer-graphics applications.
+The method is built upon the following principle: near a source, the radiance field varies rapidly in space but only weakly in angle.
+Far from the source, the radiance field varies slowly in space but rapidly in angle.
+There are, of course, caveats to this generalization, and the aim of the proposed work is to explore cases where these assumptions hold or deteriorate.
+In this section, we provide an overview of the theory presented in the papers by Sannikov and Osborne~\cite{sannikovRadianceCascadesNovel,osborneSimpleRayAcceleration2025}, along with preliminary extensions of the method as it pertains to neutron transport.
 \input{src/2-radiance-cascades/penumbra-criterion}
 
 \subsection{Radiance Intervals}
@@ -56,6 +54,7 @@ This section discusses the implementation of \glspl{rc}, and our proposed work.
 \input{src/3-proposed-work/discussion-points}
 
 \section{Future Work}
+\input{src/4-future-work/c5g7}
 \input{src/4-future-work/unstructure-probes}
 \input{src/4-future-work/transient}
 \input{src/4-future-work/sparsity}
