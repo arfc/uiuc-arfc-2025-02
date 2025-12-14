@@ -1,31 +1,11 @@
-\subsection{Initial Definitions}
-Because this paper focuses on nuclear applications of \acrlong{rc}, we briefly define a couple terms commonly used in \glspl{rc}.
-These defintions are intentionally loose, only meant as a primer to have a framework to understand the subsequent theory.
-Formal definitions will be presented as the theory is developed.
+\subsection{Radiance Probes and Cascades}
+This section formally defines radiance probes and radiance cascades, demonstrating how the radiation field about a given point is solved for. 
+To do so, we utilize our previously derived radiance intervals~(\cref{eq:beta-and-rad-interval}) and the interval merging relation~(\cref{eq:rad-interval-merging}) to solve the radiation field naively. 
+Then, we present the main result of \glspl{rc}, which enables significantly more efficient encoding of the radiation field by taking advantage of the key observations of the penumbra criterion. 
+Finally, we desribe the cascade merging algorithm, which efficiently solves for the radiation field throughout the problem domain. 
 
-The underlying observation that birthed the idea of \glspl{rc} is termed the penumbra condition.
-The major result of this observation is that the angular and spatial discretization required to resolve near- and far-feild radiation contributions is not constant between regimes. 
-The concept of the penumbra condition is formalized in~\cref{subsec:penumbra-criterion}.
+\subsubsection{Naive Radiation Field Encoding}
 
-The major key-words in \glspl{rc} are radiance intervals, probes, and cascades.
+\subsubsection{Optimized Radiation Field Encoding}
 
-A radiance interval is the contribution of incoming radiation at some point $\mathbf{r}_0$ from a spherical shell centered at $\mathbf{r}_0$.
-The range of the radiance interval is defined as the difference between the outer radius and inner radius of the shell.
-It should be noted that in 2D, the spherical shell is collapsed into a circular shell, and the range definition remains the same. 
-Radiance intervals are formalized for the \gls{lbe} in~\cref{subsection:radiance-interval}, as well as how to obtain the total incoming radiation from all radiance intervals. 
-
-A ``probe'' in \glspl{rc} is synonymous to a detector in nuclear engineering.
-It is a simulation structure that has a position in space, and computes and stores a radiance interval about it's position.
-To compute the intervals, the probe discretizes intervals into a set of rays, each with a unique direction that is normal to the spherical shell's surface.
-Note, however, that probes are ``point'' structures that do not have associated volume or surface area (like a detector would).
-In this way, probes are analogous to nodes in finite element analysis in that they are points in space that contain more information that just their location.
-Probes are discussed in more depth in~\cref{subsection:cascades-probes}. 
-
-Cascades are a collection of probes that are equidistant\footnote{More on this to be discussed in \cref{sec:future-work}.} from one another and contain the same angular discretizations.
-Each probe in a cascade solves for a radiance interval of the same size (range), but that interval is centered on the probe's own location. 
-In other words, all probes within a given cascade behave identically, the only thing that differs is where each probe is placed.
-In \glspl{rc}, cascades are arranged hierarchically: the lowest cascade provides the finest spatial resolution (the most probes) but uses the coarsest angular resolution, while higher cascades contain progressively fewer probes but have increasingly finer angular discretization.
-Radiance Cascades solves the radiance field by computing each radiance interval independently. 
-Then, the solved radiance intervals are successively merged downward from the highest cascade until the lowest cascade is reached.
-Once the probes in the lowest cascade have been encoded with the solutions from the higher cascades, the continuous radiation field is obtained by interpolating between probes.
-Cascades and merging are discussed more in~\cref{subsection:cascades-probes}.
+\subsubsection{Merging Cascades}
