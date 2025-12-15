@@ -31,23 +31,31 @@ def plot_joint_probes(ax, num_intervals, init_radius, x0=0.0, y0=0.0, init_rays=
         color = ax._get_lines.get_next_color() # iterate cycler outside of probe
         add_probe(ax, ro, int(nr), color, ri=ri, x0=x0, y0=y0)
 
+def finalize_axes(*args):
+    numerals = ["(i)","(ii)","(iii)"]
+    for ax, numeral in zip(args, numerals):
+        ax.text(0., 0.99, numeral, transform=ax.transAxes,
+                ha="left", va="top", fontweight="bold")
+        ax.set_axis_off()
 
 if __name__ == "__main__":
     ###
     # Radiation field -> radiance interval plot
     ###
-    fig, (ax1, ax2) = plt.subplots(ncols=2, sharex=True, sharey=True,
+    fig, (ax1, ax2, ax3) = plt.subplots(ncols=3, sharex=True, sharey=True,
                                    subplot_kw=dict(aspect="equal"))
 
     num_intervals=4
-    # left probe of 'full' radiation field
+    # left probe of high res 'full' radiation field
     add_probe(ax1, 1.5*3**(num_intervals-1), 4*2**(num_intervals-1), -1)
 
+    # center probe of low res 'full' radiation field
+    add_probe(ax2, 1.5*3**(num_intervals-1), 4, -1)
+
     # discretized into radiance intervals
-    plot_joint_probes(ax2, num_intervals, 1.5)
+    plot_joint_probes(ax3, num_intervals, 1.5)
     
-    for ax in (ax1, ax2):
-        ax.set_axis_off()
+    finalize_axes(ax1, ax2, ax3)
     fig.savefig("../figs/rad-field-2-ri")
     plt.close(fig)
     
@@ -68,7 +76,6 @@ if __name__ == "__main__":
     for xi, yi in zip(x.ravel(), y.ravel()):
         add_probe(ax2, ro=1.0, ri=1/3, num_rays=8, color=1, x0=xi, y0=yi)
 
-    for ax in (ax1, ax2):
-        ax.set_axis_off()
+    finalize_axes(ax1, ax2)
     fig.savefig("../figs/interval-compression")
     plt.close(fig)
