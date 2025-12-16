@@ -1,11 +1,59 @@
 \subsection{Radiance Probes and Cascades}
-This section formally defines radiance probes and radiance cascades, demonstrating how the radiation field about a given point is solved for. 
+This section formally defines radiance probes and radiance cascades, demonstrating how the radiation field about is solved for. 
 To do so, we utilize our previously derived radiance intervals~(\cref{eq:beta-and-rad-interval}) and the interval merging relation~(\cref{eq:rad-interval-merging}) to solve the radiation field naively. 
 Then, we present the main result of \glspl{rc}, which enables significantly more efficient encoding of the radiation field by taking advantage of the key observations of the penumbra criterion. 
-Finally, we desribe the cascade merging algorithm, which efficiently solves for the radiation field throughout the problem domain. 
+Finally, we desribe the cascade merging algorithm, which efficiently computes for the radiation field. 
 
-\subsubsection{Naive Radiation Field Encoding}
+\subsubsection{Radiation Field Representation}
+From the penumbra criterion, the angular discretization required to accurately resolve near-field contributions is not the same as is required for far-field contributions at a point.
+Specifically, greater angular discretization is required for far-field resolution than near-field.
+Using this, we break the radiation field about a point into a series of adjacent radiance intervals, with the increase in angular discretization between intervals defined as the branching ratio, $\alpha$.
+We simply perscribe $alpha=2$ for simplicity in presentation, but this is not required in general for \glspl{rc}.
 
-\subsubsection{Optimized Radiation Field Encoding}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figs/rad-field-2-ri.pdf}
+    \caption{Comparison of different long characteristic angular representations of a point.
+    (i) and (ii) are typical long-characteristics representations of the radiation field about a point, with the 32 and 4 rays cast, respectively.
+    (iii) uses radiance intervals, with a branching ratio of 2.
+    The lowest interval (in green) casts 4 partial rays, and the highest interval (in pink) casts 32 partial rays.}
+    \label{fig:rad-field-breakup-into-ri}
+\end{figure}
 
-\subsubsection{Merging Cascades}
+Investigating~\cref{fig:rad-field-breakup-into-ri}, the radiation field discretization in (i) might accurately resolve the contributions at the edge of the circle, but this discretization is massively overkill for resolving near the point. 
+Inversely, the radiation field discretization in (ii) might adequately resolve near the source, but will poorly resolve at the edge of the circle. 
+The inneficiency and failure of these discretizations is because the angular step (arc length) between two cast rays is not constant, and grows smaller further from the point. 
+This causes either inneficient computation near the point or incorrect solutions far from the point. 
+Conversely, the radiation field discretization in (iii), the \glspl{rc} discretization, efficiently resolves near field while accurately resolving far-field.
+By using radiance intervals with increasing angular discretization, the angular step is roughly constant between any given radiance interval, and so the solution is both effeciently computed and accurate.
+
+To solve for the radiation field, we discretize our problem domain into equidistant, discrete points, using the radiation field angular discretization employed in~\cref{fig:rad-field-breakup-into-ri} (iii).
+This discretization scheme applied across the problem domain is shown in \cref{fig:interval-compression} (i).
+Now, solving for the angular flux at each point is just a matter of solving all radiance intervals, and then merging these intervals down to each point.
+
+Although this discretization scheme is more efficient or more accurate than the full ray-casting discretizations, it only utilizes one part of the penumra criterion.
+In using the other, serious efficiency improvements are made.
+The other observation is that the spatial discretization to accurately resolve near-field contributions is greater than the requirement for far-field contributions.
+
+Applying this observation to the set of equidistant points, each with their own distinct series of adjacent radiance intervals, tells us that radiance intervals (with the same range) of nearby points are effectively identical.
+Thus, they can be compressed into one radiance interval, drastically decreasing the computational cost of the method; with the decrease in cost being directly related to the branching ratio. 
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figs/interval-compression.pdf}
+    \caption{Comparison of spatial dependence of radiance intervals.
+    (i) shows the naive approach to \glspl{rc}, applying a full set of radiance intervals to each point.
+    (ii) demonstrates the compression of nearby same-range radiance intervals, the method employed in true \glspl{rc}.
+    In both cases, the radiance interval ranges are shortened and the number of radiance intervals is decreased for clarity.}
+    \label{fig:interval-compression}
+\end{figure}
+
+Now, we can more intuitively define the terms radiance probes and radiance cascades.
+A probe is a simulation structure, storing a single radiance interval and the point the interval is centered about~\cite{sannikovRadianceCascadesNovel}.
+In~\cref{fig:interval-compression} (ii), each green and orange region are distinct radiance intervals encoded by distinct radiance probes. 
+Specifically, there are 16 `green' probes and 4 `orange' probes, for a total of 20 probes. 
+A radiance cascade is a complete set of probes that encode same-range radiance intervals. 
+By convention, the cascade that contains probes with the lowest angular discretization is cascade 0 ($C_0$), and the cascade that contains probes with highest angular discretization is cascade $n$ ($C_n$).
+In~\cref{fig:interval-compression}, there are two cascades, with $C_0$ being the complete set of all 16 green probes, and $C_1$ being the complete set of all 4 orange probes.
+
+\subsubsection{Standard Radiation Field Solution}
