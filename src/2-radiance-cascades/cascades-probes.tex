@@ -54,6 +54,16 @@ In~\cref{fig:interval-compression} (ii), each green and orange region are distin
 Specifically, there are 16 `green' probes and 4 `orange' probes, for a total of 20 probes. 
 A radiance cascade is a complete set of probes that encode same-range radiance intervals. 
 By convention, the cascade that contains probes with the lowest angular discretization is cascade 0 ($C_0$), and the cascade that contains probes with highest angular discretization is cascade $n$ ($C_n$).
-In~\cref{fig:interval-compression}, there are two cascades, with $C_0$ being the complete set of all 16 green probes, and $C_1$ being the complete set of all 4 orange probes.
+In~\cref{fig:interval-compression} (ii), there are two cascades, with $C_0$ being the complete set of all 16 green probes, and $C_1$ being the complete set of all 4 orange probes.
 
 \subsubsection{Standard Radiation Field Solution}
+% discussion on vanilla merge
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.45\linewidth]{figs/vanilla-merge.pdf}
+    \caption{Example of standard merging procedure for single ray on probe of $C_0$. 
+    %explain so more about the colors
+    }
+    \label{fig:vanilla-merge}
+\end{figure}
+%\subsubsection{Bilinear Fix}

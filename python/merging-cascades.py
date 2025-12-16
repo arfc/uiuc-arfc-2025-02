@@ -44,7 +44,7 @@ def partial_colorize_interp(ax, ro, num_rays, theta, color,
         colors[color_idx-1:color_idx+1] = [color, color]
     #emphasize colored lines
     widths = np.asarray(colors, dtype=object) != no_color
-    widths = widths * 0.6 + 0.8
+    widths = widths * 1. + 1. 
 
     # add probe to drawing
     add_probe(ax, x0, y0, ri, ro, thetas, colors, widths)
@@ -66,7 +66,7 @@ def partial_colorize_interp(ax, ro, num_rays, theta, color,
         x, y = radius * np.cos(theta), radius * np.sin(theta)
         ax.plot(x+x0, y+y0, color=color, marker='o', ms=3.0, ls="None")
         interp = [x+x0, interp_end[0]],[y+y0, interp_end[1]]
-        ax.plot(*interp, color=color, ls=":")
+        ax.plot(*interp, color=color, ls=":", linewidth=2.)
 
 
 def add_probe(ax, x0, y0, ri, ro, thetas, colors, widths):
