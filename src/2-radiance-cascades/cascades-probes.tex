@@ -57,13 +57,58 @@ By convention, the cascade that contains probes with the lowest angular discreti
 In~\cref{fig:interval-compression} (ii), there are two cascades, with $C_0$ being the complete set of all 16 green probes, and $C_1$ being the complete set of all 4 orange probes.
 
 \subsubsection{Standard Radiation Field Solution}
-% discussion on vanilla merge
+Before beginning, recall the radiatiance interval merging equation,
+\begin{equation}
+    \psi^g\left(\mathbf{r}_0 - s_{i}\boldsymbol{\Omega}, \boldsymbol{\Omega}\right) = 
+    \overbrace{\beta^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - s_{i+1}\boldsymbol{\Omega},\boldsymbol{\Omega}\right)}^{A}
+    + \overbrace{\psi^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)}^{B}.
+\end{equation}
+The first term, $A$, is the radiation contribution at the end point of the ray transported over the ray to the start point.
+The second term, $B$, is the radiance interval over the ray, and is the integral of the source term transported over the ray. 
+Importantly, $A$ is a striaght forward calculation that requires the radiation contribution at the end point, which is solved for recursively (as discussed in~\cref{subsubsection:ri-merging}).
+On the other hand, $B$ is completely unique to the specific ray being solved over. 
+Thus, the standard method for solving the radiation field globally splits this calculation into two steps.
+First, all radiance intervals ($\psi^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)$) are computed independently.
+Second, radiance intervals are recursively merged down from the highest cascade to the lowest. 
+
+The general algorithm for merging downward is
+\begin{enumerate}
+    \item Identify the neighboring probes in the next coarser cascade. 
+    In~\cref{fig:interval-compression}(ii), for our example target probe, this consists of all shown probes in $C_1$.
+    \item For each ray traced from the target probe, determine the corresponding rays traced from the higher cascade probes. 
+    The corresponding rays are those within the same angular cone.
+    \item For each target probe ray, sum each associated set of higher cascade rays and bilinearly interpolate the result to the endpoint of the target probe ray.
+    \item Transport the bilinearly interpolated value from the endpoint of the ray back to the starting point of the ray.
+\end{enumerate}
+
+For the simple case presented in~\cref{fig:interval-compression}(ii), we investigate one of the $C_0$ probes that lies between the four $C_1$ probes.
+The schematic for solving for one of the rays on this probe is shown in~\cref{fig:vanilla-merge}.
+
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.45\linewidth]{figs/vanilla-merge.pdf}
     \caption{Example of standard merging procedure for single ray on probe of $C_0$. 
-    %explain so more about the colors
+    The highlighted ray on the $C_0$ probe is the target ray for merging. 
+    The highlighted rays on each $C_1$ probe are summed together to the same colored point. 
+    Then, these sums are bilinearly interpolated from their respective points onto the endpoint of the target ray.
     }
     \label{fig:vanilla-merge}
 \end{figure}
+
+\paragraph{Parallelizability}
+The first step, in which all radiance intervals are computed, is trivially parallel. 
+Each radiance interval is completely independent of all others, and so can be computed completely in parallel.
+The second step complicates this slightly, but is still extremely Parallelizabile. 
+Each ray requires read-only access to the associated rays in the nearby probes of the next highest cascade. 
+This results in a graph, specifically a layered directed acyclic graph where each node is a probe and the edge weights are the bilinear interpolation weights. 
+Additionally, each layer is bipartite with respect to adjacent layers: no ray in $C_i$ requires any information from another ray in $C_i$, only from $C_{i+1}$.
+For the 2D case with the branching ratio $\alpha=2$, the majority of probes require communication from 4 probes from the adjacent higher cascade (3D requires 8).
+An example graph for the 2D case with $\alpha=2$ is shown in Appendix~\ref{appendix:merge-graph}.
+
+Thus, each merge step, all merges in a single layer (cascade), can be computed completely in parallel.
+However, the overall merge process is not trivially parallel, as each merge step must be computed in consecutive order. 
+
+The first step, computing all radiance intervals, is trivially parallel with both shared and distributed memory parallelism: no rank communication is required whatsoever and each radiance interval is independent.
+The second step, merging, is more challenging to parallelize with distributed memory parallelism. 
+
 %\subsubsection{Bilinear Fix}
