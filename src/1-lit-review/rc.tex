@@ -1,4 +1,4 @@
-A new method for real-time global illumination called emerged few years ago\footnote{This is intentionally vague, as the paper written was not dated nor published in a journal. It is available freely on GitHub.} in the paper ``Radiance Cascades: A Novel Approach to Calculating Global Illumination'' by Alexander Sannikov~\cite{sannikovRadianceCascadesNovel}.
+A new method for real-time global illumination called \acrfull{rc} emerged recently\footnote{This is intentionally vague, as the paper written was not dated nor published in a journal. It is available freely on GitHub.} in the paper ``Radiance Cascades: A Novel Approach to Calculating Global Illumination'' by Alexander Sannikov~\cite{sannikovRadianceCascadesNovel}.
 Sannikov, a video game developer, proposed a new data structure he termed ``radiance cascades'' that more effectively calculates and stores radiance field information by decomposing the domain into near- and far-field regions.
 This idea is based on a simple observation: to resolve the radiance from an emitter, one needs to have higher spatial resolution near the object but higher angular resolution far from it.
 
@@ -7,12 +7,12 @@ Instead of explicitly casting rays, each probe (within each cascade) is assigned
 The thickness of this shell is termed the ``radiance interval'' and is one of the foundational principles of the method.
 Thus, once a cascade has evaluated the contributions to each probe within its respective radiance interval, these intervals can be combined into reconstructed rays via interpolation when needed.
 
-Sannikov claims that the method enables, for practical purposes, infinitely many rays to be constructed at finite computational cost.
+Sannikov claims that the method enables, for practical all purposes, infinitely many rays to be constructed at finite computational cost.
 Indeed, he shows that the total memory required to store an infinite number of cascades is less than a constant, that constant being exactly equal to twice the amount of memory required to store the first cascade.
 This holds for \textit{both} 2D and 3D problems.
-As with neutronics methods such as the \acrlong{moc} (and its relative, \acrlong{trrm}), the biggest limitation for resolving solutions in complex geometry is the number of rays that are able to be cast.
-Though~\cite{sannikovRadianceCascadesNovel} gives a strong start to tackling this problem, Sannikov notes that simply storing the first cascade is practically equivalent to discretizing the entire domain, which becomes prohibitive problems.
-That is, to truly see the benefits of this technique, the method requires storing roughly twice the memory of the finest spatial discretization, though each additional cascade's memory requirements reduce exponentially.
+As in neutronics methods like the \acrlong{moc} and its relative, the \acrlong{trrm}, scalability is constrained by the memory demands associated with casting a sufficiently dense set of rays to resolve far-field solutions.
+Although Sannikov~\cite{sannikovRadianceCascadesNovel} presents a promising approach, he notes that storing only the first cascade is effectively equivalent to discretizing the entire domain, which can be prohibitive for sufficiently large domains or dense probe configurations. 
+In practice, the benefits of the technique emerge only after allocating approximately twice the memory of the finest spatial discretization because the incremental memory cost of subsequent cascades decreases exponentially.
 
 The most relevant work to this project proposal is that written by Osborne and Sannikov entitled ``Radiance cascades: a novel high-resolution formal solution for multidimensional non-LTE radiative transfer.''
 In this paper, the authors apply \acrshort{rc} to radiative transfer in astrophysics.
@@ -21,18 +21,19 @@ Unlike terrestrial neutronics, astrophysics often cannot take advantage of Monte
 Achieving accurate solutions therefore requires extremely high angular resolution, but the computational needs scale linearly with the number of angular quadrature points.
 
 Osborne revisits the claim of infinite rays constructed at finite cost.
-He notes that this asymptotic scaling breaks down before infinite rays can be realized but notes that while the penumbra criterion holds, ``the integration of the radiation field at high spatial and angular resolution [is] far cheaper than could be obtained with any traditional ray-casting approach.''
+He observes that this asymptotic scaling breaks down before the infinite-ray limit is reached, but emphasizes that, so long as the penumbra criterion holds, ``the integration of the radiation field at high spatial and angular resolution [is] far cheaper than could be obtained with any traditional ray-casting approach.''
 Additionally, the computational cost is dependent on the length of the radiance interval, and for higher cascades, these intervals can be considerably longer than those of lower cascades.
 Lastly, the scaling laws introduced by~\cite{sannikovRadianceCascadesNovel} and~\cite{osborneRadianceCascadesNovel2025} are dependent on the so-called ``branching factor,'' which controls the number of rays computed for each cascade.
 It is mentioned that more complex branching strategies can be applied in 3D to take advantage of the second angular dimension, potentially leading to improved scaling.
 This hypothesis was not explored further in Osborne's paper.
 
 The most significant contribution to \acrlong{rc} in~\cite{osborneRadianceCascadesNovel2025} is the so-called bilinear fix.
-One weakness of \acrshort{rc} as it was introduced in~\cite{sannikovRadianceCascadesNovel} is ringing artefacting.
+One weakness of \acrshort{rc} as it was introduced in~\cite{sannikovRadianceCascadesNovel} is ringing artifacting.
 The fix eliminates these numerical errors by correctly interpolating the source contributions from the next highest cascade.
 An overview of this fix is provided in \cref{subsec:bilinear-fix}.
 
-The final paper relevant is entitled ``Holographic Radiance Cascades for 2D Global Illumination''~\cite{freemanHolographicRadianceCascades2025}.
-In this work, the authors rework the original \acrlong{rc} formulation to decrease resolution in only a single direction as cascades increase.
-This modification both improves shadow resolution by limiting the diffusion introduced by class \acrlong{rc} and provides an acceleration structure.
-The results of this work show promise in the area of radiation shielding, where accurately resolving ``shadow'' regions is critical.
+The final relevant paper is entitled ``Holographic Radiance Cascades for 2D Global Illumination''~\cite{freemanHolographicRadianceCascades2025}. 
+In this work, the authors reformulate the original \acrlong{rc} approach to reduce resolution in only a single direction as the cascades progress. 
+This modification both improves shadow resolution by limiting the diffusion inherent to the classical \acrlong{rc} formulation and introduces an effective acceleration structure. 
+The results demonstrate particular promise for radiation shielding applications, where accurately resolving shadowed regions is critical.
+
