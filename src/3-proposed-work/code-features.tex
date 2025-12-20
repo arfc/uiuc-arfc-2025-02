@@ -25,7 +25,7 @@ This would be in the form of OpenMP or CUDA, or ideally a general parallelism in
 The benefits of using a general interface are that they are externally maintained and updated, interface with all types of GPUs (NVIDIA, AMD, Intel...) and CPUs (Intel, AMD...) with no additional user effort or code written, and would be updated to reflect the state of the industry (e.g.
 new GPU company comes out).
 Among all of the general parallelism interfaces, Kokkos seems to be the front runner because of its simple interface, large user community, highly active development team, large device support, and backing from the Linux foundation.
-The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{davisEvaluativeComparisonPerformanceb}.
+The next best would be RAJA, which has a smaller community overall and less backing, but has been shown to outperform Kokkos for simple instruction programs~\cite{davisEvaluativeComparisonPerformance}.
 
 \paragraph{Simple Code Base}
 Ideally, the code base would be relatively simple to develop in.
@@ -35,5 +35,5 @@ A system like OpenMC's, where there is a python interface for generating input f
 
 \paragraph{} % Not sure where this goes
 It is imperative in the growing use and capabilities of graphical processing units (GPUs) that any and all commercial implementations of \acrshort{rc} parallelize using GPUs.
-It has been shown~\cite{sannikovRadianceCascadesNovela,osborneSimpleRayAcceleration2025} that the \acrshort{rc} method scales extremely well in parallel, and indeed GPUs are manufactured to handle the ray-tracing needs of the method.
+It has been shown~\cite{sannikovRadianceCascadesNovel,osborneSimpleRayAcceleration2025} that the \acrshort{rc} method scales extremely well in parallel, and indeed GPUs are manufactured to handle the ray-tracing needs of the method.
 
