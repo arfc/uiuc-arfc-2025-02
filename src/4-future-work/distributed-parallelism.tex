@@ -1,0 +1,11 @@
+\subsection{Distributed Memory Parallelism}
+We have a few ideas on how to implement \glspl{rc} with efficient distributed memory parallelism.
+Both of these are very initial thoughts, and will need to be investigated further.
+
+The first, is a parallel in energy scheme, in which each energy group is solved independently of each other on distinct MPI ranks. 
+This would be distributed in the inner loop of something like source iteration, as after each solution, all groups would need to be brought back to update next iteration sources. 
+
+The second is a form of domain decomposition. 
+The merging method is a graph,~\cref{fig:rc-merge-graph}, that has structure we can take advantage of.
+We could perform domain decomposition on only the $C_0$ probes, such that each mpi rank has the same (or nearly the same) amount of $C_0$ probes. 
+Then, we can completely avoid MPI rank communication during the merge process by creating copies of all higher probes required from each rank's $C_0$ probes. 

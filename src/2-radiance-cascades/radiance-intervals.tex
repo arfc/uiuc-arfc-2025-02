@@ -1,3 +1,22 @@
+\subsection{Radiance Intervals}\label{subsection:radiance-interval}
+This section introduces and derives the concept of radiance intervals in a neutron transport framework.
+The foundational property of the radiation field that allows for \glspl{rc} is the notion of splitting incoming radiation rays into distinct intervals that can be solved for separately (and iteratively combined). 
+These intervals are called ``radiance intervals'', by convention from Sannikov~\cite{sannikovRadianceCascadesNovel}.
+A schematic of radiance intervals and their influence of the solution on a probe can be found in \cref{fig:ri-osborne}.
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=\linewidth]{figs/radiance-interval-cmo}
+    \caption{Concept of radiance intervals illustrated against standard long-characteristics.
+    Taken from~\cite{osborneRadianceCascadesNovel2025}
+    \label{fig:ri-osborne}.
+    Caption from original source:
+        \textit{Comparison of long characteristics style ray-casting from a point against two different radiance intervals over the same field.
+        The three coloured primitives can be considered opaque emissive sources.
+        In (a) we show the conventional ray-casting approach, whilst (b) and (c) show the radiance found inside annuli described by closer and further radiance intervals (shown in grey). 
+        Note that in (b) only the blue circle is found by these samples, whilst in (c) obscured components of the orange rectangle and green triangle are sampled.}
+    }
+\end{figure}
+
 \subsubsection{Formalization of Radiance Intervals}
 The main idea of radiance intervals is that each ray can be decomposed into adjacent segments, solved independently, and then merged, to determine the angular flux at the start point of the ray. 
 We seek to derive the radiance intervals, and how they relate to the angular flux, for the \gls{lbe}. 
@@ -77,7 +96,7 @@ For completeness and clarity, we now expand out the independent variables in eac
 \end{align}
 Now, we formally define the transparency ($\beta^g_{a,b}$) and the radiance interval ($\psi^g_{a,b}$) as
 \begin{align}
-    \label{{eq:beta-and-rad-interval}}
+    \label{eq:beta-and-rad-interval}
     \beta^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right) &= e^{-\int_a^b \dd{s'} \Sigma^g_t\left(\mathbf{r}_0 - s'\boldsymbol{\Omega}, \boldsymbol{\Omega}\right)}\\
     \psi^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)&= \int_a^{b} \dd{s}\,e^{-\int_a^s \dd{s'} \Sigma^g_t\left(\mathbf{r}_0 - s'\boldsymbol{\Omega}, \boldsymbol{\Omega}\right)}Q^g\left(\mathbf{r}_0 - s\boldsymbol{\Omega},\boldsymbol{\Omega}\right).
 \end{align}
@@ -91,4 +110,48 @@ Finally, we can insert our definitions for the transparency and radiance interva
         = \beta^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
         + \psi^g_{a,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right).
 \end{equation}
+
+\subsubsection{Validity of Radiance Interval Formulation}
+To illustrate that this formulation is a valid method of breaking a ray into segments, we select an arbitrary ray broken into two segments. 
+We define the interval ranges as $\left[a=0,b\right]$ and $\left[b,c=\tau\right]$.
+Using equation~\ref{eq:rad-contribution} we define $\psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right)$ as 
+\begin{align}
+    \psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right)
+        = \beta^g_{0,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        + \psi^g_{0,b}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right).
+\end{align}
+Now, again using equation~\ref{eq:rad-contribution}, we define $\psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)$ as 
+\begin{equation}
+    \label{eq:rad-contribution}
+    \psi^g\left(\mathbf{r}_0 - b\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        = \beta^g_{b,\tau}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - \tau\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        + \psi^g_{b,\tau}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right).
+\end{equation}
+Inserting this definition into that of $\psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right)$, again dropping arguments for brevity, we find
+\begin{align}
+    \psi^g\left(\mathbf{r}_0,\boldsymbol{\Omega}\right) &= \beta^g_{0,b}
+            \left[ \beta^g_{b,\tau}\psi^g\left(\tau\right) + \psi^g_{b,\tau} \right]
+            + \psi^g_{0,b}\notag\\
+        &= e^{-\int_0^b \dd{s'}\Sigma^g_t}
+            \left[ e^{-\int_b^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + \int_b^{\tau} \dd{s}\,e^{-\int_b^{s} \dd{s'} \Sigma^g_t}Q^g\right] +\psi^g_{b,\tau}\notag\\
+        &= e^{-\int_0^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + e^{-\int_0^b \dd{s'}\Sigma^g_t}\int_b^{\tau} \dd{s}\,e^{-\int_b^{s} \dd{s'} \Sigma^g_t}Q^g + \psi^g_{b,\tau}\notag\\ 
+        &=e^{-\int_0^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + \int_b^{\tau} \dd{s}\,e^{-\int_0^{s} \dd{s'} \Sigma^g_t}Q^g + \int_0^{b} \dd{s}\,e^{-\int_0^{s} \dd{s'} \Sigma^g_t}Q^g \notag\\
+        &= e^{-\int_0^{\tau} \dd{s'}\Sigma^g_t}\psi^g\left(\tau\right) + \int_0^{\tau} \dd{s}\,e^{-\int_0^{s} \dd{s'} \Sigma^g_t}Q^g.
+\end{align}
+
+This finding is consistent with the long-characteristic solution that is the standard in \gls{moc}, and so we conclude that rays can be broken into radiance intervals as we have defined them. 
+
+\subsubsection{Radiance Interval Merging}\label{subsubsection:ri-merging}
+The definition for $\psi^g\left(\mathbf{r}_0 - a\boldsymbol{\Omega},\boldsymbol{\Omega}\right)$ also defines how radiance intervals are combined to find the final solution at $\mathbf{r_0}$.
+The radiance interval merging formula, written more generally than Eq.~\ref{eq:rad-contribution}, is
+\begin{equation}
+    \label{eq:rad-interval-merging}
+    \psi^g\left(\mathbf{r}_0 - s_{i}\boldsymbol{\Omega}, \boldsymbol{\Omega}\right) = \beta^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - s_{i+1}\boldsymbol{\Omega},\boldsymbol{\Omega}\right)
+        + \psi^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right),
+\end{equation}
+where the dummy index $i$ denotes the interval bounds. 
+It is important to notice that two intervals can only be merged if they are directly adjacent: they must share a bound.
+Finally, it should be evident that if a ray is broken into $n$ intervals, the solution to the ray is found through recursively merging the radiance intervals, collapsing towards $\mathbf{r_0}$.
+
+
 
