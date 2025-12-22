@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
+from matplotlib.patches import Patch, Circle
 from matplotlib.lines import Line2D
 import matplotlib as mpl
 mpl.rc_file("./matplotlib.rc")
 cycle = mpl.rcParams["axes.prop_cycle"].by_key()["color"]
 import networkx as nx
+import numpy as np
 
 graph = nx.DiGraph()
 
@@ -16,17 +17,29 @@ graph.add_nodes_from(C2 + C1 + C0)
 for n in C1:
     graph.add_edge("C2_0", n)
 
-# this is pretty messy, but idk how else to do this
-for i, p in enumerate(C1):
-    for j, c in enumerate(C0):
-        if j % 4 == i and j%5 != 0:
-            pass
-        elif i < 2 and j/4 >= 3:
-            pass
-        elif i > 2 and j < 4:
-            pass
-        else:
-            graph.add_edge(p, c)
+for i in [1, 2, 3, #4
+          5, 6, 7, #8
+          9, 10, 11, #12
+          #13, #14, #15, #16
+          ]:
+    graph.add_edge("C1_0", f"C0_{i-1}")
+
+for i in [2, 3, 4,
+          6, 7, 8,
+          10, 11, 12]:
+    graph.add_edge("C1_1", f"C0_{i-1}")
+
+for i in [# 1, 2, 3, 4,
+          5, 6, 7, #8
+          9, 10, 11, #12
+          13, 14, 15, #16
+          ]:
+    graph.add_edge("C1_2", f"C0_{i-1}")
+
+for i in [6, 7, 8,
+          10, 11, 12,
+          14, 15, 16]:
+    graph.add_edge("C1_3", f"C0_{i-1}")
 
 # setting the xy locs of eah probe 
 pos = {}
@@ -59,3 +72,25 @@ plt.legend(handles=legend_handles, handlelength=4, frameon=False)
 plt.axis("off")
 plt.savefig("../figs/rc-merge-graph")
 plt.close()
+
+fig, ax = plt.subplots()
+ax.set_aspect("equal")
+ax.set_axis_off()
+ax.set_prop_cycle(None)
+c0 = np.meshgrid([1, 3, 5, 7], [7, 5, 3, 1])
+c1 = np.meshgrid([2, 6], [6, 2]) 
+c2 = np.meshgrid([4], [4])
+c_xy = [c0, c1, c2]
+for j, c in enumerate(c_xy):
+    for i, (x, y) in enumerate(zip(c[0].ravel(), c[1].ravel())):
+        x /= 8
+        y /= 8
+        circ = Circle((x, y), 0.05, facecolor=cycle[j],
+                    edgecolor="white")
+        ax.add_patch(circ)
+        ax.text(x, y, rf"$P_{{{i}}}^{{{j}}}$", ha="center",
+                va="center", transform=plt.gca().transAxes)
+legend_handles = [Patch(facecolor=cycle[c], edgecolor="None",
+                        label=rf"Cascade $C_{c}$") for c in [2, 1, 0]]
+plt.legend(loc=(1,0.8), handles=legend_handles, handlelength=4, frameon=False)
+fig.savefig("../figs/rc-merge-graph-problem")
