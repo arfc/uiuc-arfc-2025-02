@@ -1,14 +1,14 @@
 \subsection{Benchmarks}
-Benchmark cases for \acrshort{rc} must be chosen to specifically show the advantages of the method and directly test for known problems in other methods, such as ray-effects in $S_N$.
-To be considered successful, we will need to implement \acrshort{rc} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \gls{sn}.
+Benchmark cases for \acrshort{rcs} must be chosen to specifically show the advantages of the method and directly test for known problems in other methods, such as ray-effects in \acrshort{sn}.
+To be considered successful, we will need to implement \acrshort{rcs} in such a way that not only converges to the correct solution, but can also do so faster than proven methods such as \gls{sn}.
 Or, alternatively, must be proven to scale well using GPU parallelism.
-We propose the following benchmark cases be used for the development and testing of \acrshort{rc}.
+We propose the following benchmark cases be used for the development and testing of \acrshort{rcs}.
 
-The application of \acrshort{rc} to the \gls{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
+The application of \acrshort{rcs} to the \gls{bte} has been largely proven by Osborne and Sannikov~\cite{osborneRadianceCascadesNovel2025}, though with a particular application to photon transport in astrophysics.
 There are two main differences between this application and ours:
 \begin{enumerate}
-    \item Neutron transport simulations are typically focused on length scales in the centimeters to meters, not kilometers and light-years.\label{first difference}
-    \item The source term is dependent on the flux itself in both multiplying (fission) and nonmultiplying systems.\label{second difference}
+    \item Neutron transport simulations are typically focused on length scales in the centimeters to meters, not megameters and light-years.\label{first difference}
+    \item The source term is dependent on the flux itself in both multiplying and nonmultiplying systems.\label{second difference}
 \end{enumerate}
 
 \Cref{first difference} will be straightforward to show, as there are many benchmarks that allow for testing neutron streaming.
@@ -91,6 +91,6 @@ Values for these cases can be found in \cref{tab:kobayashi-source-and-mat-props}
     \caption{Source strength and material properties for Kobayashi benchmark problems.}
     \label{tab:kobayashi-source-and-mat-props}
 \end{table}
-The ultimate goal will be to report on \acrshort{rc}'s capabilities on the 3D problems as they were originally published.
+The ultimate goal will be to report on \acrshort{rcs}'s capabilities on the 3D problems as they were originally published.
 However, we propose to start with 2D ``flattened'' versions of these problems for a proof-of-concept internally, then move on to 3D implementation.
 As mentioned above, the strengths in this suite of benchmarks lie in the ability to provide both challenging streaming geometries while also testing for accurate source terms from phase space in-scattering.

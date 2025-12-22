@@ -1,14 +1,14 @@
 \subsection{Radiance Probes and Cascades}\label{subsection:cascades-probes}
 This section formally defines radiance probes and radiance cascades, demonstrating how the radiation field about is solved for. 
 To do so, we utilize our previously derived radiance intervals~(\cref{eq:beta-and-rad-interval}) and the interval merging relation~(\cref{eq:rad-interval-merging}) to solve the radiation field naively. 
-Then, we present the main result of \glspl{rc}, which enables significantly more efficient encoding of the radiation field by taking advantage of the key observations of the penumbra criterion. 
-Finally, we desribe the cascade merging algorithm, which efficiently computes for the radiation field. 
+Then, we present the main result of \acrshort{rcs}, which enables significantly more efficient encoding of the radiation field by taking advantage of the key observations of the penumbra criterion. 
+Finally, we describe the cascade merging algorithm, which efficiently computes for the radiation field. 
 
 \subsubsection{Radiation Field Representation}
 From the penumbra criterion, the angular discretization required to accurately resolve near-field contributions is not the same as is required for far-field contributions at a point.
 Specifically, greater angular discretization is required for far-field resolution than near-field.
 Using this, we break the radiation field about a point into a series of adjacent radiance intervals, with the increase in angular discretization between intervals defined as the branching ratio, $\alpha$.
-We simply perscribe $alpha=2$ for simplicity in presentation, but this is not required in general for \glspl{rc}.
+We simply prescribe $\alpha=2$ for simplicity in presentation, but this is not required in general for \acrshort{rcs}.
 
 \begin{figure}[!htbp]
     \centering
@@ -22,16 +22,16 @@ We simply perscribe $alpha=2$ for simplicity in presentation, but this is not re
 
 Investigating~\cref{fig:rad-field-breakup-into-ri}, the radiation field discretization in (i) might accurately resolve the contributions at the edge of the circle, but this discretization is massively overkill for resolving near the point. 
 Inversely, the radiation field discretization in (ii) might adequately resolve near the source, but will poorly resolve at the edge of the circle. 
-The inneficiency and failure of these discretizations is because the angular step (arc length) between two cast rays is not constant, and grows smaller further from the point. 
-This causes either inneficient computation near the point or incorrect solutions far from the point. 
-Conversely, the radiation field discretization in (iii), the \glspl{rc} discretization, efficiently resolves near field while accurately resolving far-field.
-By using radiance intervals with increasing angular discretization, the angular step is roughly constant between any given radiance interval, and so the solution is both effeciently computed and accurate.
+The inefficiency and failure of these discretizations is because the angular step (arc length) between two cast rays is not constant, and grows smaller further from the point. 
+This causes either inefficient computation near the point or incorrect solutions far from the point. 
+Conversely, the radiation field discretization in (iii), the \acrshort{rcs} discretization, efficiently resolves near field while accurately resolving far-field.
+By using radiance intervals with increasing angular discretization, the angular step is roughly constant between any given radiance interval, and so the solution is both efficiently computed and accurate.
 
 To solve for the radiation field, we discretize our problem domain into equidistant, discrete points, using the radiation field angular discretization employed in~\cref{fig:rad-field-breakup-into-ri} (iii).
 This discretization scheme applied across the problem domain is shown in \cref{fig:interval-compression} (i).
 Now, solving for the angular flux at each point is just a matter of solving all radiance intervals, and then merging these intervals down to each point.
 
-Although this discretization scheme is more efficient or more accurate than the full ray-casting discretizations, it only utilizes one part of the penumra criterion.
+Although this discretization scheme is more efficient or more accurate than the full ray-casting discretizations, it only utilizes one part of the penumbra criterion.
 In using the other, serious efficiency improvements are made.
 The other observation is that the spatial discretization to accurately resolve near-field contributions is greater than the requirement for far-field contributions.
 
@@ -42,8 +42,8 @@ Thus, they can be compressed into one radiance interval, drastically decreasing 
     \centering
     \includegraphics[width=0.9\linewidth]{figs/interval-compression.pdf}
     \caption{Comparison of spatial dependence of radiance intervals.
-    (i) shows the naive approach to \glspl{rc}, applying a full set of radiance intervals to each point.
-    (ii) demonstrates the compression of nearby same-range radiance intervals, the method employed in true \glspl{rc}.
+    (i) shows the naive approach to \acrshort{rcs}, applying a full set of radiance intervals to each point.
+    (ii) demonstrates the compression of nearby same-range radiance intervals, the method employed in true \acrshort{rcs}.
     In both cases, the radiance interval ranges are shortened and the number of radiance intervals is decreased for clarity.}
     \label{fig:interval-compression}
 \end{figure}
@@ -57,7 +57,7 @@ By convention, the cascade that contains probes with the lowest angular discreti
 In~\cref{fig:interval-compression} (ii), there are two cascades, with $C_0$ being the complete set of all 16 green probes, and $C_1$ being the complete set of all 4 orange probes.
 
 \subsubsection{Standard Radiation Field Solution}
-Before beginning, recall the radiatiance interval merging equation,
+Before beginning, recall the radiance interval merging equation,
 \begin{equation}
     \psi^g\left(\mathbf{r}_0 - s_{i}\boldsymbol{\Omega}, \boldsymbol{\Omega}\right) = 
     \overbrace{\beta^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)\psi^g\left(\mathbf{r}_0 - s_{i+1}\boldsymbol{\Omega},\boldsymbol{\Omega}\right)}^{A}
@@ -65,7 +65,7 @@ Before beginning, recall the radiatiance interval merging equation,
 \end{equation}
 The first term, $A$, is the radiation contribution at the end point of the ray transported over the ray to the start point.
 The second term, $B$, is the radiance interval over the ray, and is the integral of the source term transported over the ray. 
-Importantly, $A$ is a striaght forward calculation that requires the radiation contribution at the end point, which is solved for recursively (as discussed in~\cref{subsubsection:ri-merging}).
+Importantly, $A$ is a straight forward calculation that requires the radiation contribution at the end point, which is solved for recursively (as discussed in~\cref{subsubsection:ri-merging}).
 On the other hand, $B$ is completely unique to the specific ray being solved over. 
 Thus, the standard method for solving the radiation field globally splits this calculation into two steps.
 First, all radiance intervals ($\psi^g_{i,i+1}\left(\mathbf{r}_0, \boldsymbol{\Omega}\right)$) are computed independently.
@@ -73,8 +73,8 @@ Second, radiance intervals are recursively merged down from the highest cascade 
 
 The general algorithm for merging downward is
 \begin{enumerate}
-    \item Identify the neighboring probes in the next coarser cascade. 
-    In~\cref{fig:interval-compression}(ii), for our example target probe, this consists of all shown probes in $C_1$.
+    \item Identify the neighboring probes in the next lower cascade. 
+    In~\cref{fig:interval-compression}(ii), this consists of all shown probes in $C_1$.
     \item For each ray traced from the target probe, determine the corresponding rays traced from the higher cascade probes. 
     The corresponding rays are those within the same angular cone.
     \item For each target probe ray, sum each associated set of higher cascade rays and bilinearly interpolate the result to the endpoint of the target probe ray.
@@ -90,20 +90,20 @@ The schematic for solving for one of the rays on this probe is shown in~\cref{fi
     \caption{Example of standard merging procedure for single ray on probe of $C_0$. 
     The highlighted ray on the $C_0$ probe is the target ray for merging. 
     The highlighted rays on each $C_1$ probe are summed together to the same colored point. 
-    Then, these sums are bilinearly interpolated from their respective points onto the endpoint of the target ray.
+    Then, these sums are bi-linearly interpolated from their respective points onto the endpoint of the target ray.
     }
     \label{fig:vanilla-merge}
 \end{figure}
 
-\paragraph{Parallelizability}
+\paragraph{Parallelization}
 The first step, in which all radiance intervals are computed, is trivially parallel. 
 Each radiance interval is completely independent of all others, and so can be computed completely in parallel.
-The second step complicates this slightly, but is still extremely Parallelizabile. 
+The second step complicates this slightly, but is still extremely Parallelizable. 
 Each ray requires read-only access to the associated rays in the nearby probes of the next highest cascade. 
 This results in a graph, specifically a layered directed acyclic graph where each node is a probe and the edge weights are the bilinear interpolation weights. 
 Additionally, each layer is bipartite with respect to adjacent layers: no ray in $C_i$ requires any information from another ray in $C_i$, only from $C_{i+1}$.
-For the 2D case with the branching ratio $\alpha=2$, the majority of probes require communication from 4 probes from the adjacent higher cascade (3D requires 8).
-An example graph for the 2D case with $\alpha=2$ is shown in Appendix~\ref{appendix:merge-graph}.
+For the 2-D case with the branching ratio $\alpha=2$, the majority of probes require communication from 4 probes from the adjacent higher cascade (3-D requires 8).
+An example graph for the 2-D case with $\alpha=2$ is shown in Appendix~\ref{appendix:merge-graph}.
 
 Thus, each merge step, all merges in a single layer (cascade), can be computed completely in parallel.
 However, the overall merge process is not trivially parallel, as each merge step must be computed in consecutive order. 

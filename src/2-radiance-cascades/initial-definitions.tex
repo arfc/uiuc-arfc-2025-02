@@ -1,31 +1,36 @@
 \subsection{Initial Definitions}
-Because this paper focuses on nuclear applications of \acrlong{rc}, we briefly define a couple terms commonly used in \glspl{rc}.
-These defintions are intentionally loose, only meant as a primer to have a framework to understand the subsequent theory.
-Formal definitions will be presented as the theory is developed.
+Because this paper focuses on nuclear applications of \acrlong{rcs}, we briefly define certain terms commonly used in the technique.
+These definitions are intentionally loose, only meant as a primer to have a framework to understand the subsequent theory.
+Formal definitions, in nuclear engineering context, will be presented as the theory is developed.
 
-The underlying observation that birthed the idea of \glspl{rc} is termed the penumbra condition.
-The major result of this observation is that the angular and spatial discretization required to resolve near- and far-feild radiation contributions is not constant between regimes. 
+The underlying observation that birthed the idea of \acrshort{rcs} is the \emph{penumbra condition}.
+The major result of this observation is that the angular and spatial discretization required to resolve near- and far-field radiation contributions is not constant between regimes. 
 The concept of the penumbra condition is formalized in~\cref{subsec:penumbra-criterion}.
 
-The major key-words in \glspl{rc} are radiance intervals, probes, and cascades.
+There are three main concepts in \acrlong{rcs}:
+\begin{enumerate}
+    \item radiance intervals
+    \item probes
+    \item cascades
+\end{enumerate}
 
 A radiance interval is the contribution of incoming radiation at some point $\mathbf{r}_0$ from a spherical shell centered at $\mathbf{r}_0$.
-The range of the radiance interval is defined as the difference between the outer radius and inner radius of the shell.
-It should be noted that in 2D, the spherical shell is collapsed into a circular shell, and the range definition remains the same. 
-Radiance intervals are formalized for the \gls{lbe} in~\cref{subsection:radiance-interval}, as well as how to obtain the total incoming radiation from all radiance intervals. 
+The range of the radiance interval is defined as the difference between the outer and inner radii of the shell.
+Note that in 2-D, the spherical shell is collapsed into a circular shell with the range definition remaining the same. 
+Radiance intervals are formalized for the \acrfull{lbe} in~\cref{subsection:radiance-interval}, as well as how to obtain the total incoming radiation from all radiance intervals. 
 
-A ``probe'' in \glspl{rc} is synonymous to a detector in nuclear engineering.
-It is a simulation structure that has a position in space, and computes and stores a radiance interval about it's position.
+A ``probe'' in \acrshort{rcs} is synonymous to a detector in nuclear engineering.
+It is a simulation structure that has a position in space, and it computes and stores a radiance interval about it's position.
 To compute the intervals, the probe discretizes intervals into a set of rays, each with a unique direction that is normal to the spherical shell's surface.
 Note, however, that probes are ``point'' structures that do not have associated volume or surface area (like a detector would).
 In this way, probes are analogous to nodes in finite element analysis in that they are points in space that contain more information that just their location.
-Probes are discussed in more depth in~\cref{subsection:cascades-probes}. 
+More on this in~\cref{subsection:cascades-probes}. 
 
-Cascades are a collection of probes that are equidistant\footnote{More on this to be discussed in \cref{sec:future-work}.} from one another and contain the same angular discretizations.
+Cascades are a collection of probes that are equidistant from one another and contain the same angular discretizations.
 Each probe in a cascade solves for a radiance interval of the same size (range), but that interval is centered on the probe's own location. 
 In other words, all probes within a given cascade behave identically, the only thing that differs is where each probe is placed.
-In \glspl{rc}, cascades are arranged hierarchically: the lowest cascade provides the finest spatial resolution (the most probes) but uses the coarsest angular resolution, while higher cascades contain progressively fewer probes but have increasingly finer angular discretization.
-Radiance Cascades solves the radiance field by computing each radiance interval independently. 
+In \acrshort{rcs}, cascades are arranged hierarchically: the lowest cascade provides the finest spatial resolution (the most probes) but uses the coarsest angular resolution, while higher cascades contain progressively fewer probes but have increasingly finer angular discretization.
+The method solves the radiance field by computing each radiance interval independently. 
 Then, the solved radiance intervals are successively merged downward from the highest cascade until the lowest cascade is reached.
 Once the probes in the lowest cascade have been encoded with the solutions from the higher cascades, the continuous radiation field is obtained by interpolating between probes.
 Cascades and merging are discussed more in~\cref{subsection:cascades-probes}.

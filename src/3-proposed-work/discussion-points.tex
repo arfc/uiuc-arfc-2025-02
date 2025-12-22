@@ -2,18 +2,18 @@
 This section highlights specific ideas we believe may fit into both future work and a first implementation.
 
 \paragraph{3D Implementation}
-A 3D implementation of \glspl{rc} is absolutely feasible, however the scaling law that makes \glspl{rc} so interesting in 2D does not apply in 3D (at least not as trivially as 2D).
+A 3D implementation of \acrshort{rcs} is absolutely feasible, however the scaling law that makes \acrshort{rcs} so interesting in 2D does not apply in 3D (at least not as trivially as 2D).
 
 \paragraph{Standalone CSG Package}
 A standalone constructive solid geometry package, shared by major open source Monte Carlo codes such as OpenMC and MCDC, would greatly support the development of deterministic solvers intended to plug into Monte Carlo codes for generating variance-reduction parameters.
 The idea is that deterministic-method developers could simply import this package and focus solely on implementing their solver, while the shared CSG library would handle geometry as well as both continuous-energy (CE) and multigroup (MG) cross-section representations.
-Such an approach would significantly accelerate the development of \glspl{rc} codes, whether integrated into OpenMOC or another code, by eliminating the need to independently update/implement and maintain CSG and MGXS infrastructure within the \gls{rc} codebase.
+Such an approach would significantly accelerate the development of \acrshort{rcs} codes, whether integrated into OpenMOC or another code, by eliminating the need to independently update/implement and maintain CSG and MGXS infrastructure within the \gls{rcs} codebase.
 Essentially, this CSG package is intended to serve a similar purpose to LibMESH in FEM problem codes. 
 
 \paragraph{Source Representation}
 A major limitation to \gls{moc} (and \gls{trrm}) is the required use of source regions.
 This limitation is entirely because MOC solvers do not know the angular/scalar flux at discrete points throughout the problem domain. 
-\glspl{rc} do not suffer this limitation, and as such do not necessarily rely on source regions.
+\acrshort{rcs} do not suffer this limitation, and as such do not necessarily rely on source regions.
 Instead, the source along each radiance interval can be computed as a continuous function by interpolating from the scalar flux solution of nearby $C_0$ probes. 
 Although this formulation is more complicated than flat- or linear-source regions, it is still possible to analytically solve the integral of the source term. 
 As such, we think using this representation of the source term would drastically improve the overall accuracy of the method, compared to using source regions, at minimal added computational cost.

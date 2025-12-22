@@ -1,11 +1,11 @@
 \subsection{Radiance Cascades Implementation}
 
 \subsubsection{Toy Problem}
-Rather than immediately implementing \glspl{rc} in the general case, we propose to begin with a simple implementation applied to no more than two ``toy'' problems.
+Rather than immediately implementing \glspl{rcs} in the general case, we propose to begin with a simple implementation applied to no more than two ``toy'' problems.
 These will consist of basic two-dimensional transport problems solved using either Python or C++.
 The purpose is purely educational and serves two goals:
 \begin{enumerate}
-    \item Provide an opportunity to practice implementing \glspl{rc} on a small, well-defined problem before moving to a generalized code base.
+    \item Provide an opportunity to practice implementing \glspl{rcs} on a small, well-defined problem before moving to a generalized code base.
     \item Demonstrate early results for the method as applied to neutronics.
 \end{enumerate}
 To accomplish this, we will start from example problems already developed by the community and tailor the corresponding code to match our problem of interest\footnote{This approach was personally recommended by C.\,M.\,J.\ Osborne.}.
@@ -13,33 +13,33 @@ The first problem will consider a purely absorbing material with either a simple
 
 % OpenMoC, OpenCSG (separating from OpenMC -- would need to work with developers)
 \subsubsection{Implementation Target}
-We investigated four codes to potentially implement \glspl{rc} in: OpenMC, OpenSN, DexRT, and OpenMOC.
+We investigated four codes to potentially implement \glspl{rcs} in: OpenMC, OpenSN, DexRT, and OpenMOC.
 \paragraph{OpenMC}
 OpenMC~\cite{romanoOpenMCStateoftheartMonte2015d} has a mature code base featuring CSG and MGXS modules, and so it satisfies both required prerequisites.
 Additionally, OpenMC satisfies both desired features, as it supports shared memory parallelism via OpenMP and has a very developer friendly code base.
-Unfortunately, we believe OpenMC is not the correct code to implement \glspl{rc} in, as it is primarily a Monte Carlo code. 
-While OpenMc does have a deterministic solver, \gls{trrm} solver, this is only supported due to the inherently stochastic nature of \gls{trrm}. 
-\acrlong{rc} do not have a stochastic element, and thus do not belong in OpenMC.
+Unfortunately, we believe OpenMC is not the correct code to implement \glspl{rcs} in, as it is primarily a Monte Carlo code. 
+While OpenMC does have a deterministic solver, \gls{trrm} solver, this is only supported due to the inherently stochastic nature of \gls{trrm}. 
+\acrlong{rcs} do not have a stochastic element, and thus do not belong in OpenMC.
 
 \paragraph{OpenSN}
 OpenSN~\cite{OpenSnOpensn2025} is a discrete ordinates research code developed by Dr. Ragusa's group at Texas A\&M University. 
 OpenSN has a MGXS module and supports shared memory parallelism through OpenMP.
-OpenSN explicitly supports unstructued meshs, and should be capable of supporting structured meshes through input files, but this feature is unclear. 
-OpenSN is actively maintained, and recently underwent a massive update to the code base, which was to add a python interface. 
-Now, OpenSN is run through python, but this is not done via Cython or SWIG. 
-While OpenSN is an actively maintained determinstic research code, we believe this code is not the correct code to implement in.
-We believe this, for the goal of OpenSN is to investigate different sweeping algorithms for the discrete ordinates method, and so implementing \glspl{rc} does not align with the goal of the code. 
+OpenSN explicitly supports unstructured meshes, and should be capable of supporting structured meshes through input files, but this feature is unclear. 
+OpenSN is actively maintained, and recently underwent a massive update to the code base, in which a python interface was added. 
+Although OpenSN is now run through it's python interface, the backend is entirely C++, and the interfacing is not done through Cython or SWIG.
+While OpenSN is an actively maintained deterministic research code, we believe this code is not the correct code to implement in.
+The goal of OpenSN is to investigate different sweeping algorithms for the discrete ordinates method, and so implementing \glspl{rcs} does not align with the goal of the code. 
 
 \paragraph{DexRT}
-DexRT~\cite{osborneRadianceCascadesNovel2025} is a non-LTE radiative transfer code, and is the first published \glspl{rc} implementation for physics applications. 
+DexRT~\cite{osborneRadianceCascadesNovel2025} is a non-LTE radiative transfer code, and is the first published \glspl{rcs} implementation for physics applications. 
 DexRT supports structured rectilinear meshes, and uses Kokkos for portable shared-memory parallelism. 
 Unfortunately, due to the nature of non-LTE radiative transfer, the representation for `opacity' (the non-LTE radiative transfer equivalent to cross-sections) differs from a standard MGXS representation.
 The representation for opacity is significantly more complicated, as the opacity is strongly coupled to the radiation field, but still stores mean values for each discretized wavelength (the equivalent to discrete energy groups).
 Thus, DexRT is capable of representing MGXS, and the implementation would only require adding input file parsing and a removal of cross-section dependence on the radiation field.
-Additionally, as DexRT is a implementation of \glspl{rc} for a physics application, it is adaptable to solving the \gls{lbe}.
-Despite mostly satisfying the prerequisites, there are a few notable things to consider if implementing in DexRT:
+Additionally, as DexRT is a implementation of \glspl{rcs} for a physics application, it is adaptable to solving the \gls{lbe}.
+Despite mostly satisfying the prerequisites, there are a few notable considerations for implementing in DexRT:
 \begin{enumerate}
-    \item DexRT is in rapid but sporradic development, and is maintained by a single person.
+    \item DexRT is in rapid but sporadic development, and is maintained by a single person.
     \item DexRT solves for non-LTE radiative transfer, and this problem is heavily baked into the code base. An abstraction to also solve the \gls{lbe} could be tricky to implement, and may not be supported by Osborne, as the problems are very different.
 \end{enumerate}
 Given these, we believe if DexRT is chosen as the implementation target, the best course of action would be to create a fork and alter the code base independent of DexRT.
@@ -51,18 +51,18 @@ In our opinion, the code base is relatively complex, due mostly to design choice
 For example, the code uses SWIG for python bindings of C++ code, which adds an additional, complicated step to the build system. 
 OpenMOC also has distinct code written for CPUs and GPUs, and, due to the state of OpenMP and CUDA at the time of writing, has many explicit memory calls. 
 These features add maintenance burden and are no longer required given the recent introduction of portable parallelism interfaces like Kokkos and RAJA.
-Additionally, OpenMOC is outdated and needs a lot of code maintenance prior to implementing \glspl{rc}, although this will be discussed further in~\cref{subsubsec:implementation-outline}.
-That said, we believe that of the four codes investigated, OpenMOC is clearly the code to implement \glspl{rc} into for a few reasons. 
+Additionally, OpenMOC is outdated and will require code maintenance and updates prior to implementing \glspl{rcs}. This will be discussed further in~\cref{subsubsec:implementation-outline}.
+That said, we believe that of the four codes investigated, OpenMOC is clearly the code to implement \glspl{rcs} into for a few reasons. 
 OpenMOC satisfies most of the prerequisite features we defined previously, only missing the mark on code base simplicity; something that can be remedied through maintenance and updates.
 Additionally, the intent of OpenMOC was to investigate and demonstrate long characteristic methods for solving the \gls{lbe}.
-OpenMOC is also an open-source package, that is nearly in the code graveyard of github, and could be revived if we implement \glspl{rc} into OpenMOC.
+OpenMOC is also an open-source package, that is nearly in the code graveyard of github, and could be revived if we implement \glspl{rcs} into OpenMOC.
 
 \subsubsection{Implementation Outline}\label{subsubsec:implementation-outline}
 % Long time implementation outline
 % - maintenance required
 % - updates planned
 % - planned implementation goals (forward solve, 2D, source iteration, neutron only, multiplying and fixed source...)
-This section assumes we will be implementing into OpenMOC, and will layout a rough estimate on the work for the initial \glspl{rc} implementation. 
+This section assumes we will be implementing into OpenMOC, and will layout a rough estimate on the work for the initial \glspl{rcs} implementation. 
 \paragraph{Required Maintenance}
 OpenMOC is sporadically maintained, and as such has a few outdated dependencies.
 Specifically, the build system uses some deprecated packages, like \texttt{distutils}, and the minimum CMake version (2.8) has been deprecated since 2020. 
@@ -71,18 +71,18 @@ More significantly, OpenMOC was intended to be able to interface with OpenMC, sp
 However, OpenMC has developed new surfaces that are not implemented in OpenMOC, such as x/y cylinders, quadrics, spheres, cones, and torii. 
 Additionally, OpenMOC only supports reading MGXS from OpenMC for cell and material domain types, while OpenMC supports generating cross sections for distributed cells, meshes, and universes.
 Thus, OpenMOC is not currently fully compatible with OpenMC geometry or cross section generation. 
-Before implementing \glspl{rc}, we believe OpenMOC should be able to do all the things it's documentation says it can do, and so these must be updated.
+Before implementing \glspl{rcs}, we believe OpenMOC should be able to do all the things it's documentation says it can do, and so these must be updated.
 
 \paragraph{Desired Updates}
-There are a lot of desired updates to OpenMOC that we believe could be beneficial to implement for \glspl{rc}.
+There are \emph{several} desired updates to OpenMOC that we believe will be extremely helpful for implementing \glspl{rcs}:
 \begin{enumerate}
-    \item Code organization: The C++ source code is currently all stored in the same directory. We propose organizing the code into logical sub-directories, similair to the organization of MOOSE apps.
-    \item Code complexity: The C++ source integration into Python using SWIG complicates the code and build system. We propose seperating the C++ source and Python interface, similair to how OpenMC works.
+    \item Code organization: The C++ source code is currently all stored in the same directory. We propose organizing the code into logical sub-directories, similar to the organization of INL's MOOSE framework.
+    \item Code complexity: The C++ source integration into Python using SWIG complicates the code and build system. We propose separating the C++ source and Python interface, similair to how OpenMC works.
     \item Code cleanliness: Some of the source files are extremely long, and could benefit from templating and unnecessary function/variable removal.
     \item Linear Algebra: OpenMOC has a \gls{cmfd} solver implemented, where the data storage (sparse matrix) and the solver itself are written natively. 
-    For the sake of conciceness and performance, we propose bringing in PETSc for the sparse linear algebra that \gls{cmfd} requires. 
+    For the sake of conciseness and performance, we propose bringing in PETSc for the sparse linear algebra that \gls{cmfd} requires. 
     This would drastically decrease the volume of code written for the \gls{cmfd} solver, and entirely remove the need of the \texttt{vector} class. 
-    Additionally, using PETSc gaurantees adequate performance, scalability, and portability (PETSc supports Kokkos).
+    Additionally, using PETSc guarantees adequate performance, scalability, and portability (PETSc supports Kokkos).
     \item Portable Parallelism: The parallel solvers currently use CUDA or OpenMP for shared memory parallelism.
     Because of this, there are two families of solvers in OpenMOC, those written with CUDA and those written with OpenMP, that have nearly identical code. 
     Additionally, because the GPU solver is written in CUDA, it is not portable between GPU systems. 
@@ -91,13 +91,13 @@ There are a lot of desired updates to OpenMOC that we believe could be beneficia
 \end{enumerate}
 
 \paragraph{Implementation Goals}
-For the initial implementation, we propose the following features
+For the initial implementation, we propose the following required features:
 \begin{enumerate}
     \item Support for arbitrary geometries through CSG representation
     \item MGXS input parsing from a tool like OpenMC, NJOY, or some other code
-    \item Steady-state 2D \glspl{rc} solver
+    \item Steady-state 2D \glspl{rcs} solver
     \item Capability to handle both multiplying and fixed-source problems
-    \item The standard \glspl{rc} merging algorithm and Bilinear fix merging algorithm
+    \item The standard \glspl{rcs} merging algorithm and Bilinear fix merging algorithm
 \end{enumerate}
 
 The first two features already exist in OpenMOC, but are included for completeness and clarity.

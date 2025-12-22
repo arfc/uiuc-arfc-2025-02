@@ -2,7 +2,7 @@
 %Liam's scratch thoughts:
 %\begin{itemize}
 %    \item Numerous meshing algorithms exist that can place nodes within the domain of arbitrary meshes (such as \texttt{gmsh}).
-%    \item The requirements of \glspl{rc} lie in the spacing between probes with regard to their angular resolution.
+%    \item The requirements of \glspl{rcs} lie in the spacing between probes with regard to their angular resolution.
 %    As of the writing of this, it is understood that each increase in cascade ``level'' results in a doubling of the spatial distance.
 %    It should therefore be very straightforward to use a mesh generator with a user-set minimum spatial discretization for cascade 0, then the generator can place the probes for all higher cascades by doubling a global mesh parameter.
 %    The parameter needs to ensure that this is the \textit{maximum} distance between probes (nodes) to ensure the penumbra criteria are satisfied.
@@ -14,14 +14,14 @@
 A natural extension of this work is to explore unstructured probe placement for radiance cascades, especially in constructive solid geometry (CSG) models, and to investigate higher-accuracy interpolation schemes between probes.
 
 Modern mesh generators (e.g., \texttt{gmsh}) already provide algorithms capable of placing nodes throughout arbitrary domains.
-Because \acrlong{rc} primarily impose constraints on probe spacing relative to angular resolution, these tools could be adapted directly.
+Because \acrlong{rcs} primarily impose constraints on probe spacing relative to angular resolution, these tools could be adapted directly.
 In the current formulation, each cascade increases its spatial spacing by a factor of two.
 Thus, cascade~0 could be produced using a mesh with a prescribed minimum spacing, and higher cascades could be derived simply by doubling a global spacing parameter.
 This value must be enforced as a \emph{maximum} spacing to preserve the penumbra criterion.
 
 Unstructured probe locations also raise the question of accurate interpolation.
-The process resembles finite-element interpolation, though without the overhead of element-level basis functions and their gradients.
-Since \acrshort{rc} only require interpolation between probe values, schemes such as linear, quadratic, or even spline-based interpolation could be evaluated.
+The process resembles finite element interpolation, though without the overhead of element-level basis functions and their gradients.
+Since \acrshort{rcs} only require interpolation between probe values, schemes such as linear, quadratic, or even spline-based interpolation could be evaluated.
 While spline-type methods may introduce additional computational cost, the mathematical framework is straightforward and could significantly improve accuracy.
 
 Finally, each probe would need to store its angular flux information and a record of its interpolation neighbors.

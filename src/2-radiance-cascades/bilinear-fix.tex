@@ -1,5 +1,5 @@
 \subsection{Bilinear Fix}\label{subsec:bilinear-fix}
-The most notable issue with \glspl{rc} is ringing artefacts, as shown in the upper image of \cref{fig:ringing-effect}.
+The most notable issue with \acrshort{rcs} is ringing artefacts, as shown in the upper image of \cref{fig:ringing-effect}.
 As discussed by Osborne~\cite{osborneRadianceCascadesNovel2025}, the origin of this issue lies in the oversampling of a source across cascades.
 This issue is remedied through the use of the so-called ``bilinear fix.''
 \begin{figure}[!htb]
@@ -14,9 +14,9 @@ Because each probe both within and across cascades is located a different point 
 When interpolation is carried out between a higher and lower cascade, we unfairly increase the contributions of the source on the probe; the source is not properly blocked (``occluded'') when stepping to a lower cascade.
 This leads to energy not being conserved at locations where cascades overlap a source.
 
-For illustration, let's say we have two cascades, 0 and 1, where Cascade 0 has 4 equidistant angular directions, and Cascade 1 has 8.
+For illustration, let's say we have two cascades, 0 and 1, where Cascade 0 has 4 equidistant angular directions, and Cascade 1 has 16.
 Additionally let's assume that the penumbra criterion holds, so there are twice as many probes in Cascade 0 as there are in Cascade 1 to reflect the higher spatial density.
-As discussed previously, the method of radiance cascades evaluates contributions to each probe within distances defined by the radiance interval.
+As discussed previously, the method of \acrlong{rcs} evaluates contributions to each probe within distances defined by the radiance interval.
 This interval is an annulus is 2D and a shell in 3D.
 The fix is thus:
 \begin{enumerate}
@@ -26,5 +26,5 @@ The fix is thus:
 \end{enumerate}
 This process minimizes parallax effects and ensures occlusion (blocking) from Cascade $i$ is correctly applied.
 A source of confusion that still exists are the descriptions of additional ray tracing from the higher cascades to the lower. 
-It is not immediately from the descriptions and figures provided by Osborne~\cite{osborneRadianceCascadesNovel2025} where these steps emerge in the process and what their purpose is.
+It is not immediately clear from the descriptions and figures provided by Osborne~\cite{osborneRadianceCascadesNovel2025} where these steps emerge in the process and what their purpose is.
 % CREATE IMAGES FOR EACH OF THE ABOVE STEPS

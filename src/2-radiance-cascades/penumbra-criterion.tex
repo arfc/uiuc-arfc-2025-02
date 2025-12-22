@@ -1,7 +1,7 @@
 \subsection{Penumbra Criterion}\label{subsec:penumbra-criterion}
 % Nathan
-The relationship between the distance from a source and the required spatial and angular resolution to resolve the source is the `penumbra condition'.
-The penumbra condition is formally defined by Sannikov~\cite{sannikovRadianceCascadesNovel} using a 2-D planar problem with a light source and perfectly opaque absorber. 
+The relationship between the distance from a source and the required spatial and angular resolution to resolve the source is the ``penumbra criterion.''
+It is formally defined by Sannikov~\cite{sannikovRadianceCascadesNovel} using a 2-D planar problem with a light source and perfectly opaque absorber. 
 The goal of the problem is to determine the angular and spatial resolution required to accurately capture the penumbra of the shadow cast by the source at some distance past the absorber.
 
 This can be illustrated by considering a detector placed in the penumbra.
@@ -18,7 +18,7 @@ Compressing these observations yields the penumbra condition~\cite{sannikovRadia
     \item Far-field radiance contributions from the light source vary with low spatial frequency and high angular frequency.
 \end{enumerate}
 
-The penumbra condition can be represented mathematically as~\cite{sannikovRadianceCascadesNovel, osborneRadianceCascadesNovel2025}:
+The penumbra criterion can be represented mathematically as~\cite{sannikovRadianceCascadesNovel, osborneRadianceCascadesNovel2025}:
 \begin{align}
     \begin{split}
         \Delta_s &< f(D) \propto D,\\
@@ -28,7 +28,7 @@ The penumbra condition can be represented mathematically as~\cite{sannikovRadian
 
 such that $f(D)$ and $g(D)$ are linear functions of the distance $D$ from a source. It should be noted that these observations still hold for the case in which the source is far from the absorber, but for that case the angular step $\Delta_{\omega}$ scales super-linearly with $1/D$~\cite{osborneRadianceCascadesNovel2025}. 
 
-\glspl{rc} depends on the hypothesis that the penumbra condition holds generally throughout the problem domain for all sources. 
+\acrshort{rcs} depends on the hypothesis that the penumbra condition holds generally throughout the problem domain for all sources. 
 There are trivial exceptions to this hypothesis, namely a point source or a small source embedded in a perfectly absorbing medium. 
-In general however, the penumbra condition holds well for most purposes, and \glspl{rc} are formulated to encode most extreme cases~\cite{sannikovRadianceCascadesNovel}.
+In general however, the penumbra condition holds well for most purposes, and \acrshort{rcs} are formulated to encode most extreme cases~\cite{sannikovRadianceCascadesNovel}.
 

@@ -1,18 +1,17 @@
-Deterministic neutron transport techniques are commonly developed around the expansion of the \acrshort{bte}'s scattering source term in angle ($\mathbf{\Omega}$) using orthogonal basis functions.
+Deterministic neutron transport techniques are commonly developed around the expansion of the \acrfull{bte}'s scattering source term in solid angle ($\mathbf{\Omega}$) using orthogonal basis functions.
 The most-widely used expansion is the set of spherical harmonics, which is a complete set of orthogonal functions that form a basis on the surface of a sphere~\cite{bellNuclearReactorTheory1970a}.
 When treated continuously in angle, the angular flux is then expanded using Legendre polynomials~\cite{lewisComputationalMethodsNeutron1984a}, making up the so-called $P_N$ method.
 While the details of this method are outside the scope of this paper, we note that the $P_N$ method has mostly fallen out of favor because the complexity involved in its formulation and the approximations needed to achieve vacuum boundary conditions, which themselves are defined piecewise-discontinuous in angle.
 Moreover, the $P_N$ method is capable of producing nonphysical negative particle densities~\cite{camminadyRayEffectMitigation2019}.
 
-The discrete ordinates method ($S_N$) has remained the standard numerical approach in transport theory in applications ranging from heat transfer~\cite{thynellDiscreteordinatesMethodRadiative1998} to neutronics to astrophysics.
-Indeed, since its introduction by Chandrasekhar~\cite{alma99126985512205899} to astrophysics and subsequent application to neutronics by Carlson~\cite{carlsonMethodCharacteristicsOther1976,osti_4315921}, it has seen continued research, development, and applications at the national laboratories through codes such as Denovo~\cite{evansDenovoNewThreeDimensional2010b} and PARTISN~\cite{baker2009time}, and in the open-source community wtih OpenSN~\cite{OpenSnOpensn2025}\footnote{At the time of this writing, a reference journal article for citations of OpenSN has not been provided.}.
-In $S_N$, the \acrshort{bte} is evaluated along selected angles (``ordinates'') that make up a quadrature set (usually Gauss-Legendre).
+The \acrfull{sn} method has remained the standard numerical approach in transport theory in applications ranging from heat transfer~\cite{thynellDiscreteordinatesMethodRadiative1998} to neutronics to astrophysics.
+Indeed, since its introduction by Chandrasekhar~\cite{alma99126985512205899} to astrophysics and subsequent application to neutronics by Carlson~\cite{carlsonMethodCharacteristicsOther1976,osti_4315921}, it has seen continued research, development, and applications at the national laboratories through codes such as Denovo~\cite{evansDenovoNewThreeDimensional2010b} and PARTISN~\cite{baker2009time}, and in the open-source community with OpenSN~\cite{OpenSnOpensn2025}\footnote{At the time of this writing, a reference journal article for citations of OpenSN has not been provided.} and OpenMOC~\cite{boydOpenMOCMethodCharacteristics2014a}.
+In one form of \acrshort{sn}, the \acrshort{bte} is evaluated along selected angles (``ordinates'') that make up a quadrature set (usually Gauss-Legendre).
 Once each direction has been solved for, the results are multiplied by their associated weighting functions and summed together at each spatial point to construct the scalar (angle-integrated) flux.
-$S_N$ methods usually use ``sweeps,'' a colloquial term referring to an iterative scheme in which the solver follows (``sweeps'') along the direction of neutron travel, updating the source term until convergence.
+\acrshort{sn} methods usually use ``sweeps,'' a colloquial term referring to an iterative scheme in which the solver follows (``sweeps'') along the direction of neutron travel, updating the source term until convergence.
 An excellent introduction to the sweeping algorithm, along with the discrete ordinates method in general, can be found in~\cite{lewisComputationalMethodsNeutron1984a}.
 
-Despite its effectiveness, $S_N$ struggles with numerical artifacts known as \textit{ray effects}.
+Despite its effectiveness, \acrshort{sn} struggles with numerical artifacts known as ray effects.
 These arise because discretizing the angular domain into a finite number of ordinates breaks rotational symmetry~\cite{camminadyRayEffectMitigation2019}, causing radiation from a localized source to appear smeared or faceted along discrete directions.
 Mitigation strategies stretch back to early work by Lathrop~\cite{lathropRayEffectsDiscrete1968,lathropRemediesRayEffects1971}, yet ray effects remain a central challenge—particularly for large domains, where resolving far-field behavior demands extremely dense quadrature sets.
-However, the issue persists, especially for large domains, where an extremely-dense quadrature set is required to accurately resolve far-field parts of the domain (see Figure 1 provided in~\cite{osborneRadianceCascadesNovel2025} on page 4).
-
+See Figure 1 provided in~\cite{osborneRadianceCascadesNovel2025} on page 4.

@@ -6,20 +6,6 @@
 \input{src/introduction}
 
 \section{Literature Review and Background}
-% MoC in neutronics
-% SN in neutronics
-% global illumination in computer graphics
-%       goals, algorithms
-
-%%%%%%
-% Nathans thoughts on the layout of this section:
-% - Neutron Transport equation presentation, and discussion
-% - Numerical methods to solving neutron transport equation (Pn, Sn, short vs long MOC, Diffusion)
-    % strengths, weaknesses, applications
-% - Discussion of MOC specifically, presentation of basic MOC ideas and equations (flat vs linear source region, TRRM, parallelism...)
-% - Related fields to neutron transport (global illumination in computer graphics, non-LTE radiative transfer)
-    %  methods in solving there, finish with Radiance Cascades
-%%%%%%
 \input{src/1-lit-review/neutronics-history}
 \input{src/1-lit-review/gi-background}
 \input{src/1-lit-review/rc}
@@ -33,7 +19,7 @@
 \input{src/2-radiance-cascades/bilinear-fix}
 
 \section{Proposed Work}
-This section discusses the implementation of \glspl{rc}, and our proposed work.
+\input{src/3-proposed-work/proposed-work-header}
 \input{src/3-proposed-work/formalize-penumbra}
 \input{src/3-proposed-work/code-features}
 \input{src/3-proposed-work/rc-implementation}
