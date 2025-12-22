@@ -18,3 +18,28 @@ Instead, the source along each radiance interval can be computed as a continuous
 Although this formulation is more complicated than flat- or linear-source regions, it is still possible to analytically solve the integral of the source term. 
 As such, we think using this representation of the source term would drastically improve the overall accuracy of the method, compared to using source regions, at minimal added computational cost.
 
+\paragraph{Distributed Memory Parallelism}
+A massive limitation of the current versions of \acrshort{rcs} is the lack of distributed memory parallelism. 
+This is due predominantly to lack of interest from the computer graphics community, as they interact with single devices and thus rely enitrely upon shared memory parallelism.
+
+This is problematic for a neutronics implementation of \acrshort{rcs}, as many nuclear problems are large and complicated, and may need to run on HPCs.
+For \acrshort{rcs} to run on HPC systems, there must be some form of distributed memory parallelism. 
+This can be achieved in a few different ways.
+
+The first method we though of is a form of domain decomposition, and would be generally applicable. 
+Both the standard and bi-linear fix merging problem can be represented by a graph, \cref{fig:rc-merge-graph}, that has a structure we can take advantage of.
+Specifically, the graph is a layered graph, where each layer is bipartite with respect to neighbor layers. 
+Additionally, each node in the graph (probe) follows a common stencil, where it has $\gamma$ higher probes it interpolates from, and $\gamma^2$ lower probes it interpolates on, where $\gamma$ is 4 and 8 for 2-D and 3-D problems, respectively. 
+Thus, we can perform domain decomposition by partitioning only the set of $C_0$ probes across MPI ranks.
+For each owned $C_0$ probe, we then trace its `lineage' through the cascade hierarchy by identifying all upstream probes in coarser cascades that contribute to it according to the merge graph.
+Nearby $C_0$ probes share most (if not all) higher probe dependencies, causing the number of required $C_1$ probes to grow sublinearly with the number of owned $C_0$ probes.
+This applies for all neighboring cascades, and so the total number of probes owned per MPI rank will be dominated by $C_0$ probes.
+As a result, rather than decomposing coarser cascades globally, each MPI rank locally instantiates copies of only the coarser probes appearing in the lineage of its assigned $C_0$ probes.
+There will be some overlap in probes from higher cascades across MPI ranks, but this can be treated by communication or by each rank independently computing all higher cascade probes (resulting in no communication, but recomputation of certain probes).
+If each rank independently computes all higher cascade probes, the only communication required would be at the end of each inner source-iteration step when the source is updated.
+The benefit to partitioning the $C_0$ probes decreases as the number of $C_0$ probes approaches the number of higher cascade probes (mainly $C_1$). 
+This breakdown occurs when the number of MPI ranks is roughly 1/$\gamma$ of the number of $C_0$ probes in the problem, or 1/4 and 1/8 for 2-D and 3-D, respectively.
+
+The second method is a parallel in energy scheme, in which each energy group is solved independently of each other on distinct MPI ranks. 
+This would be distributed in the inner loop of something like source iteration, as after each solution, all groups would need to be brought back to update next iteration sources. 
+Notably, the number of MPI ranks is limited to the number of energy groups, and so this may not be particularly helpful for standard neutronic simulations.
