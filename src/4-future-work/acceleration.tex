@@ -3,4 +3,6 @@ There are various methods employed in deterministic neutron transport methods fo
 Specific methods we think would be interesting to investigate are \acrshort{cmfd}, \acrshort{dsa}, and \acrshort{tsa}.
 \acrshort{cmfd} has already been used for \acrshort{moc} codes (and is implemented in OpenMOC and OpenMC) and has proven to be a great accelerator.
 \acrshort{dsa} is a super effective method for accelerating source iteration, but is only effective for highly diffusive problems/regions.
+Additionally, \acrshort{dsa} has not been formalized for \acrshort{moc}, as MOC is an angular discretization technique and Diffusion has no angular dependence.
 \acrshort{tsa} is a more robust method for accelerating source iteration, is well suited for highly anisotropic scattering problems/regions and sparse/void/near-void problems and regions; at added computational cost compared to DSA.
+

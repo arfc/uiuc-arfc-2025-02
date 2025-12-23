@@ -79,10 +79,6 @@ There are \emph{several} desired updates to OpenMOC that we believe will be extr
     \item Code organization: The C++ source code is currently all stored in the same directory. We propose organizing the code into logical sub-directories, similar to the organization of INL's MOOSE framework.
     \item Code complexity: The C++ source integration into Python using SWIG complicates the code and build system. We propose separating the C++ source and Python interface, similair to how OpenMC works.
     \item Code cleanliness: Some of the source files are extremely long, and could benefit from templating and unnecessary function/variable removal.
-    \item Linear Algebra: OpenMOC has a \acrshort{cmfd} solver implemented, where the data storage (sparse matrix) and the solver itself are written natively. 
-    For the sake of conciseness and performance, we propose bringing in PETSc for the sparse linear algebra that \acrshort{cmfd} requires. 
-    This would drastically decrease the volume of code written for the \acrshort{cmfd} solver, and entirely remove the need of the \texttt{vector} class. 
-    Additionally, using PETSc guarantees adequate performance, scalability, and portability (PETSc supports Kokkos).
     \item Portable Parallelism: The parallel solvers currently use CUDA or OpenMP for shared memory parallelism.
     Because of this, there are two families of solvers in OpenMOC, those written with CUDA and those written with OpenMP, that have nearly identical code. 
     Additionally, because the GPU solver is written in CUDA, it is not portable between GPU systems. 
@@ -98,6 +94,7 @@ For the initial implementation, we propose the following required features:
     \item Steady-state 2D \acrshort{rcs} solver
     \item Capability to handle both multiplying and fixed-source problems
     \item The standard \acrshort{rcs} merging algorithm and Bilinear fix merging algorithm
+    \item Shared memory parallelism support (CUDA, Kokkos, \ldots)
 \end{enumerate}
 
 The first two features already exist in OpenMOC, but are included for completeness and clarity.
